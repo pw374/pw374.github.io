@@ -1,6 +1,10 @@
 #!/bin/bash
 # set -x
 
+function OMD () {
+    omd -r ocaml=/Users/phil/OCL/MPP-language-blender/src/lib/ocamltohtml/ocamltohtml
+}
+
 function CAT () {
     for i in "$@" ; do
         echo "# 0 \"$i\""
@@ -34,7 +38,7 @@ for i in posts/*.md.ml.mpp ; do
     # .main.md
     ocaml "$bn.main.ml" > "$bn.main.md"
     # .main.html
-    omd < "$bn.main.md" > "$bn.main.html"
+    OMD < "$bn.main.md" > "$bn.main.html"
     # .toc.html
     omd -otoc < "$bn.main.md" > "$toc"
     n=$(wc -l < "$toc")
@@ -101,7 +105,7 @@ for bn in index projects blog tags/*/index; do
     # .main.md
     ocaml "$bn.main.ml" > "$bn.main.md"
     # .main.html
-    omd < "$bn.main.md" > "$bn.main.html"
+    OMD < "$bn.main.md" > "$bn.main.html"
     # .toc.html
     if [[ "$bn" == index ]]
     then
