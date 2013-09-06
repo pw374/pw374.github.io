@@ -9,6 +9,8 @@ module type Meta =
 sig 
   val title : string
   val date : string
+  val xmldate : string
+  val rssdate : string
   val tags : string list
 end
 
@@ -39,12 +41,14 @@ let input_command e =
   Sys.remove tmp;
   r
   
+let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
 # 0 "_tmp/2013-09-05-21-31-26-about-omd.md.ml"
  let _ = print_string ""
  module Meta : Meta = struct
  let title = "OMD: a Markdown parser in OCaml"
  let id = "pw374.github.io--2013-09-05-22-31-26--29154"
  let xmldate = "2013-09-05T22:31:26+01:00"
+ let rssdate = "Thu, 05 Sep 2013 22:31:26 +01:00"
  let date = "2013-09-05 22:31:26+01:00"
  let tags = [ "ocaml"; "markdown"; "software development"; ]
 end
@@ -57,3 +61,7 @@ include Meta
 (* running Post(Something) must generate the main contents of the post *)
 include Post(struct end)
 
+let _ =
+  printf "<div><emph>started on %s, (re)generated on %s</emph></div>" 
+    date 
+    (input_command "date --rfc-3339=seconds")

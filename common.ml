@@ -6,6 +6,8 @@ module type Meta =
 sig 
   val title : string
   val date : string
+  val xmldate : string
+  val rssdate : string
   val tags : string list
 end
 
@@ -36,3 +38,4 @@ let input_command e =
   Sys.remove tmp;
   r
   
+let selfbn = try Sys.getenv "selfbn" with Not_found -> ""

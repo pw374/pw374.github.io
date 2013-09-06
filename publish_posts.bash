@@ -1,5 +1,10 @@
 #!/bin/bash
-# set -x
+
+if [[ "$DEBUG" != "" ]]
+then
+set -x
+unset DEBUG
+fi
 
 function OMD () {
     omd -r ocaml=/Users/phil/OCL/MPP-language-blender/src/lib/ocamltohtml/ocamltohtml
@@ -18,6 +23,8 @@ rm -fr _tmp
 mkdir _tmp
 
 echo > blogposts.contents.tmp.md.ml
+echo > blogposts.contents-atom.xml
+
 
 for i in posts/*.md.ml.mpp ; do
     if [[ -f "$i" ]] ; then true ; else continue ; fi
@@ -26,6 +33,7 @@ for i in posts/*.md.ml.mpp ; do
     export toc="$bn.toc.html"
     i="posts/$(basename "$i")"
     export self="posts/$(basename "$i" .md.ml.mpp).html"
+    export selfbn="posts/$(basename "$i" .md.ml.mpp)"
 
     # .md.ml
     mpp -soc '' -scc '' -its -snl -l ocaml < "$i" > "$bn.md.ml"
@@ -53,7 +61,18 @@ for i in posts/*.md.ml.mpp ; do
     # .html
     ocaml "$bn.html.ml" > "$bn.html"
     mv "$bn.html" posts/
+
+    # atom feed
+    contents="$bn.main.html" mpp -soc '' -scc '' -its -snl -l ocaml < atom-body.xml >> blog-atom-body.xml
+    # rss feed
+    contents="$bn.main.html" mpp -soc '' -scc '' -its -snl -l ocaml < rss-body.xml >> blog-rss-body.xml
+
 done
+
+(CAT common.ml ; atom_contents=blog-atom-body.xml mpp -soc '' -scc '' -its -snl -l ocaml < atom.xml) > atom.ml
+ocaml atom.ml > blog-atom.xml
+(CAT common.ml ; rss_contents=blog-rss-body.xml mpp -soc '' -scc '' -its -snl -l ocaml < rss.xml) > rss.ml
+ocaml rss.ml > blog-rss.xml
 
 ## make blogposts.contents.tmp.md
 ocaml blogposts.contents.tmp.md.ml > blogposts.contents.tmp.md
@@ -76,6 +95,7 @@ for x in tags/* ; do
  let title = "blog#$(basename "$x")"
  let id = "pw374.github.io--" ^ input_command "date +%Y-%m-%d-%H-%M-%S" ^ "--index"
  let xmldate = input_command "date --rfc-3339=seconds|tr ' ' T"
+ let rssdate = input_command "date '+%a, %d %b %Y %H:%M:%S %z'"
  let date = input_command "date --rfc-3339=seconds|tr ' ' T"
  let tags = [ "$(basename "$x")"; ]
 end
@@ -98,6 +118,7 @@ for bn in index projects blog tags/*/index; do
     export toc="$bn.toc.html"
     export contents="$bn.main.html"
     export self="$bn.html"
+    export selfbn="$bn"
     # .md.ml
     mpp -soc '' -scc '' -its -snl -l ocaml < "$bn.md.ml.mpp" > "$bn.md.ml"
     # .main.ml

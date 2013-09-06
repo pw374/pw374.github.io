@@ -13,3 +13,6 @@ triplet.
 * [posts/2013-09-05-21-31-26-about-omd.html](posts/2013-09-05-21-31-26-about-omd.html)
 * [posts/test_ocaml.html](posts/test_ocaml.html)
 
+<div><emph>started on 2013-09-06T20:43:49+01:00
+, (re)generated on 2013-09-06 20:43:49+01:00
+</emph></div>

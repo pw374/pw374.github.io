@@ -1,16 +1,18 @@
 %% Copyright (C) 2013  Philippe Wang
 {< module Meta : Meta = struct
- let title = "test ocaml"
- let id = "pw374.github.io--2013-09-06-15-56-12--4361"
- let xmldate = "2013-09-06T15:56:12+01:00"
- let date = "2013-09-06 15:56:12+01:00"
- let tags = [ "ocaml"; ]
+ let title = ""
+ let id = "pw374.github.io--2013-09-06-20-21-41--27952"
+ let xmldate = "2013-09-06T20:21:41+01:00"
+ let rssdate = "Fri, 06 Sep 2013 20:21:41 +0100"
+ let date = "2013-09-06 20:21:41+01:00"
+ let tags = [ "ocaml"; "omd"; "markdown"; ]
 end
 include Meta
 >}
 
 {< module Post(Unit:Unit) = struct >}
 ## {< let _ = !!title >}
+
 
 ```ocaml
 module Meta : Meta = struct
@@ -22,6 +24,7 @@ module Meta : Meta = struct
 end
 include Meta
 ```
+
 
 
 {< end >}

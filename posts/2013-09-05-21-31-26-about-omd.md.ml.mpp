@@ -3,6 +3,7 @@
  let title = "OMD: a Markdown parser in OCaml"
  let id = "pw374.github.io--2013-09-05-22-31-26--29154"
  let xmldate = "2013-09-05T22:31:26+01:00"
+ let rssdate = "Thu, 05 Sep 2013 22:31:26 +01:00"
  let date = "2013-09-05 22:31:26+01:00"
  let tags = [ "ocaml"; "markdown"; "software development"; ]
 end

@@ -10,6 +10,11 @@
     <link href="http://fonts.googleapis.com/css?family=Domine:400,700" rel="stylesheet">
     <!-- Only part of Bootstrap that we don't load from a CDN is our own customized CSS build. -->
     <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
+{< let _ = if selfbn <> "" then printf
+"    <link rel=\"alternate\" type=\"application/atom+xml\" title=\"ATOM Feed\" href=\"/%s-atom.xml\">
+    <link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS Feed\" href=\"/%s-rss.xml\">
+" selfbn selfbn
+>}
     <!--[if lt IE 9]>
         <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
     <![endif]-->

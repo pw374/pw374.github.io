@@ -7,6 +7,8 @@ module type Meta =
 sig 
   val title : string
   val date : string
+  val xmldate : string
+  val rssdate : string
   val tags : string list
 end
 
@@ -37,12 +39,14 @@ let input_command e =
   Sys.remove tmp;
   r
   
+let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
 # 0 "index.md.ml"
  let _ = print_string ""
  module Meta : Meta = struct
  let title = "Philippe Wang"
  let id = "pw374.github.io--" ^ input_command "date +%Y-%m-%d-%H-%M-%S" ^ "--index"
  let xmldate = input_command "date --rfc-3339=seconds|tr ' ' T"
+ let rssdate = input_command "date '+%a, %d %b %Y %H:%M:%S %z'"
  let date = input_command "date --rfc-3339=seconds|tr ' ' T"
  let tags = [ "root"; ]
 end
@@ -57,3 +61,7 @@ include Meta
 (* running Post(Something) must generate the main contents of the post *)
 include Post(struct end)
 
+let _ =
+  printf "<div><emph>started on %s, (re)generated on %s</emph></div>" 
+    date 
+    (input_command "date --rfc-3339=seconds")

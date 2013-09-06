@@ -13,6 +13,7 @@ cat > $target <<EOF
  let title = ""
  let id = "pw374.github.io--$(date +%Y-%m-%d-%H-%M-%S)--$RANDOM"
  let xmldate = "$(date --rfc-3339=seconds|tr ' ' T)"
+ let rssdate = "$(date '+%a, %d %b %Y %H:%M:%S %z')"
  let date = "$(date --rfc-3339=seconds)"
  let tags = [ "ocaml"; "cooking"; "pastry"; "raspberrypi"; "linux"; "osx"; ]
 end
