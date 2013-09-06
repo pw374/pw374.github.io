@@ -10,6 +10,8 @@ function CAT () {
 
 rm -fr tags
 mkdir tags
+rm -fr _tmp
+mkdir _tmp
 
 echo > blogposts.contents.tmp.md.ml
 
