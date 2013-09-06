@@ -49,11 +49,11 @@ using this  syntax:</p>
 <pre><code>[blah blah blah](the-url-which-can-be-absolute-or-relative)
 </code></pre>
 <p>and it gets converted to</p>
-<pre><code><a href="the-url-which-can-be-absolute-or-relative">blah blah blah</a>
+<pre><code>&lt;a href=&quot;the-url-which-can-be-absolute-or-relative&quot;&gt;blah blah blah&lt;/a&gt;
 </code></pre>
 <p>
 But if you forget the closing parenthesis, then it becomes this instead</p>
-<pre><code><p>[blah blah blah](the-url-which-can-be-absolute-or-relative</p>
+<pre><code>&lt;p&gt;[blah blah blah](the-url-which-can-be-absolute-or-relative&lt;/p&gt;
 </code></pre>
 <p>
 precisely because nothing is wrong in Markdown.</p>
@@ -61,37 +61,37 @@ precisely because nothing is wrong in Markdown.</p>
 <h4 id="FlagrantAmbiguity"> Flagrant Ambiguity</h4>
 <p>The following is some text that has to mean something in Markdown...</p>
 <pre><code>* Alice is falling in love with Bob.
-    * Bob is secretly in love with Alice, but he's seeing Eve.
-  * Eve is in-between, she loves both Alice and Bob, she can't help it.
+    * Bob is secretly in love with Alice, but he&apos;s seeing Eve.
+  * Eve is in-between, she loves both Alice and Bob, she can&apos;t help it.
 </code></pre>
 <p>So, Pandoc, which a tool that converts a document in language A to a
 document in language B, where A and B can be the same or different
 languages amongst LaTeX, HTML, Markdown and (many) others, considers
 that Eve is on the same level as Bob. So its HTML output is</p>
-<pre><code><ul>
-<li>Alice is falling in love with Bob.
-<ul>
-<li>Bob is secretly in love with Alice, but he's seeing Eve.</li>
-</ul></li>
-<li>Eve is in-between, she loves both Alice and Bob, she can't help it.</li>
-</ul>
+<pre><code>&lt;ul&gt;
+&lt;li&gt;Alice is falling in love with Bob.
+&lt;ul&gt;
+&lt;li&gt;Bob is secretly in love with Alice, but he&apos;s seeing Eve.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Eve is in-between, she loves both Alice and Bob, she can&apos;t help it.&lt;/li&gt;
+&lt;/ul&gt;
 </code></pre>
 <p>But if instead you add Dylan as in</p>
 <pre><code>* Alice is falling in love with Bob.
    * Dylan, a new character, is being conceived here.
-    * Bob is secretly in love with Alice, but he's seeing Eve.
-  * Eve is in-between, she loves both Alice and Bob, she can't help it.
+    * Bob is secretly in love with Alice, but he&apos;s seeing Eve.
+  * Eve is in-between, she loves both Alice and Bob, she can&apos;t help it.
 </code></pre>
 <p>then <em>of course</em> Eve is not on the same level as Bob anymore and goes
 with Dylan and Alice, Bob is on his own.</p>
-<pre><code><ul>
-<li>Alice is falling in love with Bob.</li>
-<li>Dylan, a new character, is being conceived here.
-<ul>
-<li>Bob is secretly in love with Alice, but he's seeing Eve.</li>
-</ul></li>
-<li>Eve is in-between, she loves both Alice and Bob, she can't help it.</li>
-</ul>
+<pre><code>&lt;ul&gt;
+&lt;li&gt;Alice is falling in love with Bob.&lt;/li&gt;
+&lt;li&gt;Dylan, a new character, is being conceived here.
+&lt;ul&gt;
+&lt;li&gt;Bob is secretly in love with Alice, but he&apos;s seeing Eve.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Eve is in-between, she loves both Alice and Bob, she can&apos;t help it.&lt;/li&gt;
+&lt;/ul&gt;
 </code></pre>
 <p>This doesn&apos;t make much sense...</p>
 <p>And Github&apos;s embedded Markdown  to HTML converter chooses some similar
@@ -130,18 +130,18 @@ one on that  level anyway). So she  is in a new list.  And since she&apos;s
 not on a deeper level than Bob, she shouldn&apos;t be on a sub-list of his.
 But  she is  on a  deeper level  than Alice,  so she  has to  be  on a
 sub-list of hers. So, here is the HTML that OMD produces:</p>
-<pre><code><ul>
- <li>Alice is falling in love with Bob.
-  <ul>
-   <li>Bob is secretly in love with Alice, but he&apos;s seeing Eve.
-   </li>
-  </ul>
-  <ul>
-   <li>Eve is in-between, she loves both Alice and Bob, she can&apos;t help it.
-   </li>
-  </ul>
- </li>
-</ul>
+<pre><code>&lt;ul&gt;
+ &lt;li&gt;Alice is falling in love with Bob.
+  &lt;ul&gt;
+   &lt;li&gt;Bob is secretly in love with Alice, but he&amp;apos;s seeing Eve.
+   &lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;ul&gt;
+   &lt;li&gt;Eve is in-between, she loves both Alice and Bob, she can&amp;apos;t help it.
+   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;
 </code></pre>
 <p>Oh,  you might  have  noticed  that OMD  converts  quotes to  <code>&amp;apos;</code>
 because otherwise I  would need to differentiate when  they have to be

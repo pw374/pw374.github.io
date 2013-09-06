@@ -1,10 +1,10 @@
  let _ = print_string ""
  module Meta : Meta = struct
- let title = "blog#software"
+ let title = "blog#software development"
  let id = "pw374.github.io--" ^ input_command "date +%Y-%m-%d-%H-%M-%S" ^ "--index"
  let xmldate = input_command "date --rfc-3339=seconds|tr ' ' T"
  let date = input_command "date --rfc-3339=seconds|tr ' ' T"
- let tags = [ "software"; ]
+ let tags = [ "software development"; ]
 end
 include Meta
  let _ = print_string "\n"
