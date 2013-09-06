@@ -260,7 +260,8 @@ We    are    at   OCaml    Labs    making    a    new   website    for
 [ocaml.org](http://ocaml.org).   The  design   is  being  provided  by
 [onespacemedia](http://www.onespacemedia.com).    At   the  time   I'm
 writing  these  lines, I'm  using  the  HTML/CSS/JS  for the  upcoming
-OCaml.org, so I can play with it without breaking anything important.
+OCaml.org to style my new Github-hosted website, so I can play with it
+*more*.
 
 Most pages will be written in Markdown instead of HTML, so that people
 of the OCaml community may contribute to it in a more convenient way.
