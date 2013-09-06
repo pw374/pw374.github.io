@@ -1,6 +1,11 @@
 # Copyright (C) 2013  Philippe Wang
 
-target=_drafts/"$(date -u +%Y-%m-%d-%H-%M-%S).md.ml.mpp"
+if [[ "$1" != "" ]]
+then
+    target="$1".md.ml.mpp
+else
+    target=_drafts/"$(date -u +%Y-%m-%d-%H-%M-%S).md.ml.mpp"
+fi
 
 cat > $target <<EOF
 %% Copyright (C) 2013  Philippe Wang
