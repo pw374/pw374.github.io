@@ -10,9 +10,9 @@ include Meta
 >}
 
 {< module Post(Unit:Unit) = struct >}
-# {< let _ = !!title >}
+## {< let _ = !!title >}
 
-## Motivations
+### Motivations
 
 There  are  so many  existing  implementations  of  Markdown, why  yet
 another one?   Well, after asking  the OCaml community  about existing
@@ -33,7 +33,7 @@ preferably  OCaml alone,  meaning that  one that  has  OCaml installed
 should be able  to use it easily without having to  deal with too many
 dependencies. Well, there it is: OMD!
 
-## Issues... were essentially with Markdown itself
+### Issues... were essentially with Markdown itself
 
 Every computer  scientist knows how to  write a parser  for a language
 that is as simple as Markdown. Well, no, not every computer scientist,
@@ -84,7 +84,7 @@ precisely because nothing is wrong in Markdown.
 And what if there are parentheses in your URL? What if they are unbalanced?
 
 
-### Flagrant Ambiguity
+#### Flagrant Ambiguity
 
 The following is some text that has to mean something in Markdown...
 
@@ -195,7 +195,7 @@ Oh,  you might  have  noticed  that OMD  converts  quotes to  `&apos;`
 because otherwise I  would need to differentiate when  they have to be
 converted from when it's optional.
 
-## Implementation
+### Implementation
 
 Pandoc's documentation says 
 
@@ -230,7 +230,7 @@ to be  converted (quickly)  to HTML.  OMD, so far,  is about  10 times
 faster than  Pandoc, and  I didn't  even make any  efforts to  make it
 fast.
 
-### Compatibility
+#### Compatibility
 
 OMD has been developed using OCaml 4.0.1, [Christophe Troestler made
 me make it compatible with OCaml
@@ -242,7 +242,7 @@ don't use any language features that were introduced in 3.12 or 4.0).
 By  the way,  thank  you  Christophe for  your  support, interest  and
 contributions to OMD :-)
 
-# Future of OMD
+### Future of OMD
 
 OMD  already is  in OPAM.   A  very stable  version of  OMD should  be
 released soon.   As a  tool, it takes  Markdown as input  and produces
@@ -254,7 +254,7 @@ basically the HTML  without the HTML tags, so  it's very non-formatted
 text.  There  also are  options to output  HTML table of  contents and
 parametrise their depths.
 
-# OMD and OCaml.org
+### OMD and OCaml.org
 
 We    are    at   OCaml    Labs    making    a    new   website    for
 [ocaml.org](http://ocaml.org).   The  design   is  being  provided  by
