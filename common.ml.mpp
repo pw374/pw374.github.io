@@ -1,0 +1,11 @@
+open Printf
+
+(* functor to ensure the type of Meta *)
+module M(X: 
+  sig 
+    val title : string
+    val date : string
+    val tags : string list
+  end) = struct include X end
+include M(Meta) (* ensure the type of Meta by applying M *)
+

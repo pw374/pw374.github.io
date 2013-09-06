@@ -1,0 +1,31 @@
+---
+layout: nil
+---
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>pw374</title>
+    <link>http://pw374.github.io/</link>
+    <atom:link href="http://pw374.net/rss.xml" rel="self" type="application/rss+xml" />
+    <description>pw374 blog</description>
+    <language>en-gb</language>
+    <pubDate>{{ site.time | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>
+    <lastBuildDate>{{ site.time | date: "%a, %d %b %Y %H:%M:%S %z" }}</lastBuildDate>
+
+    {% for post in site.posts %}
+    <item>
+      <title>{{ post.title }}</title>
+      <link>http://pw374.github.io{{ post.url }}</link>
+      {% for tag in post.tags %}
+      <category>{{ tag }}</category>
+      {% endfor %}
+      <pubDate>{{ post.date | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>
+      <author>Philippe Wang</author>
+      <guid>http://pw374.github.io/{{ post.id }}</guid>
+      <description>{{ post.content | xml_escape }}</description>
+    </item>
+    {% endfor %}
+
+  </channel>
+</rss>
+

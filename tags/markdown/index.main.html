@@ -1,0 +1,205 @@
+<h1 id="tagmarkdown"> tag markdown</h1>
+<h1 id="OMDaMarkdownparserinOCaml"> OMD: a Markdown parser in OCaml</h1><h2 id="Motivations"> Motivations</h2>
+<p>There  are  so many  existing  implementations  of  Markdown, why  yet
+another one?   Well, after asking  the OCaml community  about existing
+ways to parse and manipulate  Markdown documents, it seemed that there
+were no stand-alone complete Markdown parser written in OCaml, meaning
+that they  were incomplete (i.e., not fully  compatible with Markdown)
+or  interfaces  to  some  Markdown  parsers  implemented  using  other
+languages than OCaml.</p>
+<p>Since in OCaml  Labs we&apos;re working a lot with  Github, and Github uses
+Markdown a  lot (Github  web pages hosting,  Github issues,  etc.) and
+other  sites are also  using Markdown  as well,  and Markdown  is very
+popular and  easy to  learn, and  flexible in the  sense that  you can
+always  fall back  to HTML  when you  want to  express  something that
+doesn&apos;t have  a special syntax in  Markdown, blah blah blah,  it was -
+somehow - time to have  a Markdown parser implemented using OCaml. And
+preferably  OCaml alone,  meaning that  one that  has  OCaml installed
+should be able  to use it easily without having to  deal with too many
+dependencies. Well, there it is: OMD!</p>
+<h2 id="IssueswereessentiallywithMarkdownitself"> Issues... were essentially with Markdown itself</h2>
+<p>Every computer  scientist knows how to  write a parser  for a language
+that is as simple as Markdown. Well, no, not every computer scientist,
+sadly, but at least every programmer should. Ok, sadly it isn&apos;t really
+the case either. Anyways.</p>
+<p>Markdown is a rather simple language,  if you look at the specs. Well,
+that depends on what you actuall call &quot;specs&quot;, of course. According to
+<a href='http://en.wikipedia.org/wiki/Markdow'>Wikipedia</a>,     Markdown    was
+invented by <a href='http://daringfireball.net'>John Gruber</a>, and Aaron Swartz
+helped  him. Then the  original document  that describes  the Markdown
+language          is          available         online          there:
+<a href='http://daringfireball.net/projects/markdown/syntax'>http://daringfireball.net/projects/markdown/syntax</a>.  And you can see
+that         searching        for         <a href='https://www.google.com/#q=Markdown+syntax'>&quot;Markdown+syntax&quot;        on
+Google</a> makes that page the
+top result (and here again, I&apos;m kind  of helping it be and stay on the
+top...).</p>
+<p>Actually, Markdown is not that  simple to parse.  Why? Because so many
+things are  just left to the  imagination of the  people who implement
+parsers  for  this  language,   because  programmes  can&apos;t  decide  by
+themselves  what&apos;s right  to do.   It&apos;s  really the  author(s) of  the
+programme that  decides what the  programme does. And in  Markdown, so
+many  things  are ambiguous  and  Gruber&apos;s  document doesn&apos;t  actually
+describe a  grammar at all.  It just tells  you how to write  this and
+that, but if you write it slightly differently, it doesn&apos;t tell you
+what the outcome would be. 
+<em><strong>In other words, there are no errors in Markdown.</strong></em>
+Every text file is a valid Markdown file, it might just be converted 
+to some HTML you wouldn&apos;t expect. For instance, you may write a link 
+using this  syntax:</p>
+<pre><code>[blah blah blah](the-url-which-can-be-absolute-or-relative)
+</code></pre>
+<p>and it gets converted to</p>
+<pre><code>&lt;a href=&quot;the-url-which-can-be-absolute-or-relative&quot;&gt;blah blah blah&lt;/a&gt;
+</code></pre>
+<p>
+But if you forget the closing parenthesis, then it becomes this instead</p>
+<pre><code>&lt;p&gt;[blah blah blah](the-url-which-can-be-absolute-or-relative&lt;/p&gt;
+</code></pre>
+<p>
+precisely because nothing is wrong in Markdown.</p>
+<p>And what if there are parentheses in your URL? What if they are unbalanced?</p>
+<h3 id="FlagrantAmbiguity"> Flagrant Ambiguity</h3>
+<p>The following is some text that has to mean something in Markdown...</p>
+<pre><code>* Alice is falling in love with Bob.
+    * Bob is secretly in love with Alice, but he&apos;s seeing Eve.
+  * Eve is in-between, she loves both Alice and Bob, she can&apos;t help it.
+</code></pre>
+<p>So, Pandoc, which a tool that converts a document in language A to a
+document in language B, where A and B can be the same or different
+languages amongst LaTeX, HTML, Markdown and (many) others, considers
+that Eve is on the same level as Bob. So its HTML output is</p>
+<pre><code>&lt;ul&gt;
+&lt;li&gt;Alice is falling in love with Bob.
+&lt;ul&gt;
+&lt;li&gt;Bob is secretly in love with Alice, but he&apos;s seeing Eve.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Eve is in-between, she loves both Alice and Bob, she can&apos;t help it.&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<p>But if instead you add Dylan as in</p>
+<pre><code>* Alice is falling in love with Bob.
+   * Dylan, a new character, is being conceived here.
+    * Bob is secretly in love with Alice, but he&apos;s seeing Eve.
+  * Eve is in-between, she loves both Alice and Bob, she can&apos;t help it.
+</code></pre>
+<p>then <em>of course</em> Eve is not on the same level as Bob anymore and goes
+with Dylan and Alice, Bob is on his own.</p>
+<pre><code>&lt;ul&gt;
+&lt;li&gt;Alice is falling in love with Bob.&lt;/li&gt;
+&lt;li&gt;Dylan, a new character, is being conceived here.
+&lt;ul&gt;
+&lt;li&gt;Bob is secretly in love with Alice, but he&apos;s seeing Eve.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Eve is in-between, she loves both Alice and Bob, she can&apos;t help it.&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<p>This doesn&apos;t make much sense...</p>
+<p>And Github&apos;s embedded Markdown  to HTML converter chooses some similar
+broken semantics. If one writes bullets on different levels, it shouldn&apos;t
+be meaningless.</p>
+<p>Also, on Github, if you write</p>
+<pre><code>* 1
+  * 2
+    * 3
+      * 4
+        * 5
+          * 6
+            * 7
+              * 8
+                * 9
+                  * 10
+</code></pre>
+<p>Then 2 and 3 are on the same level, as for 4 and 5, 6 and 7, and 8 and 9.
+1 and 10 are on their own. And if you extract 2 and 3, meaning</p>
+<pre><code>  * 2
+    * 3
+</code></pre>
+<p>
+then 2 and 3 are not on the same level anymore! 
+See for yourself:</p>
+<ul>
+ <li>raw version: <a href='https://raw.github.com/pw374/sandbox/master/mad-lists.md'>https://raw.github.com/pw374/sandbox/master/mad-lists.md</a>
+ </li>
+ <li>rendered-by-Github version: <a href='https://github.com/pw374/sandbox/blob/master/mad-lists.md'>https://github.com/pw374/sandbox/blob/master/mad-lists.md</a></li>
+</ul>
+
+<p>With OMD, hopefully, there is a deterministic meaning for each level of indentation. The list where there were Alice, Bob and Eve is converted to this to the least insane semantics I could think of.</p>
+<p>The idea  is that, since Eve  is neither on  the same level as  Bob or
+Alice, Eve should be in a new list (because, obviously, she&apos;s the only
+one on that  level anyway). So she  is in a new list.  And since she&apos;s
+not on a deeper level than Bob, she shouldn&apos;t be on a sub-list of his.
+But  she is  on a  deeper level  than Alice,  so she  has to  be  on a
+sub-list of hers. So, here is the HTML that OMD produces:</p>
+<pre><code>&lt;ul&gt;
+ &lt;li&gt;Alice is falling in love with Bob.
+  &lt;ul&gt;
+   &lt;li&gt;Bob is secretly in love with Alice, but he&amp;apos;s seeing Eve.
+   &lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;ul&gt;
+   &lt;li&gt;Eve is in-between, she loves both Alice and Bob, she can&amp;apos;t help it.
+   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<p>Oh,  you might  have  noticed  that OMD  converts  quotes to  <code>&amp;apos;</code>
+because otherwise I  would need to differentiate when  they have to be
+converted from when it&apos;s optional.</p>
+<h2 id="Implementation"> Implementation</h2>
+<p>Pandoc&apos;s documentation says</p>
+<blockquote><p>
+In contrast to most existing tools for converting markdown to HTML,
+which use regex substitutions, Pandoc has a modular design: it
+consists of a set of readers, which parse text in a given format and
+produce a native representation of the document, and a set of writers,
+which convert this native representation into a target format.
+Thus, adding an input or output format requires only adding a reader
+or writer.</p>
+</blockquote>
+<p>Come on, most tools are using regular expressions substitutions?!
+I can only imagine the nightmare -- no wait, I actually cannot --
+that it must be to implement and debug such an implementation.</p>
+<p>I used functions and function calls, a lot of them are tail recursive,
+not  all of  them but  then it  means  I don&apos;t  need them  to be  tail
+recursive, and  those functions  basically take a  list of  tokens and
+return a  new list  with possibly fewer  tokens and the  expression to
+which the missing ones were converted into.</p>
+<p>So far, in version 0.4 (which is not released yet at the time I write this),
+there&apos;s a little less than 8k lines of pure OCaml code.
+(Note that I didn&apos;t write &quot;pure functional&quot;, I wrote &quot;pure OCaml&quot;.)</p>
+<p>OMD is an  open-source free and libre software  library that any OCaml
+developer can use  (hopefully quite easily since it  doesn&apos;t depend on
+anything else  that the standard  OCaml compiler and library).  And of
+course, it&apos;s also  a tool for any one who write  Markdown and wants it
+to be  converted (quickly)  to HTML.  OMD, so far,  is about  10 times
+faster than  Pandoc, and  I didn&apos;t  even make any  efforts to  make it
+fast.</p>
+<h3 id="Compatibility"> Compatibility</h3>
+<p>OMD has been developed using OCaml 4.0.1, <a href='https://github.com/pw374/omd/issues/19'>Christophe Troestler made
+me make it compatible with OCaml
+3.12.1</a>.  Then I guess it
+might work with older version of OCaml but it&apos;s not certain (mainly
+because OCaml&apos;s standard library has slightly changed, as I think I
+don&apos;t use any language features that were introduced in 3.12 or 4.0).</p>
+<p>By  the way,  thank  you  Christophe for  your  support, interest  and
+contributions to OMD :-)</p>
+<h1 id="FutureofOMD"> Future of OMD</h1>
+<p>OMD  already is  in OPAM.   A  very stable  version of  OMD should  be
+released soon.   As a  tool, it takes  Markdown as input  and produces
+HTML as output.   A Markdown backend has been  freshly implemented, so
+you can output  Markdown as well, which is  quite useful for debugging
+or if you  want to know how many iterations you  need before you reach
+the fix  point. You  can also  output &quot;text&quot;, in  the sense  that it&apos;s
+basically the HTML  without the HTML tags, so  it&apos;s very non-formatted
+text.  There  also are  options to output  HTML table of  contents and
+parametrise their depths.</p>
+<h1 id="OMDandOCamlorg"> OMD and OCaml.org</h1>
+<p>We    are    at   OCaml    Labs    making    a    new   website    for
+<a href='http://ocaml.org'>ocaml.org</a>.   The  design   is  being  provided  by
+<a href='http://www.onespacemedia.com'>onespacemedia</a>.    At   the  time   I&apos;m
+writing  these  lines, I&apos;m  using  the  HTML/CSS/JS  for the  upcoming
+OCaml.org, so I can play with it without breaking anything important.</p>
+<p>Most pages will be written in Markdown instead of HTML, so that people
+of the OCaml community may contribute to it in a more convenient way.</p>
+<p>And of course, that means that OMD will be used for OCaml.org.</p>

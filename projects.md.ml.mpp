@@ -1,0 +1,24 @@
+%% Copyright (C) 2013  Philippe Wang
+{< module Meta : Meta = struct
+ let title = "Projects"
+ let id = "pw374.github.io--" ^ input_command "date +%Y-%m-%d-%H-%M-%S" ^ "--projects"
+ let xmldate = input_command "date --rfc-3339=seconds|tr ' ' T"
+ let date = input_command "date --rfc-3339=seconds|tr ' ' T"
+ let tags = [ "projects"; ]
+end
+include Meta
+>}
+
+{< module Post(Unit:Unit) = struct >}
+# {< let _ = !!title >}
+
+A list of projects...
+
+* omd
+* mpp
+* ...
+
+
+
+{< end >}
+
