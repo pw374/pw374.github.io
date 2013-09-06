@@ -8,8 +8,8 @@ Here follow the last blog posts
 
 
 
-# OMD: a Markdown parser in OCaml
-## Motivations
+## OMD: a Markdown parser in OCaml
+### Motivations
 
 There  are  so many  existing  implementations  of  Markdown, why  yet
 another one?   Well, after asking  the OCaml community  about existing
@@ -30,7 +30,7 @@ preferably  OCaml alone,  meaning that  one that  has  OCaml installed
 should be able  to use it easily without having to  deal with too many
 dependencies. Well, there it is: OMD!
 
-## Issues... were essentially with Markdown itself
+### Issues... were essentially with Markdown itself
 
 Every computer  scientist knows how to  write a parser  for a language
 that is as simple as Markdown. Well, no, not every computer scientist,
@@ -81,7 +81,7 @@ precisely because nothing is wrong in Markdown.
 And what if there are parentheses in your URL? What if they are unbalanced?
 
 
-### Flagrant Ambiguity
+#### Flagrant Ambiguity
 
 The following is some text that has to mean something in Markdown...
 
@@ -192,7 +192,7 @@ Oh,  you might  have  noticed  that OMD  converts  quotes to  `&apos;`
 because otherwise I  would need to differentiate when  they have to be
 converted from when it's optional.
 
-## Implementation
+### Implementation
 
 Pandoc's documentation says 
 
@@ -204,9 +204,10 @@ which convert this native representation into a target format.
 Thus, adding an input or output format requires only adding a reader
 or writer.
 
-Come on, most tools are using regular expressions substitutions?!
-I can only imagine the nightmare -- no wait, I actually cannot --
-that it must be to implement and debug such an implementation.
+Come on,  most tools are using regular  expressions substitutions?!  I
+can only imagine the nightmare that  it must be to implement and debug
+such an implementation  -- no wait, I can't because  I just don't want
+to imagine such a nightmare.
 
 I used functions and function calls, a lot of them are tail recursive,
 not  all of  them but  then it  means  I don't  need them  to be  tail
@@ -214,9 +215,9 @@ recursive, and  those functions  basically take a  list of  tokens and
 return a  new list  with possibly fewer  tokens and the  expression to
 which the missing ones were converted into.
 
-So far, in version 0.4 (which is not released yet at the time I write this),
-there's a little less than 8k lines of pure OCaml code.
-(Note that I didn't write "pure functional", I wrote "pure OCaml".)
+So far, in version 0.4 (which is  not released yet at the time I write
+this), there's a little less than  8k lines of pure OCaml code.  (Note
+that I didn't write "pure functional", I wrote "pure OCaml".)
 
 OMD is an  open-source free and libre software  library that any OCaml
 developer can use  (hopefully quite easily since it  doesn't depend on
@@ -226,7 +227,7 @@ to be  converted (quickly)  to HTML.  OMD, so far,  is about  10 times
 faster than  Pandoc, and  I didn't  even make any  efforts to  make it
 fast.
 
-### Compatibility
+#### Compatibility
 
 OMD has been developed using OCaml 4.0.1, [Christophe Troestler made
 me make it compatible with OCaml
@@ -238,7 +239,7 @@ don't use any language features that were introduced in 3.12 or 4.0).
 By  the way,  thank  you  Christophe for  your  support, interest  and
 contributions to OMD :-)
 
-# Future of OMD
+### Future of OMD
 
 OMD  already is  in OPAM.   A  very stable  version of  OMD should  be
 released soon.   As a  tool, it takes  Markdown as input  and produces
@@ -250,13 +251,14 @@ basically the HTML  without the HTML tags, so  it's very non-formatted
 text.  There  also are  options to output  HTML table of  contents and
 parametrise their depths.
 
-# OMD and OCaml.org
+### OMD and OCaml.org
 
 We    are    at   OCaml    Labs    making    a    new   website    for
 [ocaml.org](http://ocaml.org).   The  design   is  being  provided  by
 [onespacemedia](http://www.onespacemedia.com).    At   the  time   I'm
 writing  these  lines, I'm  using  the  HTML/CSS/JS  for the  upcoming
-OCaml.org, so I can play with it without breaking anything important.
+OCaml.org to style my new Github-hosted website, so I can play with it
+*more*.
 
 Most pages will be written in Markdown instead of HTML, so that people
 of the OCaml community may contribute to it in a more convenient way.
