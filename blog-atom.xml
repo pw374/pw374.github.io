@@ -18,16 +18,16 @@
           href="http://pw374.github.io/posts/test_ocaml.html"/>
     <title>OMD: a Markdown parser in OCaml</title>
     <category term='ocaml' /><category term='markdown' /><category term='software development' />    <published>2013-09-05T22:31:26+01:00</published>
-    <updated>2013-09-10T00:52:38+01:00
+    <updated>2013-09-10T00:54:11+01:00
 </updated>
     <author>
       <name>Philippe Wang</name>
       <uri>http://pw374.github.io/</uri>
     </author>
     <content type="html">
-<h2 id=""></h2>
+<h2 id="thisisonlyatestitaposllbedeletedsoon"> this is only a test (it&apos;ll be deleted soon)</h2>
 <pre><code class='ocaml'><span class='k'>module</span> Meta <span class='o'>:</span> Meta <span class='k'>=</span> <span class='k'>struct</span>
- <span class='k'>let</span> title <span class='k'>=</span> <span class='s'>&#34;&#34;</span>
+ <span class='k'>let</span> title <span class='k'>=</span> <span class='s'>&#34;this is only a test (it&#39;ll be deleted soon)&#34;</span>
  <span class='k'>let</span> id <span class='k'>=</span> <span class='s'>&#34;pw374.github.io--2013-09-06-15-56-12--4361&#34;</span>
  <span class='k'>let</span> xmldate <span class='k'>=</span> <span class='s'>&#34;2013-09-06T15:56:12+01:00&#34;</span>
  <span class='k'>let</span> date <span class='k'>=</span> <span class='s'>&#34;2013-09-06 15:56:12+01:00&#34;</span>
@@ -35,7 +35,7 @@
 <span class='k'>end</span>
 <span class='k'>include</span> Meta
 </code></pre>
-<div style='font-size:80%;'><em>started on 2013-09-06 20:21:41+01:00, (re)generated on 2013-09-10 00:52:38+01:00
+<div style='font-size:80%;'><em>started on 2013-09-06 20:21:41+01:00, (re)generated on 2013-09-10 00:54:11+01:00
 </em></div>
 </content>
   </entry>
@@ -45,18 +45,18 @@
     <id>pw374.github.io-pw374.github.io--2013-09-06-20-21-41--27952</id>
     <link type="text/html" rel="alternate"
           href="http://pw374.github.io/posts/test_ocaml.html"/>
-    <title></title>
+    <title>this is only a test (it'll be deleted soon)</title>
     <category term='ocaml' /><category term='omd' /><category term='markdown' />    <published>2013-09-06T20:21:41+01:00</published>
-    <updated>2013-09-10T00:52:38+01:00
+    <updated>2013-09-10T00:54:11+01:00
 </updated>
     <author>
       <name>Philippe Wang</name>
       <uri>http://pw374.github.io/</uri>
     </author>
     <content type="html">
-<h2 id=""></h2>
+<h2 id="thisisonlyatestitaposllbedeletedsoon"> this is only a test (it&apos;ll be deleted soon)</h2>
 <pre><code class='ocaml'><span class='k'>module</span> Meta <span class='o'>:</span> Meta <span class='k'>=</span> <span class='k'>struct</span>
- <span class='k'>let</span> title <span class='k'>=</span> <span class='s'>&#34;&#34;</span>
+ <span class='k'>let</span> title <span class='k'>=</span> <span class='s'>&#34;this is only a test (it&#39;ll be deleted soon)&#34;</span>
  <span class='k'>let</span> id <span class='k'>=</span> <span class='s'>&#34;pw374.github.io--2013-09-06-15-56-12--4361&#34;</span>
  <span class='k'>let</span> xmldate <span class='k'>=</span> <span class='s'>&#34;2013-09-06T15:56:12+01:00&#34;</span>
  <span class='k'>let</span> date <span class='k'>=</span> <span class='s'>&#34;2013-09-06 15:56:12+01:00&#34;</span>
@@ -64,7 +64,7 @@
 <span class='k'>end</span>
 <span class='k'>include</span> Meta
 </code></pre>
-<div style='font-size:80%;'><em>started on 2013-09-06 20:21:41+01:00, (re)generated on 2013-09-10 00:52:38+01:00
+<div style='font-size:80%;'><em>started on 2013-09-06 20:21:41+01:00, (re)generated on 2013-09-10 00:54:11+01:00
 </em></div>
 </content>
   </entry>
