@@ -2,6 +2,6 @@
 include Post(struct end)
 
 let _ =
-  printf "<div><emph>started on %s, (re)generated on %s</emph></div>" 
+  printf "<div style='font-size:80%%;'><em>started on %s, (re)generated on %s</em></div>" 
     date 
     (input_command "date --rfc-3339=seconds")

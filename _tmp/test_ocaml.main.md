@@ -15,5 +15,5 @@ include Meta
 
 
 
-<div><emph>started on 2013-09-06 20:21:41+01:00, (re)generated on 2013-09-10 00:46:16+01:00
-</emph></div>
+<div style='font-size:80%;'><em>started on 2013-09-06 20:21:41+01:00, (re)generated on 2013-09-10 00:52:38+01:00
+</em></div>
