@@ -4,6 +4,7 @@ let (!!) s = Printf.printf "%s" s
 
 module type Meta =
 sig 
+  val id : string
   val title : string
   val date : string
   val xmldate : string

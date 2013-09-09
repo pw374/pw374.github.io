@@ -7,7 +7,7 @@ unset DEBUG
 fi
 
 function OMD () {
-    omd -r ocaml=/Users/phil/OCL/MPP-language-blender/src/lib/ocamltohtml/ocamltohtml
+    omd -r ocaml=ocamltohtml
 }
 
 function CAT () {
@@ -17,6 +17,11 @@ function CAT () {
     done
 }
 
+function MPPOCAML () {
+    mpp -soc '' -scc '' -its -snl -l ocaml
+}
+
+
 rm -fr tags
 mkdir tags
 rm -fr _tmp
@@ -25,6 +30,8 @@ mkdir _tmp
 echo > blogposts.contents.tmp.md.ml
 echo > blogposts.contents-atom.xml
 
+cat common.ml > blog-atom-body.ml
+cat common.ml > blog-rss-body.ml
 
 for i in posts/*.md.ml.mpp ; do
     if [[ -f "$i" ]] ; then true ; else continue ; fi
@@ -36,7 +43,7 @@ for i in posts/*.md.ml.mpp ; do
     export selfbn="posts/$(basename "$i" .md.ml.mpp)"
 
     # .md.ml
-    mpp -soc '' -scc '' -its -snl -l ocaml < "$i" > "$bn.md.ml"
+    MPPOCAML < "$i" > "$bn.md.ml"
     # .main.ml
     CAT common.ml "$bn.md.ml" ml_to_md.ml > "$bn.main.ml"
 
@@ -57,22 +64,65 @@ for i in posts/*.md.ml.mpp ; do
     # create tags (symb links)
     ocaml "$bn.tags.ml"
     # .html.ml
-    (CAT common.ml "$bn.md.ml" ; mpp -soc '' -scc '' -its -snl -l ocaml < _templates/main.mpp) > "$bn.html.ml"
+    (CAT common.ml "$bn.md.ml" ; MPPOCAML < _templates/main.mpp) > "$bn.html.ml"
     # .html
     ocaml "$bn.html.ml" > "$bn.html"
     mv "$bn.html" posts/
 
     # atom feed
-    contents="$bn.main.html" mpp -soc '' -scc '' -its -snl -l ocaml < atom-body.xml >> blog-atom-body.xml
+    CAT "$bn.md.ml" >> blog-atom-body.ml
+    MPPOCAML < _templates/atom-body.xml.ml.mpp >> blog-atom-body.ml
     # rss feed
-    contents="$bn.main.html" mpp -soc '' -scc '' -its -snl -l ocaml < rss-body.xml >> blog-rss-body.xml
+    CAT "$bn.md.ml" >> blog-rss-body.ml
+    MPPOCAML < _templates/rss-body.xml.ml.mpp >> blog-rss-body.ml
 
 done
 
-(CAT common.ml ; atom_contents=blog-atom-body.xml mpp -soc '' -scc '' -its -snl -l ocaml < atom.xml) > atom.ml
-ocaml atom.ml > blog-atom.xml
-(CAT common.ml ; rss_contents=blog-rss-body.xml mpp -soc '' -scc '' -its -snl -l ocaml < rss.xml) > rss.ml
-ocaml rss.ml > blog-rss.xml
+cat > blog-atom.xml <<EOF
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+  <title>pw374</title>
+  <link href="http://pw374.github.io/"/>
+  <link type="application/atom+xml" rel="self" href="http:///pw374.github.io/blog-atom.xml"/>
+  <updated></updated>
+  <id>http://pw374.github.io/</id>
+  <author>
+    <name>Philippe Wang</name>
+    <email>philippe.wang@cl.cam.ac.uk</email>
+  </author>
+EOF
+echo foobar
+ocaml blog-atom-body.ml >> blog-atom.xml
+cat >> blog-atom.xml <<EOF
+</feed>
+EOF
+
+cat > blog-rss.xml <<EOF
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>pw374</title>
+    <link>http://pw374.github.io/</link>
+    <atom:link href="http://pw374.net/rss.xml" rel="self" type="application/rss+xml" />
+    <description>pw374 blog</description>
+    <language>en-gb</language>
+    <pubDate>{< let _ = input_command "date '+%a, %d %b %Y %H:%M:%S %z'" >}</pubDate>
+    <lastBuildDate>{< let _ = input_command "date '+%a, %d %b %Y %H:%M:%S %z'" >}</lastBuildDate>
+EOF
+echo foobar2
+ocaml -stdin < blog-rss-body.ml >> blog-rss.xml
+cat >> blog-rss.xml <<EOF
+  </channel>
+</rss>
+EOF
+
+# CAT common.ml > rss.ml
+# echo \#5
+# MPPOCAML < rss.xml >> rss.ml
+# echo \#6
+# contents=blog-rss-body.xml ocaml rss.ml > blog-rss.xml
+# echo \#7
 
 ## make blogposts.contents.tmp.md
 ocaml blogposts.contents.tmp.md.ml > blogposts.contents.tmp.md
@@ -120,7 +170,7 @@ for bn in index projects blog tags/*/index; do
     export self="$bn.html"
     export selfbn="$bn"
     # .md.ml
-    mpp -soc '' -scc '' -its -snl -l ocaml < "$bn.md.ml.mpp" > "$bn.md.ml"
+    MPPOCAML < "$bn.md.ml.mpp" > "$bn.md.ml"
     # .main.ml
     CAT common.ml "$bn.md.ml" ml_to_md.ml > "$bn.main.ml"
     # .main.md
@@ -143,7 +193,7 @@ for bn in index projects blog tags/*/index; do
     mv "$toc"{.tmp,}
     fi
     # .html.ml
-    (CAT common.ml "$bn.md.ml"  ; mpp -soc '' -scc '' -its -snl -l ocaml < _templates/main.mpp) > "$bn.html.ml"
+    (CAT common.ml "$bn.md.ml"  ; MPPOCAML < _templates/main.mpp) > "$bn.html.ml"
     # .html
     ocaml "$bn.html.ml" > "$bn.html"
 done

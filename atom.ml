@@ -41,4 +41,4 @@ let input_command e =
   
 let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
  let _ = print_string "<?xml version=\"1.0\"?>\n<feed xmlns=\"http://www.w3.org/2005/Atom\">\n \n  <title>pw374</title>\n  <link href=\"http://pw374.github.io/\"/>\n  <link type=\"application/atom+xml\" rel=\"self\" href=\"http:///pw374.github.io/blog-atom.xml\"/>\n  <updated></updated>\n  <id>http://pw374.github.io/</id>\n  <author>\n    <name>Philippe Wang</name>\n    <email>philippe.wang@cl.cam.ac.uk</email>\n  </author>\n\n  "
- let _ = cat (Sys.getenv "contents")  let _ = print_string "\n</feed>\n"
+ let _ = print_string "\n</feed>\n"

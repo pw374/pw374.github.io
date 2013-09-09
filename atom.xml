@@ -11,6 +11,6 @@
     <email>philippe.wang@cl.cam.ac.uk</email>
   </author>
 
-  {< let _ = cat (Sys.getenv "contents") >}
+  {{ cat (( getenv contents )) }}
 
 </feed>

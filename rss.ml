@@ -42,5 +42,4 @@ let input_command e =
 let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
  let _ = print_string "<?xml version=\"1.0\"?>\n<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n  <channel>\n    <title>pw374</title>\n    <link>http://pw374.github.io/</link>\n    <atom:link href=\"http://pw374.net/rss.xml\" rel=\"self\" type=\"application/rss+xml\" />\n    <description>pw374 blog</description>\n    <language>en-gb</language>\n    <pubDate>"
  let _ = input_command "date '+%a, %d %b %Y %H:%M:%S %z'"  let _ = print_string "</pubDate>\n    <lastBuildDate>"
- let _ = input_command "date '+%a, %d %b %Y %H:%M:%S %z'"  let _ = print_string "</lastBuildDate>\n\n    "
- let _ = cat (Sys.getenv "contents")  let _ = print_string "    \n\n  </channel>\n</rss>\n\n"
+ let _ = input_command "date '+%a, %d %b %Y %H:%M:%S %z'"  let _ = print_string "</lastBuildDate>\n\n    \n\n  </channel>\n</rss>\n\n"
