@@ -16,6 +16,8 @@ cat > $target <<EOF
  let rssdate = "$(date '+%a, %d %b %Y %H:%M:%S %z')"
  let date = "$(date --rfc-3339=seconds)"
  let tags = [ "ocaml"; "cooking"; "pastry"; "raspberrypi"; "linux"; "osx"; ]
+ let disqus = true
+ let stamp = true
 end
 include Meta
 >}

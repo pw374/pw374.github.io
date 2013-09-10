@@ -1,11 +1,13 @@
 %% Copyright (C) 2013  Philippe Wang
 {< module Meta : Meta = struct
- let title = ""
+ let title = "this is only a test (it'll be deleted soon)"
  let id = "pw374.github.io--2013-09-06-20-21-41--27952"
  let xmldate = "2013-09-06T20:21:41+01:00"
  let rssdate = "Fri, 06 Sep 2013 20:21:41 +0100"
  let date = "2013-09-06 20:21:41+01:00"
  let tags = [ "ocaml"; "omd"; "markdown"; ]
+ let disqus = true
+ let stamp = true
 end
 include Meta
 >}
@@ -16,7 +18,7 @@ include Meta
 
 ```ocaml
 module Meta : Meta = struct
- let title = ""
+ let title = "this is only a test (it'll be deleted soon)"
  let id = "pw374.github.io--2013-09-06-15-56-12--4361"
  let xmldate = "2013-09-06T15:56:12+01:00"
  let date = "2013-09-06 15:56:12+01:00"

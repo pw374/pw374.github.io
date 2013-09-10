@@ -1,15 +1,18 @@
-# 0 "common.ml"
+# 1 "common.ml"
 open Printf
 
 let (!!) s = Printf.printf "%s" s
 
 module type Meta =
 sig 
+  val id : string
   val title : string
   val date : string
   val xmldate : string
   val rssdate : string
   val tags : string list
+  val disqus : bool
+  val stamp : bool
 end
 
 module type Unit = sig end
@@ -40,20 +43,22 @@ let input_command e =
   r
   
 let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
-# 0 "_tmp/test_ocaml.md.ml"
+# 1 "_tmp/test_ocaml.md.ml"
  let _ = print_string ""
  module Meta : Meta = struct
- let title = ""
+ let title = "this is only a test (it'll be deleted soon)"
  let id = "pw374.github.io--2013-09-06-20-21-41--27952"
  let xmldate = "2013-09-06T20:21:41+01:00"
  let rssdate = "Fri, 06 Sep 2013 20:21:41 +0100"
  let date = "2013-09-06 20:21:41+01:00"
  let tags = [ "ocaml"; "omd"; "markdown"; ]
+ let disqus = true
+ let stamp = true
 end
 include Meta
  let _ = print_string "\n"
  module Post(Unit:Unit) = struct  let _ = print_string "## "
- let _ = !!title  let _ = print_string "\n\n```ocaml\nmodule Meta : Meta = struct\n let title = \"\"\n let id = \"pw374.github.io--2013-09-06-15-56-12--4361\"\n let xmldate = \"2013-09-06T15:56:12+01:00\"\n let date = \"2013-09-06 15:56:12+01:00\"\n let tags = [ \"ocaml\"; ]\nend\ninclude Meta\n```\n\n\n\n"
+ let _ = !!title  let _ = print_string "\n\n```ocaml\nmodule Meta : Meta = struct\n let title = \"this is only a test (it'll be deleted soon)\"\n let id = \"pw374.github.io--2013-09-06-15-56-12--4361\"\n let xmldate = \"2013-09-06T15:56:12+01:00\"\n let date = \"2013-09-06 15:56:12+01:00\"\n let tags = [ \"ocaml\"; ]\nend\ninclude Meta\n```\n\n\n\n"
  end  let _ = print_string "\n"
  let _ = print_string "<!DOCTYPE HTML>\n<html>\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n    <title>"
  let _ = !!title  let _ = print_string " &ndash; pw374</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <!-- Google Web Fonts -->\n    <link href=\"http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic\" rel=\"stylesheet\">\n    <link href=\"http://fonts.googleapis.com/css?family=Domine:400,700\" rel=\"stylesheet\">\n    <!-- Only part of Bootstrap that we don't load from a CDN is our own customized CSS build. -->\n    <link href=\"/css/bootstrap.css\" rel=\"stylesheet\" media=\"screen\">\n"
@@ -68,4 +73,21 @@ include Meta
  let _ = if List.mem "ocaml" tags then print_string "class='active'"  let _ = print_string "><a href=\"/tags/ocaml/\">#ocaml</a></li>\n            </ul>\n            <!-- <form class=\"navbar-search pull-right\"> -->\n            <!--   <input class=\"search-query\" type=\"text\" placeholder=\"Search\" /> -->\n            <!-- </form> -->\n          </div>\n        </div>\n      </div>\n    </nav>\n    <div class=\"container\">\n      <div class=\"row\">\n        <div class=\"span4\">\n          <nav id=\"nav-secondary\">\n            <ul class=\"nav nav-list\">\n              <li class=\"nav-header\"><a href=\"#\">"
  let _ = if List.mem "root" tags then print_string "Tags" else print_string "Table of Contents"  let _ = print_string "</a></li>\n              "
  let _ = cat (Sys.getenv "toc")  let _ = print_string "            </ul>\n          </nav>\n        </div>\n        <div id=\"content-primary\" class=\"span8\">\n          <div class=\"content\">\n            "
- let _ = cat (Sys.getenv "contents")  let _ = print_string "          </div>\n        </div>\n\n    <div id=\"disqus_thread\"></div>\n    <script type=\"text/javascript\">\n      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */\n      var disqus_shortname = 'pw374'; // required: replace example with your forum shortname\n  \n      /* * * DON'T EDIT BELOW THIS LINE * * */\n      (function() {\n        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;\n        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';\n        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);\n      })();\n    </script>\n    <noscript>Please enable JavaScript to view the <a href=\"http://disqus.com/?ref_noscript\">comments powered by Disqus.</a></noscript>\n    <a href=\"http://disqus.com\" class=\"dsq-brlink\">comments powered by <span class=\"logo-disqus\">Disqus</span></a>\n  </div>\n\n\n      </div>\n    </div>\n    <footer id=\"footer\" class=\"navbar navbar-inverse navbar-fixed-bottom\">\n      <div class=\"navbar-inner\">\n        <div class=\"container-fluid\">\n          <ul class=\"nav pull-right\">\n            <li><a href=\"https://github.com/pw374\">on GitHub</a></li>\n          </ul>\n        </div>\n      </div>\n    </footer>\n    <!-- Load javascript from CDN -->\n    <script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js\"></script>\n    <script src=\"http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js\"></script>\n  </body>\n</html>\n"
+ let _ = cat (Sys.getenv "contents")  let _ = print_string "          </div>\n"
+ let _ = if disqus then print_string "
+          <div id=\"disqus_thread\">
+          <script type=\"text/javascript\">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'pw374'; // required: replace example with your forum shortname
+            
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+          </script>
+          <noscript>Please enable JavaScript to view the <a href=\"http://disqus.com/?ref_noscript\">comments powered by Disqus.</a></noscript>
+          <a href=\"http://disqus.com\" class=\"dsq-brlink\">comments powered by <span class=\"logo-disqus\">Disqus</span></a>
+          </div>
+"  let _ = print_string "        </div>\n      </div>\n    </div>\n    <footer id=\"footer\" class=\"navbar navbar-inverse navbar-fixed-bottom\">\n      <div class=\"navbar-inner\">\n        <div class=\"container-fluid\">\n          <ul class=\"nav pull-right\">\n            <li><a href=\"https://github.com/pw374\">on GitHub</a></li>\n          </ul>\n        </div>\n      </div>\n    </footer>\n    <!-- Load javascript from CDN -->\n    <script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js\"></script>\n    <script src=\"http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js\"></script>\n  </body>\n</html>\n"

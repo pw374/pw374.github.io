@@ -4,11 +4,14 @@ let (!!) s = Printf.printf "%s" s
 
 module type Meta =
 sig 
+  val id : string
   val title : string
   val date : string
   val xmldate : string
   val rssdate : string
   val tags : string list
+  val disqus : bool
+  val stamp : bool
 end
 
 module type Unit = sig end

@@ -9,7 +9,7 @@
     <pubDate>{< let _ = input_command "date '+%a, %d %b %Y %H:%M:%S %z'" >}</pubDate>
     <lastBuildDate>{< let _ = input_command "date '+%a, %d %b %Y %H:%M:%S %z'" >}</lastBuildDate>
 
-    {< let _ = cat (Sys.getenv "contents") >}    
+    
 
   </channel>
 </rss>

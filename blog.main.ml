@@ -1,15 +1,18 @@
-# 0 "common.ml"
+# 1 "common.ml"
 open Printf
 
 let (!!) s = Printf.printf "%s" s
 
 module type Meta =
 sig 
+  val id : string
   val title : string
   val date : string
   val xmldate : string
   val rssdate : string
   val tags : string list
+  val disqus : bool
+  val stamp : bool
 end
 
 module type Unit = sig end
@@ -40,7 +43,7 @@ let input_command e =
   r
   
 let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
-# 0 "blog.md.ml"
+# 1 "blog.md.ml"
  let _ = print_string ""
  module Meta : Meta = struct
  let title = "Blog"
@@ -49,6 +52,8 @@ let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
  let rssdate = input_command "date '+%a, %d %b %Y %H:%M:%S %z'"
  let date = input_command "date --rfc-3339=seconds"
  let tags = [ ]
+ let disqus = false
+ let stamp = false
 end
 include Meta
  let _ = print_string "\n"
@@ -56,11 +61,12 @@ include Meta
  let _ = !!title  let _ = print_string "\nI'm trying to make this website my new blog, using OMD and MPP, \nwith OCaml of course, but also the (awful) HTML/CSS/JS triplet.\n\nHere follow the last blog posts\n\n"
  let _ = cat "blogposts.contents.tmp.md"  let _ = print_string "\n"
  end  let _ = print_string "\n"
-# 0 "ml_to_md.ml"
+# 1 "ml_to_md.ml"
 (* running Post(Something) must generate the main contents of the post *)
 include Post(struct end)
 
 let _ =
-  printf "<div><emph>started on %s, (re)generated on %s</emph></div>" 
+  if stamp then
+  printf "<div style='font-size:80%%;'><em>started on %s, (re)generated on %s</em></div>" 
     date 
     (input_command "date --rfc-3339=seconds")

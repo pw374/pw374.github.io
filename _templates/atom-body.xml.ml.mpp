@@ -10,5 +10,5 @@
       <name>Philippe Wang</name>
       <uri>http://pw374.github.io/</uri>
     </author>
-    <content type="html">{< cat (Sys.getenv "contents") >}</content>
+    <content type="html">{< let _ = cat (Sys.getenv "contents") >}</content>
   </entry>

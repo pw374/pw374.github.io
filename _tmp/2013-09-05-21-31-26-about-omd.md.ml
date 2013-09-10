@@ -6,6 +6,8 @@
  let rssdate = "Thu, 05 Sep 2013 22:31:26 +01:00"
  let date = "2013-09-05 22:31:26+01:00"
  let tags = [ "ocaml"; "markdown"; "software development"; ]
+ let disqus = true
+ let stamp = true
 end
 include Meta
  let _ = print_string "\n"
