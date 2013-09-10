@@ -44,8 +44,9 @@ let input_command e =
   
 let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
 # 1 "tags/omd/index.md.ml"
- let _ = print_string "# 1 \"tags/omd/index.md.ml.mpp\"\n"
- module Meta : Meta = struct
+ let _ = print_string ""
+ # 1 "tags/omd/index.md.ml.mpp"
+module Meta : Meta = struct
  let title = "blog#omd"
  let id = "pw374.github.io--" ^ input_command "date +%Y-%m-%d-%H-%M-%S" ^ "--index"
  let xmldate = input_command "date --rfc-3339=seconds|tr ' ' T"

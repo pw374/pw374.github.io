@@ -140,9 +140,9 @@ for x in tags/* ; do
     echo "ocaml $x/index.ml > $x/index.contents.md"
     ocaml "$x"/index.ml > "$x"/index.contents.md
     cat > "$x"/index.md.ml.mpp <<EOF
-# 1 "$x/index.md.ml.mpp"
 %% Copyright (C) 2013  Philippe Wang
-{< module Meta : Meta = struct
+{< # 1 "$x/index.md.ml.mpp"
+module Meta : Meta = struct
  let title = "blog#$(basename "$x")"
  let id = "pw374.github.io--" ^ input_command "date +%Y-%m-%d-%H-%M-%S" ^ "--index"
  let xmldate = input_command "date --rfc-3339=seconds|tr ' ' T"
