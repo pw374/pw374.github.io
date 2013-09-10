@@ -55,7 +55,7 @@ for i in posts/*.md.ml.mpp ; do
     # .main.html
     OMD < "$bn.main.md" > "$bn.main.html"
     # .toc.html
-    omd -otoc < "$bn.main.md" > "$toc"
+    omd -otoc -otoc -td 3 < "$bn.main.md" > "$toc"
     n=$(wc -l < "$toc")
     tail -n $((n-1)) "$toc" | head -n $((n-2)) > "$toc.tmp"
     mv "$toc"{.tmp,}
@@ -190,7 +190,7 @@ for bn in index projects blog tags/*/index; do
         fi
     done > "$toc"
     else
-    omd -otoc < "$bn.main.md" > "$toc"
+    omd -otoc -td 3 < "$bn.main.md" > "$toc"
     n=$(wc -l < "$toc")
     tail -n $((n-1)) "$toc" | head -n $((n-2)) > "$toc.tmp"
     mv "$toc"{.tmp,}
