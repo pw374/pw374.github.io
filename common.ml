@@ -10,6 +10,8 @@ sig
   val xmldate : string
   val rssdate : string
   val tags : string list
+  val disqus : bool
+  val stamp : bool
 end
 
 module type Unit = sig end

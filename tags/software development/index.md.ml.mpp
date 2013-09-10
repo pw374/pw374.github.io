@@ -1,3 +1,4 @@
+# 1 "tags/software development/index.md.ml.mpp"
 %% Copyright (C) 2013  Philippe Wang
 {< module Meta : Meta = struct
  let title = "blog#software development"
@@ -6,6 +7,8 @@
  let rssdate = input_command "date '+%a, %d %b %Y %H:%M:%S %z'"
  let date = input_command "date --rfc-3339=seconds|tr ' ' T"
  let tags = [ "software development"; ]
+ let stamp = false
+ let disqus = false
 end
 include Meta
 >}

@@ -1,3 +1,4 @@
+# 1 "tags/software development/index.md.ml.mpp"
 
 # blog#software development
 
@@ -261,8 +262,5 @@ of the OCaml community may contribute to it in a more convenient way.
 And of course, that means that OMD will be used for OCaml.org.
 
 
-<div style='font-size:80%;'><em>started on 2013-09-05 22:31:26+01:00, (re)generated on 2013-09-10 01:45:57+01:00
-</em></div>
-<div style='font-size:80%;'><em>started on 2013-09-10T01:45:59+01:00
-, (re)generated on 2013-09-10 01:45:59+01:00
+<div style='font-size:80%;'><em>started on 2013-09-05 22:31:26+01:00, (re)generated on 2013-09-10 01:59:02+01:00
 </em></div>

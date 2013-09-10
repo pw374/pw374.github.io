@@ -1,4 +1,4 @@
-# 0 "common.ml"
+# 1 "common.ml"
 open Printf
 
 let (!!) s = Printf.printf "%s" s
@@ -11,6 +11,8 @@ sig
   val xmldate : string
   val rssdate : string
   val tags : string list
+  val disqus : bool
+  val stamp : bool
 end
 
 module type Unit = sig end
@@ -41,7 +43,7 @@ let input_command e =
   r
   
 let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
-# 0 "projects.md.ml"
+# 1 "projects.md.ml"
  let _ = print_string ""
  module Meta : Meta = struct
  let title = "Projects"
@@ -50,17 +52,20 @@ let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
  let rssdate = input_command "date '+%a, %d %b %Y %H:%M:%S %z'"
  let date = input_command "date --rfc-3339=seconds|tr ' ' T"
  let tags = [ "projects"; ]
+ let disqus = false
+ let stamp = false
 end
 include Meta
  let _ = print_string "\n"
  module Post(Unit:Unit) = struct  let _ = print_string "# "
  let _ = !!title  let _ = print_string "\nA list of projects...\n\n* omd\n* mpp\n* ...\n\n\n\n"
  end  let _ = print_string "\n"
-# 0 "ml_to_md.ml"
+# 1 "ml_to_md.ml"
 (* running Post(Something) must generate the main contents of the post *)
 include Post(struct end)
 
 let _ =
+  if stamp then
   printf "<div style='font-size:80%%;'><em>started on %s, (re)generated on %s</em></div>" 
     date 
     (input_command "date --rfc-3339=seconds")

@@ -1,4 +1,4 @@
-# 0 "common.ml"
+# 1 "common.ml"
 open Printf
 
 let (!!) s = Printf.printf "%s" s
@@ -11,6 +11,8 @@ sig
   val xmldate : string
   val rssdate : string
   val tags : string list
+  val disqus : bool
+  val stamp : bool
 end
 
 module type Unit = sig end
@@ -41,7 +43,7 @@ let input_command e =
   r
   
 let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
-# 0 "blog.md.ml"
+# 1 "blog.md.ml"
  let _ = print_string ""
  module Meta : Meta = struct
  let title = "Blog"
@@ -50,6 +52,8 @@ let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
  let rssdate = input_command "date '+%a, %d %b %Y %H:%M:%S %z'"
  let date = input_command "date --rfc-3339=seconds"
  let tags = [ ]
+ let disqus = false
+ let stamp = false
 end
 include Meta
  let _ = print_string "\n"
@@ -70,4 +74,21 @@ include Meta
  let _ = if List.mem "ocaml" tags then print_string "class='active'"  let _ = print_string "><a href=\"/tags/ocaml/\">#ocaml</a></li>\n            </ul>\n            <!-- <form class=\"navbar-search pull-right\"> -->\n            <!--   <input class=\"search-query\" type=\"text\" placeholder=\"Search\" /> -->\n            <!-- </form> -->\n          </div>\n        </div>\n      </div>\n    </nav>\n    <div class=\"container\">\n      <div class=\"row\">\n        <div class=\"span4\">\n          <nav id=\"nav-secondary\">\n            <ul class=\"nav nav-list\">\n              <li class=\"nav-header\"><a href=\"#\">"
  let _ = if List.mem "root" tags then print_string "Tags" else print_string "Table of Contents"  let _ = print_string "</a></li>\n              "
  let _ = cat (Sys.getenv "toc")  let _ = print_string "            </ul>\n          </nav>\n        </div>\n        <div id=\"content-primary\" class=\"span8\">\n          <div class=\"content\">\n            "
- let _ = cat (Sys.getenv "contents")  let _ = print_string "          </div>\n          <div id=\"disqus_thread\">\n          <script type=\"text/javascript\">\n            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */\n            var disqus_shortname = 'pw374'; // required: replace example with your forum shortname\n            \n            /* * * DON'T EDIT BELOW THIS LINE * * */\n            (function() {\n            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;\n            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';\n            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);\n            })();\n          </script>\n          <noscript>Please enable JavaScript to view the <a href=\"http://disqus.com/?ref_noscript\">comments powered by Disqus.</a></noscript>\n          <a href=\"http://disqus.com\" class=\"dsq-brlink\">comments powered by <span class=\"logo-disqus\">Disqus</span></a>\n          </div>\n        </div>\n      </div>\n    </div>\n    <footer id=\"footer\" class=\"navbar navbar-inverse navbar-fixed-bottom\">\n      <div class=\"navbar-inner\">\n        <div class=\"container-fluid\">\n          <ul class=\"nav pull-right\">\n            <li><a href=\"https://github.com/pw374\">on GitHub</a></li>\n          </ul>\n        </div>\n      </div>\n    </footer>\n    <!-- Load javascript from CDN -->\n    <script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js\"></script>\n    <script src=\"http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js\"></script>\n  </body>\n</html>\n"
+ let _ = cat (Sys.getenv "contents")  let _ = print_string "          </div>\n"
+ let _ = if disqus then print_string "
+          <div id=\"disqus_thread\">
+          <script type=\"text/javascript\">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'pw374'; // required: replace example with your forum shortname
+            
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+          </script>
+          <noscript>Please enable JavaScript to view the <a href=\"http://disqus.com/?ref_noscript\">comments powered by Disqus.</a></noscript>
+          <a href=\"http://disqus.com\" class=\"dsq-brlink\">comments powered by <span class=\"logo-disqus\">Disqus</span></a>
+          </div>
+"  let _ = print_string "        </div>\n      </div>\n    </div>\n    <footer id=\"footer\" class=\"navbar navbar-inverse navbar-fixed-bottom\">\n      <div class=\"navbar-inner\">\n        <div class=\"container-fluid\">\n          <ul class=\"nav pull-right\">\n            <li><a href=\"https://github.com/pw374\">on GitHub</a></li>\n          </ul>\n        </div>\n      </div>\n    </footer>\n    <!-- Load javascript from CDN -->\n    <script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js\"></script>\n    <script src=\"http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js\"></script>\n  </body>\n</html>\n"

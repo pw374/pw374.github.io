@@ -18,7 +18,7 @@
           href="http://pw374.github.io/posts/test_ocaml.html"/>
     <title>OMD: a Markdown parser in OCaml</title>
     <category term='ocaml' /><category term='markdown' /><category term='software development' />    <published>2013-09-05T22:31:26+01:00</published>
-    <updated>2013-09-10T01:45:57+01:00
+    <updated>2013-09-10T01:59:02+01:00
 </updated>
     <author>
       <name>Philippe Wang</name>
@@ -35,7 +35,7 @@
 <span class='k'>end</span>
 <span class='k'>include</span> Meta
 </code></pre>
-<div style='font-size:80%;'><em>started on 2013-09-06 20:21:41+01:00, (re)generated on 2013-09-10 01:45:57+01:00
+<div style='font-size:80%;'><em>started on 2013-09-06 20:21:41+01:00, (re)generated on 2013-09-10 01:59:02+01:00
 </em></div>
 </content>
   </entry>
@@ -47,7 +47,7 @@
           href="http://pw374.github.io/posts/test_ocaml.html"/>
     <title>this is only a test (it'll be deleted soon)</title>
     <category term='ocaml' /><category term='omd' /><category term='markdown' />    <published>2013-09-06T20:21:41+01:00</published>
-    <updated>2013-09-10T01:45:57+01:00
+    <updated>2013-09-10T01:59:02+01:00
 </updated>
     <author>
       <name>Philippe Wang</name>
@@ -64,7 +64,7 @@
 <span class='k'>end</span>
 <span class='k'>include</span> Meta
 </code></pre>
-<div style='font-size:80%;'><em>started on 2013-09-06 20:21:41+01:00, (re)generated on 2013-09-10 01:45:57+01:00
+<div style='font-size:80%;'><em>started on 2013-09-06 20:21:41+01:00, (re)generated on 2013-09-10 01:59:02+01:00
 </em></div>
 </content>
   </entry>

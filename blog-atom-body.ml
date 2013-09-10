@@ -10,6 +10,8 @@ sig
   val xmldate : string
   val rssdate : string
   val tags : string list
+  val disqus : bool
+  val stamp : bool
 end
 
 module type Unit = sig end
@@ -40,7 +42,7 @@ let input_command e =
   r
   
 let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
-# 0 "_tmp/2013-09-05-21-31-26-about-omd.md.ml"
+# 1 "_tmp/2013-09-05-21-31-26-about-omd.md.ml"
  let _ = print_string ""
  module Meta : Meta = struct
  let title = "OMD: a Markdown parser in OCaml"
@@ -49,6 +51,8 @@ let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
  let rssdate = "Thu, 05 Sep 2013 22:31:26 +01:00"
  let date = "2013-09-05 22:31:26+01:00"
  let tags = [ "ocaml"; "markdown"; "software development"; ]
+ let disqus = true
+ let stamp = true
 end
 include Meta
  let _ = print_string "\n"
@@ -63,7 +67,7 @@ include Meta
  let _ = print_string xmldate  let _ = print_string "</published>\n    <updated>"
  let _ = command "date --rfc-3339=seconds|tr ' ' T"  let _ = print_string "</updated>\n    <author>\n      <name>Philippe Wang</name>\n      <uri>http://pw374.github.io/</uri>\n    </author>\n    <content type=\"html\">"
  let _ = cat (Sys.getenv "contents")  let _ = print_string "</content>\n  </entry>\n"
-# 0 "_tmp/test_ocaml.md.ml"
+# 1 "_tmp/test_ocaml.md.ml"
  let _ = print_string ""
  module Meta : Meta = struct
  let title = "this is only a test (it'll be deleted soon)"
@@ -72,6 +76,8 @@ include Meta
  let rssdate = "Fri, 06 Sep 2013 20:21:41 +0100"
  let date = "2013-09-06 20:21:41+01:00"
  let tags = [ "ocaml"; "omd"; "markdown"; ]
+ let disqus = true
+ let stamp = true
 end
 include Meta
  let _ = print_string "\n"

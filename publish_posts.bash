@@ -12,7 +12,7 @@ function OMD () {
 
 function CAT () {
     for i in "$@" ; do
-        echo "# 0 \"$i\""
+        echo "# 1 \"$i\""
         cat "$i"
     done
 }
@@ -140,6 +140,7 @@ for x in tags/* ; do
     echo "ocaml $x/index.ml > $x/index.contents.md"
     ocaml "$x"/index.ml > "$x"/index.contents.md
     cat > "$x"/index.md.ml.mpp <<EOF
+# 1 "$x/index.md.ml.mpp"
 %% Copyright (C) 2013  Philippe Wang
 {< module Meta : Meta = struct
  let title = "blog#$(basename "$x")"
@@ -148,6 +149,8 @@ for x in tags/* ; do
  let rssdate = input_command "date '+%a, %d %b %Y %H:%M:%S %z'"
  let date = input_command "date --rfc-3339=seconds|tr ' ' T"
  let tags = [ "$(basename "$x")"; ]
+ let stamp = false
+ let disqus = false
 end
 include Meta
 >}

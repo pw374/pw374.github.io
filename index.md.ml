@@ -6,6 +6,8 @@
  let rssdate = input_command "date '+%a, %d %b %Y %H:%M:%S %z'"
  let date = input_command "date --rfc-3339=seconds|tr ' ' T"
  let tags = [ "root"; ]
+ let disqus = false
+ let stamp = false
 end
 include Meta
  let _ = print_string "\n"
