@@ -6,8 +6,11 @@ all:
 	@echo make new
 	@echo make clean
 
-publish:
+publish:ocamltohtml
 	./publish_posts.bash
+
+ocamltohtml:ocamltohtml_all.ml
+	ocamlopt $< -o $@
 
 push-all:
 	git add -A; git commit -a -m "auto $(date)" ; git push
