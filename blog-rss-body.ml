@@ -66,27 +66,3 @@ include Meta
  let _ = print_string rssdate  let _ = print_string "</pubDate>\n      <author>Philippe Wang</author>\n      <guid>http://pw374.github.io/"
  let _ = print_string id  let _ = print_string "</guid>\n      <description><![CDATA[\n        "
  let _ = cat (Sys.getenv "contents")  let _ = print_string "      ]]></description>\n    </item>\n\n"
-# 1 "_tmp/test_ocaml.md.ml"
- let _ = print_string ""
- module Meta : Meta = struct
- let title = "this is only a test (it'll be deleted soon)"
- let id = "pw374.github.io--2013-09-06-20-21-41--27952"
- let xmldate = "2013-09-06T20:21:41+01:00"
- let rssdate = "Fri, 06 Sep 2013 20:21:41 +0100"
- let date = "2013-09-06 20:21:41+01:00"
- let tags = [ "ocaml"; "omd"; "markdown"; ]
- let disqus = true
- let stamp = true
-end
-include Meta
- let _ = print_string "\n"
- module Post(Unit:Unit) = struct  let _ = print_string "## "
- let _ = !!title  let _ = print_string "\n\n```ocaml\nmodule Meta : Meta = struct\n let title = \"this is only a test (it'll be deleted soon)\"\n let id = \"pw374.github.io--2013-09-06-15-56-12--4361\"\n let xmldate = \"2013-09-06T15:56:12+01:00\"\n let date = \"2013-09-06 15:56:12+01:00\"\n let tags = [ \"ocaml\"; ]\nend\ninclude Meta\n```\n\n\n\n"
- end  let _ = print_string "\n"
- let _ = print_string "    <item>\n      <title>"
- let _ = print_string title  let _ = print_string "</title>\n      <link>http://pw374.github.io/posts/"
- let _ = printf "%s.html" selfbn  let _ = print_string "</link>\n      "
- let _ = List.iter (printf "<category>%s</category>") tags  let _ = print_string "\n      <pubDate>"
- let _ = print_string rssdate  let _ = print_string "</pubDate>\n      <author>Philippe Wang</author>\n      <guid>http://pw374.github.io/"
- let _ = print_string id  let _ = print_string "</guid>\n      <description><![CDATA[\n        "
- let _ = cat (Sys.getenv "contents")  let _ = print_string "      ]]></description>\n    </item>\n\n"

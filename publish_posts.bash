@@ -7,7 +7,12 @@ unset DEBUG
 fi
 
 function OMD () {
-    omd -r ocaml=ocamltohtml
+    if which -s ocamltohtml
+    then
+        omd -r ocaml=ocamltohtml
+    else
+        omd -r ocaml=./ocamltohtml
+    fi
 }
 
 function CAT () {
