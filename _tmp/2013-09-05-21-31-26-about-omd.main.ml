@@ -34,6 +34,19 @@ let command e =
   flush stdout;
   ignore(Sys.command e)
 
+let htmlescape s =
+  let b = Buffer.create (String.length s  * 2) in
+  for i = 0 to String.length s - 1 do
+    match s.[i] with
+    | '&' | '<' | '>' | '\'' | '"' as c ->
+      Printf.bprintf b "&#%d;" (int_of_char c)
+    | c -> 
+      Buffer.add_char b c
+  done;
+  Buffer.contents b
+
+
+
 let input_command e =
   flush stdout;
   let tmp = Filename.temp_file ~temp_dir:"./" "tmp" "plop" in

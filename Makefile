@@ -6,10 +6,13 @@ all:
 	@echo make new
 	@echo make clean
 
-publish:ocamltohtml
+publish:ocamltohtml htmlescape
 	./publish_posts.bash
 
 ocamltohtml:ocamltohtml_all.ml
+	ocamlopt $< -o $@
+
+htmlescape:htmlescape.ml
 	ocamlopt $< -o $@
 
 push-all:

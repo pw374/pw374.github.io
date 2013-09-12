@@ -33,6 +33,19 @@ let command e =
   flush stdout;
   ignore(Sys.command e)
 
+let htmlescape s =
+  let b = Buffer.create (String.length s  * 2) in
+  for i = 0 to String.length s - 1 do
+    match s.[i] with
+    | '&' | '<' | '>' | '\'' | '"' as c ->
+      Printf.bprintf b "&#%d;" (int_of_char c)
+    | c -> 
+      Buffer.add_char b c
+  done;
+  Buffer.contents b
+
+
+
 let input_command e =
   flush stdout;
   let tmp = Filename.temp_file ~temp_dir:"./" "tmp" "plop" in
@@ -66,4 +79,4 @@ include Meta
  let _ = List.iter (printf "<category term='%s' />") tags  let _ = print_string "    <published>"
  let _ = print_string xmldate  let _ = print_string "</published>\n    <updated>"
  let _ = command "date --rfc-3339=seconds|tr ' ' T"  let _ = print_string "</updated>\n    <author>\n      <name>Philippe Wang</name>\n      <uri>http://pw374.github.io/</uri>\n    </author>\n    <content type=\"html\">"
- let _ = cat (Sys.getenv "contents")  let _ = print_string "</content>\n  </entry>\n"
+ let _ = cat(htmlescape(Sys.getenv "contents"))  let _ = print_string "</content>\n  </entry>\n"
