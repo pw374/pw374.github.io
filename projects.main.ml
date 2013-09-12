@@ -54,6 +54,10 @@ let input_command e =
   r
   
 let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
+
+
+let precontents () = ()
+let html = false
 # 1 "projects.md.ml"
  let _ = print_string ""
  module Meta : Meta = struct

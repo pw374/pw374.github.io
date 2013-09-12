@@ -54,6 +54,10 @@ let input_command e =
   r
   
 let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
+
+
+let precontents () = ()
+let html = false
 # 1 "blog.md.ml"
  let _ = print_string ""
  module Meta : Meta = struct
@@ -72,6 +76,7 @@ include Meta
  let _ = !!title  let _ = print_string "\nI'm trying to make this website my new blog, using OMD and MPP, \nwith OCaml of course, but also the (awful) HTML/CSS/JS triplet.\n\nHere follow the last blog posts\n\n"
  let _ = cat "blogposts.contents.tmp.md"  let _ = print_string "\n"
  end  let _ = print_string "\n"
+let html = true
  let _ = print_string "<!DOCTYPE HTML>\n<html>\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n    <title>"
  let _ = !!title  let _ = print_string " &ndash; pw374</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <!-- Google Web Fonts -->\n    <link href=\"http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic\" rel=\"stylesheet\">\n    <link href=\"http://fonts.googleapis.com/css?family=Domine:400,700\" rel=\"stylesheet\">\n    <!-- Only part of Bootstrap that we don't load from a CDN is our own customized CSS build. -->\n    <link href=\"/css/bootstrap.css\" rel=\"stylesheet\" media=\"screen\">\n"
  let _ = if selfbn <> "" then printf

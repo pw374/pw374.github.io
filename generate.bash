@@ -70,7 +70,7 @@ for i in posts/*.md.ml.mpp ; do
     # create tags (symb links)
     ocaml "$bn.tags.ml"
     # .html.ml
-    (CAT common.ml "$bn.md.ml" ; MPPOCAML < _templates/main.mpp) > "$bn.html.ml"
+    (CAT common.ml "$bn.md.ml" ; echo 'let html = true' ; MPPOCAML < _templates/main.mpp) > "$bn.html.ml"
     # .html
     ocaml "$bn.html.ml" > "$bn.html"
     mv "$bn.html" posts/
@@ -122,12 +122,6 @@ cat >> blog-rss.xml <<EOF
 </rss>
 EOF
 
-# CAT common.ml > rss.ml
-# echo \#5
-# MPPOCAML < rss.xml >> rss.ml
-# echo \#6
-# contents=blog-rss-body.xml ocaml rss.ml > blog-rss.xml
-# echo \#7
 
 ## make blogposts.contents.tmp.md
 ocaml blogposts.contents.tmp.md.ml > blogposts.contents.tmp.md
@@ -201,7 +195,7 @@ for bn in index projects blog tags/*/index; do
     mv "$toc"{.tmp,}
     fi
     # .html.ml
-    (CAT common.ml "$bn.md.ml"  ; MPPOCAML < _templates/main.mpp) > "$bn.html.ml"
+    (CAT common.ml "$bn.md.ml" ; echo 'let html = true' ; MPPOCAML < _templates/main.mpp) > "$bn.html.ml"
     # .html
     ocaml "$bn.html.ml" > "$bn.html"
 done

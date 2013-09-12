@@ -1,13 +1,13 @@
 
 all:
-	@echo make publish
+	@echo make generate
 	@echo make push-all
 	@echo make reinit-git
 	@echo make new
 	@echo make clean
 
-publish:ocamltohtml htmlescape
-	./publish_posts.bash
+generate:ocamltohtml htmlescape
+	./generate.bash
 
 ocamltohtml:ocamltohtml_all.ml
 	ocamlopt $< -o $@

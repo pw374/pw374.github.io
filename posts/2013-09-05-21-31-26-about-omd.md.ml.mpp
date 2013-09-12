@@ -13,7 +13,6 @@ include Meta
 >}
 
 {< module Post(Unit:Unit) = struct >}
-## {< let _ = !!title >}
 
 ### Motivations
 

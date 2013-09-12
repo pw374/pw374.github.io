@@ -53,3 +53,7 @@ let input_command e =
   r
   
 let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
+
+
+let precontents () = ()
+let html = false

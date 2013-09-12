@@ -1,6 +1,6 @@
 
 
-## OMD: a Markdown parser in OCaml
+
 ### Motivations
 
 There  are  so many  existing  implementations  of  Markdown, why  yet
@@ -258,5 +258,5 @@ of the OCaml community may contribute to it in a more convenient way.
 And of course, that means that OMD will be used for OCaml.org.
 
 
-<p style='font-size:80%;'><em>started on 2013-09-05 22:31:26+01:00, (re)generated on 2013-09-12 15:28:52+01:00
+<p style='font-size:80%;'><em>started on 2013-09-05 22:31:26+01:00, (re)generated on 2013-09-12 16:35:28+01:00
 </em></p>
