@@ -10,5 +10,7 @@
       <name>Philippe Wang</name>
       <uri>http://pw374.github.io/</uri>
     </author>
-    <content type="html">{< include Post(struct end) >}</content>
+    <content type="html"><![CDATA[
+{< include Post(struct end) >}
+]]></content>
   </entry>

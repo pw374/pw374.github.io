@@ -1,11 +1,11 @@
   <entry>
-    <id>pw374.github.io-{< let _ = print_string id >}</id>
+    {< let _ = printf "<id>http://pw374.github.io/posts/%s.html</id>\n" id >}
     <link type="text/html" rel="alternate"
           href="http://pw374.github.io/{< let _ = printf "%s.html" selfbn >}"/>
     <title>{< let _ = print_string title >}</title>
     {< let _ = List.iter (printf "<category term='%s' />") tags >}
     <published>{< let _ = print_string xmldate >}</published>
-    <updated>{< let _ = command "date --rfc-3339=seconds|tr ' ' T" >}</updated>
+    {< let _ = printf "<updated>%s</updated>\n" (String.trim(input_command "date --rfc-3339=seconds|tr ' ' T")) >}
     <author>
       <name>Philippe Wang</name>
       <uri>http://pw374.github.io/</uri>

@@ -4,7 +4,7 @@
   <title>pw374</title>
   <link href="http://pw374.github.io/"/>
   <link type="application/atom+xml" rel="self" href="http:///pw374.github.io/blog-atom.xml"/>
-  <updated></updated>
+  <updated>2013-09-12T15:21:14+01:00</updated>
   <id>http://pw374.github.io/</id>
   <author>
     <name>Philippe Wang</name>
@@ -13,13 +13,12 @@
 
 
   <entry>
-    <id>pw374.github.io-pw374.github.io--2013-09-05-22-31-26--29154</id>
+    <id>http://pw374.github.io/posts/2013-09-05-21-31-26-about-omd.html.html</id>
     <link type="text/html" rel="alternate"
           href="http://pw374.github.io/posts/2013-09-05-21-31-26-about-omd.html"/>
     <title>OMD: a Markdown parser in OCaml</title>
     <category term='ocaml' /><category term='markdown' /><category term='software development' />    <published>2013-09-05T22:31:26+01:00</published>
-    <updated>2013-09-12T15:02:49+01:00
-</updated>
+    <updated>2013-09-12T15:21:14+01:00</updated>
     <author>
       <name>Philippe Wang</name>
       <uri>http://pw374.github.io/</uri>
@@ -231,7 +230,7 @@ OCaml.org to style my new Github-hosted website, so I can play with it
 <p>Most pages will be written in Markdown instead of HTML, so that people
 of the OCaml community may contribute to it in a more convenient way.</p>
 <p>And of course, that means that OMD will be used for OCaml.org.</p>
-<p style='font-size:80%;'><em>started on 2013-09-05 22:31:26+01:00, (re)generated on 2013-09-12 15:02:48+01:00
+<p style='font-size:80%;'><em>started on 2013-09-05 22:31:26+01:00, (re)generated on 2013-09-12 15:21:13+01:00
 </em></p>
 </content>
   </entry>

@@ -35,7 +35,7 @@ let command e =
   ignore(Sys.command e)
 
 let htmlescape s =
-  let b = Buffer.create (String.length s  * 2) in
+  let b = Buffer.create (String.length s * 2) in
   for i = 0 to String.length s - 1 do
     match s.[i] with
     | '&' | '<' | '>' | '\'' | '"' as c ->
@@ -44,8 +44,6 @@ let htmlescape s =
       Buffer.add_char b c
   done;
   Buffer.contents b
-
-
 
 let input_command e =
   flush stdout;
@@ -60,7 +58,7 @@ let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
  let _ = print_string ""
  module Meta : Meta = struct
  let title = "OMD: a Markdown parser in OCaml"
- let id = "pw374.github.io--2013-09-05-22-31-26--29154"
+ let id = "2013-09-05-21-31-26-about-omd.html"
  let xmldate = "2013-09-05T22:31:26+01:00"
  let rssdate = "Thu, 05 Sep 2013 22:31:26 +01:00"
  let date = "2013-09-05 22:31:26+01:00"

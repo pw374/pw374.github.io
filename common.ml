@@ -34,7 +34,7 @@ let command e =
   ignore(Sys.command e)
 
 let htmlescape s =
-  let b = Buffer.create (String.length s  * 2) in
+  let b = Buffer.create (String.length s * 2) in
   for i = 0 to String.length s - 1 do
     match s.[i] with
     | '&' | '<' | '>' | '\'' | '"' as c ->
@@ -43,8 +43,6 @@ let htmlescape s =
       Buffer.add_char b c
   done;
   Buffer.contents b
-
-
 
 let input_command e =
   flush stdout;

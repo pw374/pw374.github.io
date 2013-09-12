@@ -34,6 +34,7 @@ mkdir _tmp
 
 echo > blogposts.contents.tmp.md.ml
 echo > blogposts.contents-atom.xml
+echo > blogposts.contents-rss.xml
 
 cat common.ml > blog-atom-body.ml
 cat common.ml > blog-rss-body.ml
@@ -90,7 +91,7 @@ cat > blog-atom.xml <<EOF
   <title>pw374</title>
   <link href="http://pw374.github.io/"/>
   <link type="application/atom+xml" rel="self" href="http:///pw374.github.io/blog-atom.xml"/>
-  <updated></updated>
+  <updated>$(date --rfc-3339=seconds|tr ' ' T)</updated>
   <id>http://pw374.github.io/</id>
   <author>
     <name>Philippe Wang</name>

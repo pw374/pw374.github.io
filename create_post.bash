@@ -11,7 +11,7 @@ cat > $target <<EOF
 %% Copyright (C) 2013  Philippe Wang
 {< module Meta : Meta = struct
  let title = ""
- let id = "pw374.github.io--$(date +%Y-%m-%d-%H-%M-%S)--$RANDOM"
+ let id = "http://pw374.github.io/posts/$(basename $target .md.ml.mpp).html"
  let xmldate = "$(date --rfc-3339=seconds|tr ' ' T)"
  let rssdate = "$(date '+%a, %d %b %Y %H:%M:%S %z')"
  let date = "$(date --rfc-3339=seconds)"
