@@ -87,10 +87,9 @@ done
 cat > blog-atom.xml <<EOF
 <?xml version="1.0"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
- 
   <title>pw374</title>
-  <link href="http://pw374.github.io/"/>
-  <link type="application/atom+xml" rel="self" href="http:///pw374.github.io/blog-atom.xml"/>
+  <link href="http://pw374.github.io/" />
+  <link type="application/atom+xml" rel="self" href="http://pw374.github.io/blog-atom.xml" />
   <updated>$(date --rfc-3339=seconds|tr ' ' T)</updated>
   <id>http://pw374.github.io/</id>
   <author>
