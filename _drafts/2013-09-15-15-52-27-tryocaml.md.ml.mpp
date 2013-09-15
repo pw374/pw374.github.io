@@ -1,0 +1,46 @@
+%% Copyright (C) 2013  Philippe Wang
+{< module Meta : Meta = struct
+ let title = ""
+ let id = "http://pw374.github.io/posts/2013-09-15-15-52-27.html"
+ let xmldate = "2013-09-15T17:52:27+02:00"
+ let rssdate = "Sun, 15 Sep 2013 17:52:27 +0200"
+ let date = "2013-09-15 17:52:27+02:00"
+ let tags = [ "ocaml"; "tryocaml"; ]
+ let disqus = true
+ let stamp = true
+end
+include Meta
+>}
+
+{< module Post(Unit:Unit) = struct >}
+
+This works:
+- initiate a fresh opam 
+- opam switch 4.00.1
+- opam install tryocaml # -----> this is weird because nothing interesting seems to be installed in .opam except the dependencies, which are somehow what is most important...
+
+and then,
+tar xzf ~/.opam/archives/tryocaml.0.2.2+opam.tar.gz
+cd tryocaml.0.2.2
+./configure
+make
+
+So I think I'll stick to that. Before, when it didn't work, I was trying to install what's in https://github.com/OCamlPro/tryocaml and followed the instructions on https://github.com/OCamlPro/tryocaml#try-it. And I suspect the actual error being the fact that it tried to apply some patch to a version of the ocaml compiler that was not present (and it didn't go fetch it by itself, or maybe it did and failed…) Also, the fact that opam creates 3 empty directories (when "opam install tryocaml") is very disturbing!
+
+```
+$ find .opam -iname tryocaml|xargs ls -l
+.opam/4.00.1/doc/tryocaml:
+total 0
+
+.opam/4.00.1/lib/tryocaml:
+total 0
+
+.opam/4.00.1/share/tryocaml:
+total 0
+```
+
+Anyways, now I believe I have means to customise a tryocaml, which is (for now) what really matters.
+
+
+{< end >}
+
