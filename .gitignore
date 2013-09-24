@@ -2,4 +2,9 @@
 *~
 #*
 .#*
+_build/_tmp
+*.cmi
+*.cmo
+*.cmx
+*.cma
 
