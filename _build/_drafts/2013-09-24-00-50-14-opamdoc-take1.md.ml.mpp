@@ -41,7 +41,7 @@ packaging.
 
 If you want to use opamdoc now, here's some instructions based on
 [Anil's instructions](https://github.com/ocamllabs/opam-doc/issues/1#issuecomment-23430108), 
-which are those:
+which are:
 
 > ```
 > opam remote add opamdoc git://github.com/avsm/opamdoc-dev
