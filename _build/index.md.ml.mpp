@@ -1,0 +1,29 @@
+%% Copyright (C) 2013  Philippe Wang
+{< module Meta : Meta = struct
+ let title = "Philippe Wang"
+ let id = "index.html"
+ let xmldate = ""
+ let rssdate = ""
+ let date = input_command "date --rfc-3339=seconds|tr ' ' T"
+ let tags = [ "root"; ]
+ let disqus = false
+ let stamp = false
+end
+include Meta
+>}
+
+{< module Post(Printer:Printer) = struct open Printer >}
+# {< let _ = !!title >}
+
+I'm making this [website](http://pw374.github.io) my new blog, using
+[OMD](https://github.com/pw374/omd/) and
+[MPP](https://github.com/pw374/MPP-language-blender/), with
+[OCaml](http://ocaml.org) of course, but also the (awful) HTML/CSS/JS
+triplet.
+
+## Last blog posts
+
+{< let _ = cat "_tmp/blogposts.list.tmp.md" >}
+
+{< end >}
+

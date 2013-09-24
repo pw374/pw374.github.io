@@ -1,4 +1,4 @@
-MPPOCAML = mpp -soc '' -scc '' -its -snl -l ocaml
+MPPOCAML = mpp -so '((!' -sc '!))' -son '{{!' -scn '!}}' -soc '' -scc '' -its -snl -l ocaml
 
 OMD = omd -r ocaml=ocamltohtml -r tryocaml=ocamltotryocaml
 
@@ -45,8 +45,8 @@ _tmp/%.md.ml:posts/%.md.ml.mpp Makefile
 _tmp/gen_post_contents.ml: Makefile
 	echo 'let () = printf "## %s" title ; let module M = Post(Printer) in ()' > $@
 
-_tmp/%.contents.md:_tmp/%.md.ml _tmp/gen_post_contents.ml Makefile
-	 for i in _tmp/tag.ml _tmp/common.ml $< _tmp/gen_post_contents.ml ; do echo "# 1 \"$$i\"" ; cat "$$i" ; done | ocaml -stdin > $@
+_tmp/%.contents.md:_tmp/%.md.ml _tmp/gen_post_contents.ml _tmp/tag.ml Makefile
+	 for i in _tmp/common.ml $< _tmp/tag.ml _tmp/gen_post_contents.ml ; do echo "# 1 \"$$i\"" ; cat "$$i" ; done | ocaml -stdin > $@
 
 _tmp/%.contents.html:_tmp/%.contents.md Makefile
 	${OMD} < $< > $@
@@ -95,6 +95,9 @@ _tmp/blogposts.contents.tmp.md:posts/*.md.ml.mpp _tmp/gen_post_contents.ml _tmp/
 		cat _tmp/gen_post_contents.ml ; \
 	done) | ocaml -stdin > $@
 
+################################################################################
+# BLOG > RSS AND ATOM FEEDS
+################################################################################
 ../blog-rss.xml:_tmp/blog-rss-contents.xml
 	echo "<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>$$(date '+%a, %d %b %Y %H:%M:%S %z')</pubDate><lastBuildDate>$$(date '+%a, %d %b %Y %H:%M:%S %z')</lastBuildDate>" > $@
 	cat $< >> $@
@@ -148,13 +151,20 @@ _tmp/%.bcontents.html.ml:_tmp/%.bcontents.html Makefile
 ################################################################################
 # BLOG > TAGS
 ################################################################################
-tags:../tags/*
-	for i in $+ ; do make $$i/index.html ; done
+_tmp/tags:../tags/* ../tags/*/* Makefile
+	for i in ../tags/* ; do make $$i/index.html done
+	touch _tmp/tags
 
 ../tags/%/index.html:
+
+
 ../tags/%/index-rss.xml:
+	make $$(for i in posts/*.md.ml.mpp ; do echo _tmp/$$(basename $$i .md.ml.mpp).bcontents.html.ml ; done)
+
 ../tags/%/index-atom.xml:
 
+_tmp/tagpage.md.ml:_templates/tagpage.md.ml.mpp
+	${MPPOCAML} < $< > $@
 
 ################################################################################
 # UTILS
@@ -172,7 +182,7 @@ _tmp/main.ml:_templates/main.ml.mpp Makefile
 .PRECIOUS : _tmp/common.ml _templates/main.ml.mpp _tmp/main.ml _tmp/%.toc.html.ml _tmp/%.contents.html.ml _tmp/%.md.ml _tmp/%.contents.md _tmp/%.contents.html posts/%.md.ml.mpp _tmp/%.toc.html _tmp/blogposts.list.tmp.md _tmp/%.bcontents.md _tmp/%.bcontents.html
 
 clean:
-	rm -f *~ .#* .DS_Store *.cm[iox] *.o 
+	rm -f */*~ *~ .#* .DS_Store *.cm[iox] *.o 
 	rm -fr _tmp
 	mkdir _tmp
 	touch _tmp/index

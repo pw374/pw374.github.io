@@ -1,0 +1,26 @@
+%% Copyright (C) 2013  Philippe Wang
+{< module Meta : Meta = struct
+ let title = "Blog"
+ let id = "blog.html"
+ let xmldate = input_command "date --rfc-3339=seconds|tr ' ' T"
+ let rssdate = input_command "date '+%a, %d %b %Y %H:%M:%S %z'"
+ let date = input_command "date --rfc-3339=seconds"
+ let tags = [ ]
+ let disqus = false
+ let stamp = false
+end
+include Meta
+>}
+
+{< module Post(Printer:Printer) = struct open Printer >}
+# {< let _ = !!title >}
+
+I'm trying to make this website my new blog, using OMD and MPP, 
+with OCaml of course, but also the (awful) HTML/CSS/JS triplet.
+
+Here follow the last blog posts.
+
+{< let _ = cat "_tmp/blogposts.contents.tmp.md" >}
+
+{< end >}
+

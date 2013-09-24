@@ -1,0 +1,21 @@
+{<
+module Meta : Meta = struct
+ let title = sprintf "blog#%s" tag
+ let id = ""
+ let xmldate = input_command "date --rfc-3339=seconds|tr ' ' T"
+ let rssdate = input_command "date '+%a, %d %b %Y %H:%M:%S %z'"
+ let date = input_command "date --rfc-3339=seconds|tr ' ' T"
+ let tags = [ "$(basename "$x")"; ]
+ let stamp = false
+ let disqus = false
+end
+include Meta
+>}
+
+{< module Post(Printer:Printer) = struct >}
+# {< let _ = !!title >}
+
+
+{< let _ = cat "$x/index.contents.md" >}
+
+{< end >}
