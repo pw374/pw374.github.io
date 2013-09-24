@@ -112,10 +112,37 @@ But... it's still huge with `Core.Std`.
 
 ### opam_doc_config.ml, or docs_loader.js
 
-Since the JavaScript may have to load tens of megabytes of HTML,
-you have to program some nasty functions and loops... and at
-some point it does become big enough for your browser to stop
-responding while it's busy loading your documentation.
+Since the JavaScript  may have to load tens of  megabytes of HTML, you
+have to program some nasty functions and loops... and at some point it
+does become big enough for  your browser to stop responding while it's
+busy  loading your documentation.  So there  are several  solutions to
+that. The best would probably be to stop writing in JavaScript (and
+use something else that compiles to JavaScript). But that's for next
+step. Now, we're trying to make the JavaScript work.
+
+The problem  with JavaScript  is that basically  there is  one "event"
+loop,  and  all events  are  happening  sequentially or  concurrently,
+depending on how  you wrote your JS, but when one  event is making the
+browser busy,  the browser is unable  to do anything  else. That's why
+your browser may tell you at  some point that you have a script making
+it ill and ask you whether  you want it to stop executing that script.
+One workaround  for that problem  when you know  you ask for a  lot of
+computation time is to divide  your big computation into smaller ones.
+You can  use `window.setTimeout` for that, meaning  you transform your
+recursive calls like `f()`  into `window.setTimeout(f, 0)` so that `f`
+will be called at some point. And if you have iterative loops instead,
+write them recursive and use `window.setTimeout`. That's bad.  Because
+then the browser  is unable to tell that it's  crazy busy...  and it's
+still really busy. So you can increase the value 0 to 1 or 10 or more. 
+But if you increase it too much, it'll become too slow...
+
+Ok, well, don't use JavaScript. It's a nightmare. 
+
+We will probably rewrite the script using Js_of_ocaml at some point,
+mainly because when you write in OCaml, you have static type checking,
+and that saves so much time!
+
+To be followed...
 
 {< end >}
 
