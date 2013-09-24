@@ -1,0 +1,121 @@
+%% Copyright (C) 2013  Philippe Wang
+{< module Meta : Meta = struct
+ let title = "on the Implementation of OPAMDOC"
+ let id = "2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html"
+ let xmldate = "2013-09-24T14:21:00+00:00"
+ let rssdate = "Tue, 24 Sep 2013 14:21:00 +0000"
+ let date = "2013-09-24 14:21:00+00:00"
+ let tags = [ ]
+ let disqus = true
+ let stamp = true
+end
+include Meta
+>}
+
+{< module Post(Printer:Printer) = struct open Printer >}
+
+[Early this year, Leo White started the implementation of
+opamdoc](https://github.com/ocamllabs/opam-doc/commits/master).  
+Then [Vincent Botbol](https://github.com/vincent-botbol) worked on it
+from late May to mid August during his stay in Cambridge.
+
+Now, Vincent's back to studying "computer science research" in Paris,
+and he continues working on opam-doc when he can on his free time.
+
+I didn't really want to get involved too deep in the implementation of
+opamdoc (mainly  because it takes time). Eventually,  since I've ended
+up        doing        most        of       the        [technical-side
+implementation](https://github.com/ocamllabs/sandbox-ocaml.org) of the
+[new  ocaml.org web  site](http://ocaml-redesign.github.io), I  had to
+eventually get into  opamdoc's source code to integrate  its output in
+the website.
+
+If you look at the [source code of
+opamdoc](https://github.com/ocamllabs/opam-doc/), you'll see there's a
+bunch of files at the root directory. Well, some of them are inherited
+from the implementation of ocamldoc, and some are new.  I've mostly
+contributed to
+[`generate.ml`](https://github.com/ocamllabs/opam-doc/blob/master/generate.ml)
+and
+[`opam_doc_config.ml`](https://github.com/ocamllabs/opam-doc/blob/master/opam_doc_config.ml).
+The former implements the HTML backend of opamdoc, and the latter
+contains the JavaScript engine that loads the documentation. This blog
+post is mostly about my experience with those two files.
+
+### generate.ml
+
+This big file (about 1.5 kloc) contains the functions to retrieve
+the information from cmt, cmd, cmti, cmdi and cmi files in order to
+build the HTML document. 
+
+Side note:
+
+> The [`.cmt` files were officially introduced in the standard OCaml
+compiler in version
+4.00.0](http://www.ocamlpro.com/blog/2012/08/20/ocamlpro-and-4.00.0.html),
+so it's pretty recent work. Previously, they were produced by a
+separate tool developed at OCamlPro for
+[TypeRex](http://www.typerex.org).
+
+#### Two reasons why it's not super easy
+
+Well, this  can actually  be explain  in just a  few words.   To begin
+with, there  are many cases to  address. Well, that is  not *exact*. I
+should say that  there are may cases to address  *and* those cases are
+fairly **poorly  documented**, which is "normal" given  that there was
+probably no  particular motivation to put  efforts into documentation.
+This is  true for the source  code of ocamldoc *and*  for its official
+documentation. 
+
+For instance, if you look into
+[`info.mli`](https://github.com/ocamllabs/opam-doc/blob/master/info.mli), you
+can see that the first type definition is:
+
+```ocaml
+type style_kind =
+  | SK_bold
+  | SK_italic
+  | SK_emphasize
+  | SK_center
+  | SK_left
+  | SK_right
+  | SK_superscript
+  | SK_subscript
+  | SK_custom of string
+```
+
+and the only documentation for this type is
+`(** The differents kinds of style.  *)`.
+Well, you can see that there's not really any
+documentation needed for those `SK_...` until... you see
+`SK_custom of string`.  There you go! You have to guess...
+
+It's not that hard when you have to guess a few times, it's
+a lot harder when you keep having to guess. That's my point.
+
+Well, the other issue is more interesting.
+At the time `ocamldoc` was designed and implemented, I bet
+no one imagined what folks at JaneStreet would do with OCaml!
+I'm talking about the implementation of their open source library,
+known as `Core`. "`Core` & co" use a ***lot*** of `include` directives.
+The module  `Core.Std` includes a lot of other modules, which
+also include modules. If you want to generate a single full HTML 
+page for `Core.Std`, you'd end up with a ***huge*** page.
+And such a page would contain a lot of information coming straight
+from other pages, so you'd end up with hundreds of megabytes.
+Instead of doing so, opamdoc generates only one page per package
+and one per module. If a module includes another one, then the first
+will fetch the documentation of the second and there you go.
+That's why we have a JavaScript loader.
+
+But... it's still huge with `Core.Std`.
+
+### opam_doc_config.ml, or docs_loader.js
+
+Since the JavaScript may have to load tens of megabytes of HTML,
+you have to program some nasty functions and loops... and at
+some point it does become big enough for your browser to stop
+responding while it's busy loading your documentation.
+
+{< end >}
+
