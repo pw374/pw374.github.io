@@ -11,10 +11,10 @@ cat > $target <<EOF
 %% Copyright (C) 2013  Philippe Wang
 {< module Meta : Meta = struct
  let title = ""
- let id = "$(date +%Y-%m-%d-%H-%M-%S).html"
- let xmldate = "$(date --rfc-3339=seconds|tr ' ' T)"
- let rssdate = "$(date '+%a, %d %b %Y %H:%M:%S %z')"
- let date = "$(date --rfc-3339=seconds)"
+ let id = "$(date -u +%Y-%m-%d-%H-%M-%S).html"
+ let xmldate = "$(date -u --rfc-3339=seconds|tr ' ' T)"
+ let rssdate = "$(date -u '+%a, %d %b %Y %H:%M:%S %z')"
+ let date = "$(date -u --rfc-3339=seconds)"
  let tags = [ ]
  let disqus = true
  let stamp = true
