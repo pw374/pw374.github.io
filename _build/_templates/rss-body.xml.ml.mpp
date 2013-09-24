@@ -4,7 +4,7 @@
       {< let _ = List.iter (printf "<category>%s</category>") tags >}
 
       <pubDate>{< let _ = print_string rssdate >}</pubDate>
-      <author>Philippe Wang</author>
+      <author>philippe.wang@cl.cam.ac.uk</author>
       <guid>http://pw374.github.io/{< let _ = print_string id >}</guid>
       <description><![CDATA[
 {<
