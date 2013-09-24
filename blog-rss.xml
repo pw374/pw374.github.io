@@ -1,4 +1,4 @@
-<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Tue, 24 Sep 2013 02:45:10 +0100</pubDate><lastBuildDate>Tue, 24 Sep 2013 02:45:10 +0100</lastBuildDate>
+<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Tue, 24 Sep 2013 02:53:42 +0100</pubDate><lastBuildDate>Tue, 24 Sep 2013 02:53:42 +0100</lastBuildDate>
 
 
     <item>
@@ -230,7 +230,7 @@ of the OCaml community may contribute to it in a more convenient way.&#60;/p&#62
       <guid>http://pw374.github.io/2013-09-24-01-50-14-opamdoc-take1.html</guid>
       <description><![CDATA[
 
-&#60;h2 id=&#34;OPAMDOCwithmultipleOCamlpackages&#34;&#62; OPAM-DOC with multiple OCaml packages&#60;/h2&#62;&#60;h3 id=&#34;OPAMDOC&#34;&#62; &#60;a href=&#39;https://github.com/ocamllabs/opam-doc/&#39;&#62;OPAM-DOC&#60;/a&#62;&#60;/h3&#62;
+&#60;h3 id=&#34;OPAMDOC&#34;&#62; &#60;a href=&#39;https://github.com/ocamllabs/opam-doc/&#39;&#62;OPAM-DOC&#60;/a&#62;&#60;/h3&#62;
 &#60;p&#62;The tool &#60;code&#62;ocamldoc&#60;/code&#62; shipped with the standard distribution of the
 OCaml compiler suffers from some limitations because it doesn&#38;#39;t have
 access to all the information it needs. Notably, if you want to build
@@ -238,7 +238,7 @@ the documentation of some package &#60;code&#62;a&#60;/code&#62; that depends on
 &#60;code&#62;b&#60;/code&#62;, you&#38;#39;ll find out that the documentation of the package &#60;code&#62;a&#60;/code&#62; will
 not automatically refer to the documentation of the package &#60;code&#62;b&#60;/code&#62;.
 Well, opamdoc solves this problem and it&#38;#39;s very nice.&#60;/p&#62;
-&#60;p&#62;On &#60;a href=&#39;http://ocaml-redesign.github.io/&#39;&#62;this site&#60;/a&#62;, which work in progress,
+&#60;p&#62;On &#60;a href=&#39;http://ocaml-redesign.github.io/&#39;&#62;this site&#60;/a&#62;, which is work in progress,
 you can find a &#60;a href=&#39;http://ocaml-redesign.github.io/pkg/&#39;&#62;list of packages&#60;/a&#62; 
 with their descriptions. This list is built using &#60;a href=&#39;https://github.com/OCamlPro/opam2web&#39;&#62;opam2web&#60;/a&#62;.
 And each package description links to its documentation. And the documentation
