@@ -88,6 +88,18 @@
    </li>
   </ul>
  </li>
+ <li><a href='#ontheImplementationofOPAMDOC'> on the Implementation of OPAMDOC</a>
+  <ul>
+   <li><a href='#generateml'> generate.ml</a>
+    <ul>
+     <li><a href='#Tworeasonswhyit39snotsupereasy'> Two reasons why it&#39;s not super easy</a>
+     </li>
+    </ul>
+   </li>
+   <li><a href='#opamdocconfigmlordocsloaderjs'> opam_doc_config.ml, or docs_loader.js</a>
+   </li>
+  </ul>
+ </li>
 </ul>
             </ul>
           </nav>
@@ -462,6 +474,119 @@ for pkg in ${PKGS}; do
 done
 </code></pre>
 <p>Enjoy.</p>
+<h2 id="ontheImplementationofOPAMDOC"> on the Implementation of OPAMDOC</h2><p>
+<a href='https://github.com/ocamllabs/opam-doc/commits/master'>Early this year, Leo White started the implementation of
+opamdoc</a>.<br/>
+
+Then <a href='https://github.com/vincent-botbol'>Vincent Botbol</a> worked on it
+from late May to mid August during his stay in Cambridge.</p>
+<p>Now, Vincent&#39;s back to studying &quot;computer science research&quot; in Paris,
+and he continues working on opam-doc when he can on his free time.</p>
+<p>I didn&#39;t really want to get involved too deep in the implementation of
+opamdoc (mainly  because it takes time). Eventually,  since I&#39;ve ended
+up        doing        most        of       the        <a href='https://github.com/ocamllabs/sandbox-ocaml.org'>technical-side
+implementation</a> of the
+<a href='http://ocaml-redesign.github.io'>new  ocaml.org web  site</a>, I  had to
+eventually get into  opamdoc&#39;s source code to integrate  its output in
+the website.</p>
+<p>If you look at the <a href='https://github.com/ocamllabs/opam-doc/'>source code of
+opamdoc</a>, you&#39;ll see there&#39;s a
+bunch of files at the root directory. Well, some of them are inherited
+from the implementation of ocamldoc, and some are new.  I&#39;ve mostly
+contributed to
+<a href='https://github.com/ocamllabs/opam-doc/blob/master/generate.ml'><code>generate.ml</code></a>
+and
+<a href='https://github.com/ocamllabs/opam-doc/blob/master/opam_doc_config.ml'><code>opam_doc_config.ml</code></a>.
+The former implements the HTML backend of opamdoc, and the latter
+contains the JavaScript engine that loads the documentation. This blog
+post is mostly about my experience with those two files.</p>
+<h3 id="generateml"> generate.ml</h3>
+<p>This big file (about 1.5 kloc) contains the functions to retrieve
+the information from cmt, cmd, cmti, cmdi and cmi files in order to
+build the HTML document.</p>
+<p>Side note:</p>
+<blockquote><p>
+The <a href='http://www.ocamlpro.com/blog/2012/08/20/ocamlpro-and-4.00.0.html'><code>.cmt</code> files were officially introduced in the standard OCaml
+compiler in version
+4.00.0</a>,
+so it&#39;s pretty recent work. Previously, they were produced by a
+separate tool developed at OCamlPro for
+<a href='http://www.typerex.org'>TypeRex</a>.</p>
+</blockquote>
+<h4 id="Tworeasonswhyit39snotsupereasy"> Two reasons why it&#39;s not super easy</h4>
+<p>Well, this  can actually  be explain  in just a  few words.   To begin
+with, there  are many cases to  address. Well, that is  not <em>exact</em>. I
+should say that  there are may cases to address  <em>and</em> those cases are
+fairly <strong>poorly  documented</strong>, which is &quot;normal&quot; given  that there was
+probably no  particular motivation to put  efforts into documentation.
+This is  true for the source  code of ocamldoc <em>and</em>  for its official
+documentation.</p>
+<p>For instance, if you look into
+<a href='https://github.com/ocamllabs/opam-doc/blob/master/info.mli'><code>info.mli</code></a>, you
+can see that the first type definition is:</p>
+<pre><code class='ocaml'><span class='k'>type</span> style_kind <span class='k'>=</span>
+  <span class='o'>|</span> SK_bold
+  <span class='o'>|</span> SK_italic
+  <span class='o'>|</span> SK_emphasize
+  <span class='o'>|</span> SK_center
+  <span class='o'>|</span> SK_left
+  <span class='o'>|</span> SK_right
+  <span class='o'>|</span> SK_superscript
+  <span class='o'>|</span> SK_subscript
+  <span class='o'>|</span> SK_custom <span class='k'>of</span> string
+</code></pre>
+<p>and the only documentation for this type is
+<code>(** The differents kinds of style.  *)</code>.
+Well, you can see that there&#39;s not really any
+documentation needed for those <code>SK_...</code> until... you see
+<code>SK_custom of string</code>.  There you go! You have to guess...</p>
+<p>It&#39;s not that hard when you have to guess a few times, it&#39;s
+a lot harder when you keep having to guess. That&#39;s my point.</p>
+<p>Well, the other issue is more interesting.  At the time <code>ocamldoc</code> was
+designed  and  implemented,  I  bet  no one  imagined  what  folks  at
+JaneStreet would do with  OCaml!  I&#39;m talking about the implementation
+of their  open source library, known  as <code>Core</code>.  &quot;<code>Core</code> &amp;  co&quot; use a
+<em><strong>lot</strong></em> of  <code>include</code> directives.  The module  <code>Core.Std</code> includes a
+lot  of other  modules, which  also include  modules. If  you  want to
+generate a single  full HTML page for <code>Core.Std</code>, you&#39;d  end up with a
+<em><strong>huge</strong></em> page.  And  such a page would contain  a lot of information
+coming straight  from other  pages, so you&#39;d  end up with  hundreds of
+megabytes.  Instead of  doing so, opamdoc generates only  one page per
+package and one per module. If a module includes another one, then the
+first will fetch the documentation of the second and there you go.  So
+we  only  have 8.4MB  of  HTML  for  {async, async_core,  async_extra,
+async_unix,  core, core_bench,  core_extended,  core_kernel} in  total
+(well, this  number should  increase in the  future, but  linearly, as
+people  will hopefully  start  documenting all  those packages).   And
+that&#39;s why we have a JavaScript loader.</p>
+<h3 id="opamdocconfigmlordocsloaderjs"> opam_doc_config.ml, or docs_loader.js</h3>
+<p>Since the JavaScript  may have to load tens of  megabytes of HTML, you
+have to program some nasty functions and loops... and at some point it
+does become big enough for  your browser to stop responding while it&#39;s
+busy  loading your documentation.  So there  are several  solutions to
+that. The best would probably be to stop writing in JavaScript (and
+use something else that compiles to JavaScript). But that&#39;s for next
+step. Now, we&#39;re trying to make the JavaScript work.</p>
+<p>The problem  with JavaScript  is that basically  there is  one &quot;event&quot;
+loop,  and  all events  are  happening  sequentially or  concurrently,
+depending on how  you wrote your JS, but when one  event is making the
+browser busy,  the browser is unable  to do anything  else. That&#39;s why
+your browser may tell you at  some point that you have a script making
+it ill and ask you whether  you want it to stop executing that script.
+One workaround  for that problem  when you know  you ask for a  lot of
+computation time is to divide  your big computation into smaller ones.
+You can  use <code>window.setTimeout</code> for that, meaning  you transform your
+recursive calls like <code>f()</code>  into <code>window.setTimeout(f, 0)</code> so that <code>f</code>
+will be called at some point. And if you have iterative loops instead,
+write them recursive and use <code>window.setTimeout</code>. That&#39;s bad.  Because
+then the browser  is unable to tell that it&#39;s  crazy busy...  and it&#39;s
+still really busy. So you can increase the value 0 to 1 or 10 or more. 
+But if you increase it too much, it&#39;ll become too slow...</p>
+<p>Ok, well, don&#39;t use JavaScript. It&#39;s a nightmare.</p>
+<p>We will probably rewrite the script using Js_of_ocaml at some point,
+mainly because when you write in OCaml, you have static type checking,
+and that saves so much time!</p>
+<p>To be followed...</p>
           </div>
         </div>
       </div>

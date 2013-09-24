@@ -1,4 +1,4 @@
-<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-09-24T03:53:23+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
+<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-09-24T16:58:34+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
 
 
   <entry>
@@ -7,7 +7,7 @@
           href="http://pw374.github.io/.html"/>
     <title>OMD: a Markdown parser in OCaml</title>
     <category term='ocaml' /><category term='markdown' /><category term='software development' />    <published>2013-09-05T22:31:26+01:00</published>
-    <updated>2013-09-24T03:53:23+01:00</updated>
+    <updated>2013-09-24T16:58:34+01:00</updated>
     <author>
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html</uri>
@@ -229,7 +229,7 @@ of the OCaml community may contribute to it in a more convenient way.&#60;/p&#62
           href="http://pw374.github.io/.html"/>
     <title>OPAM-DOC with multiple OCaml packages</title>
     <category term='ocaml' /><category term='opamdoc' /><category term='opam' />    <published>2013-09-24T01:50:14+01:00</published>
-    <updated>2013-09-24T03:53:23+01:00</updated>
+    <updated>2013-09-24T16:58:34+01:00</updated>
     <author>
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-24-01-50-14-opamdoc-take1.html</uri>
@@ -391,6 +391,134 @@ for pkg in ${PKGS}; do
 done
 &#60;/code&#62;&#60;/pre&#62;
 &#60;p&#62;Enjoy.&#60;/p&#62;
+    </content>
+  </entry>
+
+
+  <entry>
+    <id>http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html</id>
+    <link type="text/html" rel="alternate"
+          href="http://pw374.github.io/.html"/>
+    <title>on the Implementation of OPAMDOC</title>
+        <published>2013-09-24T14:21:00+00:00</published>
+    <updated>2013-09-24T16:58:34+01:00</updated>
+    <author>
+      <name>Philippe Wang</name>
+    <uri>http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html</uri>
+    </author>
+    <content type="html">
+&#60;p&#62;&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/commits/master&#39;&#62;Early this year, Leo White started the implementation of
+opamdoc&#60;/a&#62;.&#60;br/&#62;
+
+Then &#60;a href=&#39;https://github.com/vincent-botbol&#39;&#62;Vincent Botbol&#60;/a&#62; worked on it
+from late May to mid August during his stay in Cambridge.&#60;/p&#62;
+&#60;p&#62;Now, Vincent&#38;#39;s back to studying &#38;quot;computer science research&#38;quot; in Paris,
+and he continues working on opam-doc when he can on his free time.&#60;/p&#62;
+&#60;p&#62;I didn&#38;#39;t really want to get involved too deep in the implementation of
+opamdoc (mainly  because it takes time). Eventually,  since I&#38;#39;ve ended
+up        doing        most        of       the        &#60;a href=&#39;https://github.com/ocamllabs/sandbox-ocaml.org&#39;&#62;technical-side
+implementation&#60;/a&#62; of the
+&#60;a href=&#39;http://ocaml-redesign.github.io&#39;&#62;new  ocaml.org web  site&#60;/a&#62;, I  had to
+eventually get into  opamdoc&#38;#39;s source code to integrate  its output in
+the website.&#60;/p&#62;
+&#60;p&#62;If you look at the &#60;a href=&#39;https://github.com/ocamllabs/opam-doc/&#39;&#62;source code of
+opamdoc&#60;/a&#62;, you&#38;#39;ll see there&#38;#39;s a
+bunch of files at the root directory. Well, some of them are inherited
+from the implementation of ocamldoc, and some are new.  I&#38;#39;ve mostly
+contributed to
+&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/blob/master/generate.ml&#39;&#62;&#60;code&#62;generate.ml&#60;/code&#62;&#60;/a&#62;
+and
+&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/blob/master/opam_doc_config.ml&#39;&#62;&#60;code&#62;opam_doc_config.ml&#60;/code&#62;&#60;/a&#62;.
+The former implements the HTML backend of opamdoc, and the latter
+contains the JavaScript engine that loads the documentation. This blog
+post is mostly about my experience with those two files.&#60;/p&#62;
+&#60;h3 id=&#34;generateml&#34;&#62; generate.ml&#60;/h3&#62;
+&#60;p&#62;This big file (about 1.5 kloc) contains the functions to retrieve
+the information from cmt, cmd, cmti, cmdi and cmi files in order to
+build the HTML document.&#60;/p&#62;
+&#60;p&#62;Side note:&#60;/p&#62;
+&#60;blockquote&#62;&#60;p&#62;
+The &#60;a href=&#39;http://www.ocamlpro.com/blog/2012/08/20/ocamlpro-and-4.00.0.html&#39;&#62;&#60;code&#62;.cmt&#60;/code&#62; files were officially introduced in the standard OCaml
+compiler in version
+4.00.0&#60;/a&#62;,
+so it&#38;#39;s pretty recent work. Previously, they were produced by a
+separate tool developed at OCamlPro for
+&#60;a href=&#39;http://www.typerex.org&#39;&#62;TypeRex&#60;/a&#62;.&#60;/p&#62;
+&#60;/blockquote&#62;
+&#60;h4 id=&#34;Tworeasonswhyit39snotsupereasy&#34;&#62; Two reasons why it&#38;#39;s not super easy&#60;/h4&#62;
+&#60;p&#62;Well, this  can actually  be explain  in just a  few words.   To begin
+with, there  are many cases to  address. Well, that is  not &#60;em&#62;exact&#60;/em&#62;. I
+should say that  there are may cases to address  &#60;em&#62;and&#60;/em&#62; those cases are
+fairly &#60;strong&#62;poorly  documented&#60;/strong&#62;, which is &#38;quot;normal&#38;quot; given  that there was
+probably no  particular motivation to put  efforts into documentation.
+This is  true for the source  code of ocamldoc &#60;em&#62;and&#60;/em&#62;  for its official
+documentation.&#60;/p&#62;
+&#60;p&#62;For instance, if you look into
+&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/blob/master/info.mli&#39;&#62;&#60;code&#62;info.mli&#60;/code&#62;&#60;/a&#62;, you
+can see that the first type definition is:&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;type&#60;/span&#62; style_kind &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
+  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_bold
+  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_italic
+  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_emphasize
+  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_center
+  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_left
+  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_right
+  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_superscript
+  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_subscript
+  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_custom &#60;span class=&#39;k&#39;&#62;of&#60;/span&#62; string
+&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;and the only documentation for this type is
+&#60;code&#62;(** The differents kinds of style.  *)&#60;/code&#62;.
+Well, you can see that there&#38;#39;s not really any
+documentation needed for those &#60;code&#62;SK_...&#60;/code&#62; until... you see
+&#60;code&#62;SK_custom of string&#60;/code&#62;.  There you go! You have to guess...&#60;/p&#62;
+&#60;p&#62;It&#38;#39;s not that hard when you have to guess a few times, it&#38;#39;s
+a lot harder when you keep having to guess. That&#38;#39;s my point.&#60;/p&#62;
+&#60;p&#62;Well, the other issue is more interesting.  At the time &#60;code&#62;ocamldoc&#60;/code&#62; was
+designed  and  implemented,  I  bet  no one  imagined  what  folks  at
+JaneStreet would do with  OCaml!  I&#38;#39;m talking about the implementation
+of their  open source library, known  as &#60;code&#62;Core&#60;/code&#62;.  &#38;quot;&#60;code&#62;Core&#60;/code&#62; &#38;amp;  co&#38;quot; use a
+&#60;em&#62;&#60;strong&#62;lot&#60;/strong&#62;&#60;/em&#62; of  &#60;code&#62;include&#60;/code&#62; directives.  The module  &#60;code&#62;Core.Std&#60;/code&#62; includes a
+lot  of other  modules, which  also include  modules. If  you  want to
+generate a single  full HTML page for &#60;code&#62;Core.Std&#60;/code&#62;, you&#38;#39;d  end up with a
+&#60;em&#62;&#60;strong&#62;huge&#60;/strong&#62;&#60;/em&#62; page.  And  such a page would contain  a lot of information
+coming straight  from other  pages, so you&#38;#39;d  end up with  hundreds of
+megabytes.  Instead of  doing so, opamdoc generates only  one page per
+package and one per module. If a module includes another one, then the
+first will fetch the documentation of the second and there you go.  So
+we  only  have 8.4MB  of  HTML  for  {async, async_core,  async_extra,
+async_unix,  core, core_bench,  core_extended,  core_kernel} in  total
+(well, this  number should  increase in the  future, but  linearly, as
+people  will hopefully  start  documenting all  those packages).   And
+that&#38;#39;s why we have a JavaScript loader.&#60;/p&#62;
+&#60;h3 id=&#34;opamdocconfigmlordocsloaderjs&#34;&#62; opam_doc_config.ml, or docs_loader.js&#60;/h3&#62;
+&#60;p&#62;Since the JavaScript  may have to load tens of  megabytes of HTML, you
+have to program some nasty functions and loops... and at some point it
+does become big enough for  your browser to stop responding while it&#38;#39;s
+busy  loading your documentation.  So there  are several  solutions to
+that. The best would probably be to stop writing in JavaScript (and
+use something else that compiles to JavaScript). But that&#38;#39;s for next
+step. Now, we&#38;#39;re trying to make the JavaScript work.&#60;/p&#62;
+&#60;p&#62;The problem  with JavaScript  is that basically  there is  one &#38;quot;event&#38;quot;
+loop,  and  all events  are  happening  sequentially or  concurrently,
+depending on how  you wrote your JS, but when one  event is making the
+browser busy,  the browser is unable  to do anything  else. That&#38;#39;s why
+your browser may tell you at  some point that you have a script making
+it ill and ask you whether  you want it to stop executing that script.
+One workaround  for that problem  when you know  you ask for a  lot of
+computation time is to divide  your big computation into smaller ones.
+You can  use &#60;code&#62;window.setTimeout&#60;/code&#62; for that, meaning  you transform your
+recursive calls like &#60;code&#62;f()&#60;/code&#62;  into &#60;code&#62;window.setTimeout(f, 0)&#60;/code&#62; so that &#60;code&#62;f&#60;/code&#62;
+will be called at some point. And if you have iterative loops instead,
+write them recursive and use &#60;code&#62;window.setTimeout&#60;/code&#62;. That&#38;#39;s bad.  Because
+then the browser  is unable to tell that it&#38;#39;s  crazy busy...  and it&#38;#39;s
+still really busy. So you can increase the value 0 to 1 or 10 or more. 
+But if you increase it too much, it&#38;#39;ll become too slow...&#60;/p&#62;
+&#60;p&#62;Ok, well, don&#38;#39;t use JavaScript. It&#38;#39;s a nightmare.&#60;/p&#62;
+&#60;p&#62;We will probably rewrite the script using Js_of_ocaml at some point,
+mainly because when you write in OCaml, you have static type checking,
+and that saves so much time!&#60;/p&#62;
+&#60;p&#62;To be followed...&#60;/p&#62;
     </content>
   </entry>
 </feed>

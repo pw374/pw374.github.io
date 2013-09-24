@@ -93,22 +93,24 @@ documentation needed for those `SK_...` until... you see
 It's not that hard when you have to guess a few times, it's
 a lot harder when you keep having to guess. That's my point.
 
-Well, the other issue is more interesting.
-At the time `ocamldoc` was designed and implemented, I bet
-no one imagined what folks at JaneStreet would do with OCaml!
-I'm talking about the implementation of their open source library,
-known as `Core`. "`Core` & co" use a ***lot*** of `include` directives.
-The module  `Core.Std` includes a lot of other modules, which
-also include modules. If you want to generate a single full HTML 
-page for `Core.Std`, you'd end up with a ***huge*** page.
-And such a page would contain a lot of information coming straight
-from other pages, so you'd end up with hundreds of megabytes.
-Instead of doing so, opamdoc generates only one page per package
-and one per module. If a module includes another one, then the first
-will fetch the documentation of the second and there you go.
-That's why we have a JavaScript loader.
+Well, the other issue is more interesting.  At the time `ocamldoc` was
+designed  and  implemented,  I  bet  no one  imagined  what  folks  at
+JaneStreet would do with  OCaml!  I'm talking about the implementation
+of their  open source library, known  as `Core`.  "`Core` &  co" use a
+***lot*** of  `include` directives.  The module  `Core.Std` includes a
+lot  of other  modules, which  also include  modules. If  you  want to
+generate a single  full HTML page for `Core.Std`, you'd  end up with a
+***huge*** page.  And  such a page would contain  a lot of information
+coming straight  from other  pages, so you'd  end up with  hundreds of
+megabytes.  Instead of  doing so, opamdoc generates only  one page per
+package and one per module. If a module includes another one, then the
+first will fetch the documentation of the second and there you go.  So
+we  only  have 8.4MB  of  HTML  for  {async, async_core,  async_extra,
+async_unix,  core, core_bench,  core_extended,  core_kernel} in  total
+(well, this  number should  increase in the  future, but  linearly, as
+people  will hopefully  start  documenting all  those packages).   And
+that's why we have a JavaScript loader.
 
-But... it's still huge with `Core.Std`.
 
 ### opam_doc_config.ml, or docs_loader.js
 

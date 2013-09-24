@@ -2,7 +2,12 @@ MPPOCAML = mpp -so '((!' -sc '!))' -son '{{!' -scn '!}}' -soc '' -scc '' -its -s
 
 OMD = omd -r ocaml=ocamltohtml -r tryocaml=ocamltotryocaml
 
-all: ../index.html ../blog.html ../blog-atom.xml ../blog-rss.xml
+all:
+	make ../index.html ../blog.html ../blog-atom.xml ../blog-rss.xml
+	make $$(for i in posts/*.md.ml.mpp ; do \
+	  echo ../posts/$$(basename $$i .md.ml.mpp).html ; \
+	done)
+	git add ../posts/*.html
 
 ################################################################################
 # INDEX
