@@ -15,7 +15,7 @@ include Meta
 {< module Post(Printer:Printer) = struct open Printer >}
 
 [Early this year, Leo White started the implementation of
-opamdoc](https://github.com/ocamllabs/opam-doc/commits/master).  
+opamdoc](https://github.com/ocamllabs/opam-doc/commits/master).
 Then [Vincent Botbol](https://github.com/vincent-botbol) worked on it
 from late May to mid August during his stay in Cambridge.
 
@@ -46,7 +46,7 @@ post is mostly about my experience with those two files.
 
 This big file (about 1.5 kloc) contains the functions to retrieve
 the information from cmt, cmd, cmti, cmdi and cmi files in order to
-build the HTML document. 
+build the HTML document.
 
 Side note:
 
@@ -65,7 +65,7 @@ should say that  there are may cases to address  *and* those cases are
 fairly **poorly  documented**, which is "normal" given  that there was
 probably no  particular motivation to put  efforts into documentation.
 This is  true for the source  code of ocamldoc *and*  for its official
-documentation. 
+documentation.
 
 For instance, if you look into
 [`info.mli`](https://github.com/ocamllabs/opam-doc/blob/master/info.mli), you
@@ -135,10 +135,10 @@ recursive calls like `f()`  into `window.setTimeout(f, 0)` so that `f`
 will be called at some point. And if you have iterative loops instead,
 write them recursive and use `window.setTimeout`. That's bad.  Because
 then the browser  is unable to tell that it's  crazy busy...  and it's
-still really busy. So you can increase the value 0 to 1 or 10 or more. 
+still really busy. So you can increase the value 0 to 1 or 10 or more.
 But if you increase it too much, it'll become too slow...
 
-Ok, well, don't use JavaScript. It's a nightmare. 
+Ok, well, don't use JavaScript. It's a nightmare.
 
 We will probably rewrite the script using Js_of_ocaml at some point,
 mainly because when you write in OCaml, you have static type checking,
