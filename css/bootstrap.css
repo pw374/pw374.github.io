@@ -7012,5 +7012,9 @@ body {
       output while not bloating the compiled file size, since blank
       declarations are stripped out by most compressors.
   */
-
+}
+blockquote {
+    border-left:solid;
+    border-width-left:1ex;
+    border-color-left:orange;
 }
