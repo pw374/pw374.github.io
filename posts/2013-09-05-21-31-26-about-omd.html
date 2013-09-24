@@ -8,12 +8,10 @@
     <title>OMD: a Markdown parser in OCaml &ndash; pw374</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Google Web Fonts -->
-    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet">
-    <link href="http://fonts.googleapis.com/css?family=Domine:400,700" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" />
+    <link href="http://fonts.googleapis.com/css?family=Domine:400,700" rel="stylesheet" />
     <!-- Only part of Bootstrap that we don't load from a CDN is our own customized CSS build. -->
-    <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
-    <link rel="alternate" type="application/atom+xml" title="ATOM Feed" href="/posts/2013-09-05-21-31-26-about-omd-atom.xml">
-    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/posts/2013-09-05-21-31-26-about-omd-rss.xml">
+    <link href="/css/bootstrap.css" rel="stylesheet" media="screen" />
     <!--[if lt IE 9]>
         <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
     <![endif]-->
@@ -48,22 +46,37 @@
           <nav id="nav-secondary">
             <ul class="nav nav-list">
               <li class="nav-header"><a href="#">Table of Contents</a></li>
-               <li><a href='#Motivations'> Motivations</a>
+              <ul>
+ <li><a href='#OMDaMarkdownparserinOCaml'> OMD: a Markdown parser in OCaml</a>
+  <ul>
+   <li><a href='#Motivations'> Motivations</a>
+   </li>
+   <li><a href='#IssueswereessentiallywithMarkdownitself'> Issues... were essentially with Markdown itself</a>
+    <ul>
+     <li><a href='#FlagrantAmbiguity'> Flagrant Ambiguity</a>
+     </li>
+    </ul>
+   </li>
+   <li><a href='#Implementation'> Implementation</a>
+    <ul>
+     <li><a href='#Compatibility'> Compatibility</a>
+     </li>
+    </ul>
+   </li>
+   <li><a href='#FutureofOMD'> Future of OMD</a>
+   </li>
+   <li><a href='#OMDandOCamlorg'> OMD and OCaml.org</a>
+   </li>
+  </ul>
  </li>
- <li><a href='#IssueswereessentiallywithMarkdownitself'> Issues... were essentially with Markdown itself</a>
- </li>
- <li><a href='#Implementation'> Implementation</a>
- </li>
- <li><a href='#FutureofOMD'> Future of OMD</a>
- </li>
- <li><a href='#OMDandOCamlorg'> OMD and OCaml.org</a>
- </li>
+</ul>
             </ul>
           </nav>
         </div>
         <div id="content-primary" class="span8">
           <div class="content">
-            
+              
+<h2 id="OMDaMarkdownparserinOCaml"> OMD: a Markdown parser in OCaml</h2>
 <h3 id="Motivations"> Motivations</h3>
 <p>There  are  so many  existing  implementations  of  Markdown, why  yet
 another one?   Well, after asking  the OCaml community  about existing
@@ -270,8 +283,6 @@ OCaml.org to style my new Github-hosted website, so I can play with it
 <p>Most pages will be written in Markdown instead of HTML, so that people
 of the OCaml community may contribute to it in a more convenient way.</p>
 <p>And of course, that means that OMD will be used for OCaml.org.</p>
-<p style='font-size:80%;'><em>started on 2013-09-05 22:31:26+01:00, (re)generated on 2013-09-12 16:36:22+01:00
-</em></p>
           </div>
 
           <div id="disqus_thread">

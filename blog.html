@@ -1,19 +1,16 @@
 
 
 <!DOCTYPE HTML>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Blog &ndash; pw374</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Google Web Fonts -->
-    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet">
-    <link href="http://fonts.googleapis.com/css?family=Domine:400,700" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" />
+    <link href="http://fonts.googleapis.com/css?family=Domine:400,700" rel="stylesheet" />
     <!-- Only part of Bootstrap that we don't load from a CDN is our own customized CSS build. -->
-    <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
-    <link rel="alternate" type="application/atom+xml" title="ATOM Feed" href="/blog-atom.xml">
-    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/blog-rss.xml">
+    <link href="/css/bootstrap.css" rel="stylesheet" media="screen" />
     <!--[if lt IE 9]>
         <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
     <![endif]-->
@@ -48,13 +45,22 @@
           <nav id="nav-secondary">
             <ul class="nav nav-list">
               <li class="nav-header"><a href="#">Table of Contents</a></li>
-               <li><a href='#Blog'> Blog</a>
+              <ul>
+ <li><a href='#OMDaMarkdownparserinOCaml'> OMD: a Markdown parser in OCaml</a>
   <ul>
    <li><a href='#Motivations'> Motivations</a>
    </li>
    <li><a href='#IssueswereessentiallywithMarkdownitself'> Issues... were essentially with Markdown itself</a>
+    <ul>
+     <li><a href='#FlagrantAmbiguity'> Flagrant Ambiguity</a>
+     </li>
+    </ul>
    </li>
    <li><a href='#Implementation'> Implementation</a>
+    <ul>
+     <li><a href='#Compatibility'> Compatibility</a>
+     </li>
+    </ul>
    </li>
    <li><a href='#FutureofOMD'> Future of OMD</a>
    </li>
@@ -62,16 +68,34 @@
    </li>
   </ul>
  </li>
+ <li><a href='#OPAMDOCwithmultipleOCamlpackagesOPAMDOCwithmultipleOCamlpackages'> OPAM-DOC with multiple OCaml packages## OPAM-DOC with multiple OCaml packages</a>
+  <ul>
+   <li><a href='#OPAMDOC'> <a href='https://github.com/ocamllabs/opam-doc/'>OPAM-DOC</a></a>
+   </li>
+   <li><a href='#Installandrunopamdoc'> Install and run opamdoc</a>
+    <ul>
+     <li><a href='#Afewnotesaboutthoseinstructions'> A few notes about those instructions</a>
+     </li>
+     <li><a href='#opamdocrebuild'> <code>opamdoc-rebuild</code></a>
+     </li>
+     <li><a href='#opamdocgenerate'> <code>opamdoc-generate</code></a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
             </ul>
           </nav>
         </div>
         <div id="content-primary" class="span8">
           <div class="content">
-            
+              
 <h1 id="Blog"> Blog</h1><p>
 I&#39;m trying to make this website my new blog, using OMD and MPP, 
 with OCaml of course, but also the (awful) HTML/CSS/JS triplet.</p>
-<p>Here follow the last blog posts</p>
+<p>Here follow the last blog posts.</p>
+<h2 id="OMDaMarkdownparserinOCaml"> OMD: a Markdown parser in OCaml</h2>
 <h3 id="Motivations"> Motivations</h3>
 <p>There  are  so many  existing  implementations  of  Markdown, why  yet
 another one?   Well, after asking  the OCaml community  about existing
@@ -278,8 +302,162 @@ OCaml.org to style my new Github-hosted website, so I can play with it
 <p>Most pages will be written in Markdown instead of HTML, so that people
 of the OCaml community may contribute to it in a more convenient way.</p>
 <p>And of course, that means that OMD will be used for OCaml.org.</p>
-<p style='font-size:80%;'><em>started on 2013-09-05 22:31:26+01:00, (re)generated on 2013-09-12 16:36:23+01:00
-</em></p>
+<h2 id="OPAMDOCwithmultipleOCamlpackagesOPAMDOCwithmultipleOCamlpackages"> OPAM-DOC with multiple OCaml packages## OPAM-DOC with multiple OCaml packages</h2><h3 id="OPAMDOC"> <a href='https://github.com/ocamllabs/opam-doc/'>OPAM-DOC</a></h3>
+<p>The tool <code>ocamldoc</code> shipped with the standard distribution of the
+OCaml compiler suffers from some limitations because it doesn&#39;t have
+access to all the information it needs. Notably, if you want to build
+the documentation of some package <code>a</code> that depends on some package
+<code>b</code>, you&#39;ll find out that the documentation of the package <code>a</code> will
+not automatically refer to the documentation of the package <code>b</code>.
+Well, opamdoc solves this problem and it&#39;s very nice.</p>
+<p>On <a href='http://ocaml-redesign.github.io/'>this site</a>, which work in progress,
+you can find a <a href='http://ocaml-redesign.github.io/pkg/'>list of packages</a> 
+with their descriptions. This list is built using <a href='https://github.com/OCamlPro/opam2web'>opam2web</a>.
+And each package description links to its documentation. And the documentation
+for all packages is built as a whole, which means that if the documentation of 
+a package links to all other packages on which it depends. Isn&#39;t it nice? 
+:)</p>
+<h3 id="Installandrunopamdoc"> Install and run opamdoc</h3>
+<p>opamdoc is still under active development, the current step is
+<a href='https://github.com/ocamllabs/opam-doc/issues/'>finding and fixing remaining issues</a> and
+packaging.</p>
+<p>If you want to use opamdoc now, here&#39;s some instructions based on
+<a href='https://github.com/ocamllabs/opam-doc/issues/1#issuecomment-23430108'>Anil&#39;s instructions</a>, 
+which are those:</p>
+<blockquote><pre><code>opam remote add opamdoc git://github.com/avsm/opamdoc-dev
+opam switch 4.01.0beta1+opamdoc
+eval `opam config env`
+opam install opamdoc
+opamdoc-rebuild
+opamdoc-generate
+open ~/.opam/4.01.0beta1+opamdoc/opamhtml/index.html
+</code></pre>
+<ul>
+ <li><code>opamdoc-rebuild</code> builds a database of cmt/cmd files in <code>~/.opam/4.01.0beta1+opamdoc/opamdoc</code>.
+ </li>
+ <li><code>opamdoc-generate</code> builds a package HTML list in <code>~/.opam/4.01.0beta+opamdoc/opamhtml</code>.</li>
+</ul>
+</blockquote>
+<p>Well, they work quite well, except <code>opamdoc-rebuild</code> uses <code>.cmd</code>  files as a base, whereas
+it should use <code>.cmt</code> files instead because sometimes <code>.cmt</code> files exist while <code>.cmd</code> don&#39;t.
+This is a problem for a few packages (<code>Core</code> is one of them).</p>
+<p>My advice: if something doesn&#39;t work as expect, 
+please <a href='https://github.com/ocamllabs/opam-doc/issues'>open an issue</a>, 
+and if you want to customize the way the documentation is built, 
+don&#39;t hesitate to edit <code>opamdoc-rebuild</code> and/or <code>opamdoc-generate</code> (they are Bash scripts).</p>
+<h4 id="Afewnotesaboutthoseinstructions"> A few notes about those instructions</h4>
+<p>The first line, which is <code>opam remote add opamdoc git://github.com/avsm/opamdoc-dev</code>, 
+will give sense to the second one, which is <code>opam switch 4.01.0beta1+opamdoc</code>.
+And <code>4.01.0beta1+opamdoc</code> is a customised compiler that produces on the side the <code>.cm{t,d}{,i}</code> files
+that are used by opamdoc. Using it is very convenient! If you don&#39;t use it, you need to produce
+those files in an other way <strong>of your choice</strong> (really? you want to go through such trouble?).</p>
+<p>Note that opamdoc is written in such  a way that it would ask a lot of
+work to  make it work  with versions of  the compiler prior  to 4.01.0
+because it uses features introduced by this very version.</p>
+<p>Just in case, here follow the customised version of <code>opamdoc-rebuild</code> and <code>opamdoc-generate</code> that 
+I used to build the documentation available on <a href='http://ocaml-redesign.github.io/pkg/docs/'>http://ocaml-redesign.github.io/pkg/docs/</a>.</p>
+<h4 id="opamdocrebuild"> <code>opamdoc-rebuild</code></h4>
+<p>Here&#39;s my customised version of <code>opamdoc-rebuild</code>:</p>
+<pre><code>#!/usr/bin/env bash
+# Rebuild the cmd/cmt archive in ~/.opam/&lt;switch&gt;/opamdoc
+# Copies all the cmt/cmti/cmd files found in the OPAM build
+# dir into a single directory structure, separated by MD5
+# to keep files distinct.
+
+set -e
+#dry=echo
+SWITCH=$(opam switch show)
+if [ &quot;${SWITCH}&quot; = &quot;system&quot; ]; then
+  echo Must be using a custom OPAM switch for this to work.
+  exit 1
+fi
+
+function calc_md5_for_file()
+{
+  if builtin command -v md5 &gt; /dev/null; then
+    md5=$(cat $1 | md5)
+  elif builtin command -v md5sum &gt; /dev/null ; then
+    md5=$(cat $1 | md5sum | awk &#39;{print $1}&#39;)
+  else
+    echo &quot;Neither md5 nor md5sum were found in the PATH&quot;
+    exit 1
+  fi
+}
+
+BASE=&quot;$(dirname $(dirname $(ocamlc -where)))&quot;
+BUILD=${BASE}/build
+DOC=${BASE}/opamdoc
+rm -rf ${DOC}
+mkdir -p ${DOC}
+
+PKGS=$(find ${BUILD}/ -mindepth 1 -maxdepth 1 -type d &quot;$@&quot;)
+echo ${PKGS}
+
+for pkg in ${PKGS}; do
+  pkgname=$(basename $pkg)
+  echo $pkgname
+  mkdir -p ${DOC}/$pkgname
+
+  CMTS=$(find ${pkg} -type f -name &#39;*.cmt&#39;)
+  for cmt in ${CMTS}; do
+    d=$(dirname $cmt)
+    calc_md5_for_file &quot;$cmt&quot;;
+
+    f=$(basename $cmt .cmt)
+    mkdir -p ${DOC}/$pkgname/$md5
+    r=${DOC}/$pkgname/$md5/$f
+    for ext in cmt cmti cmd cmdi cmi ; do
+        if [ -e $d/$f.$ext ]; then
+            $dry cp $d/$f.$ext $r.$ext
+        fi
+    done
+  done
+done
+</code></pre>
+<h4 id="opamdocgenerate"> <code>opamdoc-generate</code></h4>
+<p>Here&#39;s my customised version of <code>opamdoc-generate</code>.</p>
+<pre><code>#!/usr/bin/env bash
+# Rebuild the cmd/cmt archive in ~/.opam/&lt;switch&gt;/opamdoc
+# Copies all the cmt/cmti/cmd files found in the OPAM build
+# dir into a single directory structure, separated by MD5
+# to keep files distinct.
+
+set -e
+#dry=echo
+SWITCH=$(opam switch show)
+if [ &quot;${SWITCH}&quot; = &quot;system&quot; ]; then
+  echo Must be using a custom OPAM switch for this to work.
+  exit 1
+fi
+
+OPAMDOC=${OPAMDOC:-opamdoc}
+
+
+BASE=&quot;$(dirname $(dirname $(ocamlc -where)))&quot;
+BUILD=${BASE}/build
+DOC=${BASE}/opamdoc
+HTML=${BASE}/opamhtml
+
+rm -rf ${HTML}
+mkdir -p ${HTML}
+
+# Grab the build dir in reverse mtime order to get the
+# ordering of generation &quot;correct&quot;.
+PKGS=$(ls -1tr $BUILD)
+
+rm -rf $HTML
+mkdir -p $HTML
+cd $HTML
+for pkg in ${PKGS}; do
+  fs=&quot;$(find $DOC/$pkg -type f)&quot;
+  if [ &quot;$fs&quot; != &quot;&quot; ]; then
+    name=$(echo $pkg | awk -F. &#39;{print $1}&#39;)
+    echo $pkg $name
+    $dry $OPAMDOC -p $name $fs
+  fi
+done
+</code></pre>
+<p>Enjoy.</p>
           </div>
         </div>
       </div>
