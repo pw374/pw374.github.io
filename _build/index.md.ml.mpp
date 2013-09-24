@@ -21,7 +21,7 @@ I'm making this [website](http://pw374.github.io) my new blog, using
 [OCaml](http://ocaml.org) of course, but also the (awful) HTML/CSS/JS
 triplet.
 
-## Lastest blog posts
+## Latest blog posts
 
 {< let _ = cat "_tmp/blogposts.list.tmp.md" >}
 
