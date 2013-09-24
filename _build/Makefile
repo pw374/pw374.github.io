@@ -7,7 +7,7 @@ all:
 	make $$(for i in posts/*.md.ml.mpp ; do \
 	  echo ../posts/$$(basename $$i .md.ml.mpp).html ; \
 	done)
-	git add ../posts/*.html
+	git add ../posts/*.html ../tags/*/*.html
 
 ################################################################################
 # INDEX
