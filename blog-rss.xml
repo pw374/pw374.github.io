@@ -1,4 +1,4 @@
-<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Tue, 24 Sep 2013 03:53:24 +0100</pubDate><lastBuildDate>Tue, 24 Sep 2013 03:53:24 +0100</lastBuildDate>
+<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Tue, 24 Sep 2013 03:54:37 +0100</pubDate><lastBuildDate>Tue, 24 Sep 2013 03:54:37 +0100</lastBuildDate>
 
 
     <item>
@@ -6,7 +6,7 @@
       <link>http://pw374.github.io/posts/.html</link>
       <category>ocaml</category><category>markdown</category><category>software development</category>
       <pubDate>Thu, 05 Sep 2013 22:31:26 +0100</pubDate>
-      <author>philippe.wang@cl.cam.ac.uk</author>
+      <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
       <guid>http://pw374.github.io/2013-09-05-22-31-26-about-omd.html</guid>
       <description><![CDATA[
 
@@ -226,7 +226,7 @@ of the OCaml community may contribute to it in a more convenient way.&#60;/p&#62
       <link>http://pw374.github.io/posts/.html</link>
       <category>ocaml</category><category>opamdoc</category><category>opam</category>
       <pubDate>Tue, 24 Sep 2013 01:50:14 +0100</pubDate>
-      <author>philippe.wang@cl.cam.ac.uk</author>
+      <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
       <guid>http://pw374.github.io/2013-09-24-01-50-14-opamdoc-take1.html</guid>
       <description><![CDATA[
 
