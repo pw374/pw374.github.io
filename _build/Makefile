@@ -2,7 +2,7 @@ MPPOCAML = mpp -so '((!' -sc '!))' -son '{{!' -scn '!}}' -soc '' -scc '' -its -s
 
 OMD = omd -r ocaml=ocamltohtml -r tryocaml=ocamltotryocaml
 
-all: ../index.html ../blog.html ../blog-atom.xml ../blog-rss.xml 
+all: ../index.html ../blog.html ../blog-atom.xml ../blog-rss.xml
 
 ################################################################################
 # INDEX

@@ -14,9 +14,6 @@ sig
   val stamp : bool
 end
 
-module type Unit = sig end
-module Unit : Unit = struct end
-
 let input f =
   let ic = open_in f in
   let b = Buffer.create 42 in

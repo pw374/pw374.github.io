@@ -1,4 +1,4 @@
-<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-09-24T02:38:31+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
+<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-09-24T02:45:10+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
 
 
   <entry>
@@ -7,7 +7,7 @@
           href="http://pw374.github.io/.html"/>
     <title>OMD: a Markdown parser in OCaml</title>
     <category term='ocaml' /><category term='markdown' /><category term='software development' />    <published>2013-09-05T22:31:26+01:00</published>
-    <updated>2013-09-24T02:38:31+01:00</updated>
+    <updated>2013-09-24T02:45:09+01:00</updated>
     <author>
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html</uri>
@@ -229,7 +229,7 @@ of the OCaml community may contribute to it in a more convenient way.&#60;/p&#62
           href="http://pw374.github.io/.html"/>
     <title>OPAM-DOC with multiple OCaml packages</title>
     <category term='ocaml' /><category term='opamdoc' /><category term='opam' />    <published>2013-09-24T01:50:14+01:00</published>
-    <updated>2013-09-24T02:38:31+01:00</updated>
+    <updated>2013-09-24T02:45:10+01:00</updated>
     <author>
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-24-01-50-14-opamdoc-take1.html</uri>
