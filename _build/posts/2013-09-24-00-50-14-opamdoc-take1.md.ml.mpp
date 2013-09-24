@@ -24,7 +24,7 @@ the documentation of some package `a` that depends on some package
 not automatically refer to the documentation of the package `b`.
 Well, opamdoc solves this problem and it's very nice.
 
-On [this site](http://ocaml-redesign.github.io/), which work in progress,
+On [this site](http://ocaml-redesign.github.io/), which is work in progress,
 you can find a [list of packages](http://ocaml-redesign.github.io/pkg/) 
 with their descriptions. This list is built using [opam2web](https://github.com/OCamlPro/opam2web).
 And each package description links to its documentation. And the documentation
