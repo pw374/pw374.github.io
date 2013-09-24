@@ -13,7 +13,6 @@ include Meta
 >}
 
 {< module Post(Printer:Printer) = struct open Printer >}
-## {< let _ = !!title >}
 
 ### [OPAM-DOC](https://github.com/ocamllabs/opam-doc/)
 
