@@ -18,7 +18,7 @@ include Meta
 I'm trying to make this website my new blog, using OMD and MPP, 
 with OCaml of course, but also the (awful) HTML/CSS/JS triplet.
 
-Here follow the last blog posts.
+Here follow the latest blog posts.
 
 {< let _ = cat "_tmp/blogposts.contents.tmp.md" >}
 
