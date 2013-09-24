@@ -21,7 +21,9 @@ _tmp/index.toc.ml:_tmp/index.toc.html Makefile
 _tmp/index.toc.html:_tmp/index.toc.md Makefile
 	omd < $< > $@
 _tmp/index.toc.md:../tags/* Makefile
-	(cd ../tags && for i in * ; do echo " * [$$i](/tags/$$(sed 's/ /%20/g' <<<$$i)/)" ; done) > $@
+	echo '(The links below may not work yet.)' > $@
+	echo >> $@
+	(cd ../tags && for i in * ; do echo " * [$$i](/tags/$$(sed 's/ /%20/g' <<<$$i)/)" ; done) >> $@
 _tmp/index.md.ml:index.md.ml.mpp Makefile
 	${MPPOCAML} < $< > $@
 _tmp/blogposts.list.tmp.md:posts/*.md.ml.mpp _tmp/common.ml
