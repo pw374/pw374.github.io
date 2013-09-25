@@ -15,13 +15,36 @@ include Meta
 {< module Post(Printer:Printer) = struct open Printer >}
 # {< let _ = !!title >}
 
-I'm making this [website](http://pw374.github.io) my new blog, using
-[OMD](https://github.com/pw374/omd/) and
-[MPP](https://github.com/pw374/MPP-language-blender/), with
-[OCaml](http://ocaml.org) of course, but also the (awful) HTML/CSS/JS
-triplet.
+I'm a postdoc in Cambridge, UK.
+
+I'm a member of the [OCaml Labs group](http://www.ocaml.io/).
+
+This is my [new blog](http://pw374.github.io), which mainly about
+research and software development using OCaml.
+
+Technically, this website is built using
+[OMD (to convert Markdown to HTML)](https://github.com/pw374/omd/),
+[MPP (an awesome preprocessor)](https://github.com/pw374/MPP-language-blender/),
+[OCaml (the best actual programming language that I know)](http://ocaml.org),
+but also the (terrible and mean) HTML/CSS/JS triplet.
+
+The     theme     of     this     website     is     borrowed     from
+<http://ocaml-redesign.github.io>, which is the temporary location for
+the   website  that   is  built   to  replace   the  current   one  on
+<http://www.ocaml.org/>.  As  I ended up being the  main developer for
+<http://ocaml-redesign.github.io>,  it's  pretty  convenient that  I'm
+using the same  theme. Note that this theme is  provided by [one space
+media](http://www.onespacemedia.com),   a   design   firm   based   in
+Cambridge.
+
+Once I'm done  with the engine of this blog, I'll  hopefully use it to
+make  other blogs  less related  to OCaml  (the main  constraint being
+having the time to write at all).
 
 ## Latest blog posts
+
+Here follows the list of the latest blog posts, please feel free to
+comment on them. I hope you'll enjoy reading.
 
 {< let _ = cat "_tmp/blogposts.list.tmp.md" >}
 
