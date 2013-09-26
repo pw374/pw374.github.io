@@ -645,7 +645,7 @@ number of 1s and 0s. If it&#39;s  lesser, then it has more 0s, else it has
 more 1s.</p>
 <p>Let&#39;s declare a type for the result.</p>
 <pre><code class='tryocaml'><span class='k'>type</span> result <span class='k'>=</span> Equal <span class='o'>|</span> More_zeros <span class='o'>|</span> More_ones
-<a href="javascript:octry('type result = Equal | More_zeros | More_ones');">[try]</a></code></pre>
+<a href="javascript:octry('type result = Equal | More_zeros | More_ones\n');">[try]</a></code></pre>
 <pre><code class='tryocaml'><span class='k'>let</span> count l <span class='k'>=</span>
   <span class='k'>let rec</span> loop counter <span class='k'>=</span> <span class='k'>function</span>
     <span class='o'>|</span> <span class='o'>[</span><span class='o'>]</span> <span class='k'>-></span> counter
@@ -662,22 +662,7 @@ more 1s.</p>
     More_ones
   <span class='k'>else</span>
     More_zeros    
-<a href="javascript:octry('let count l =
-  let rec loop counter = function
-    | [] -&#62; counter
-    | 1::tl -&#62; loop (counter+1) tl
-    | 0::tl -&#62; loop (counter-1) tl
-    | _::tl -&#62; loop counter tl
-    (* you might want to debate whether you should stop 
-       when you get something else than a 0 or a 1. *)
-  in
-  let r = loop 0 l in
-  if r = 0 then
-    Equal
-  else if r &#62; 0 then
-    More_ones
-  else
-    More_zeros    ');">[try]</a></code></pre>
+<a href="javascript:octry('let count l =\n  let rec loop counter = function\n    | [] -&#62; counter\n    | 1::tl -&#62; loop (counter+1) tl\n    | 0::tl -&#62; loop (counter-1) tl\n    | _::tl -&#62; loop counter tl\n    (* you might want to debate whether you should stop \n       when you get something else than a 0 or a 1. *)\n  in\n  let r = loop 0 l in\n  if r = 0 then\n    Equal\n  else if r &#62; 0 then\n    More_ones\n  else\n    More_zeros    \n');">[try]</a></code></pre>
 <p>Well, what&#39;s the risk with this  program? The risk is that the integer
 <code>counter</code> overflows, of course! If you have a very long list of 1s (or
 0s)  only, you  may  get things  just  wrong.  However,  in OCaml,  in
@@ -737,23 +722,7 @@ and 1s in O(1).</p>
     a<span class='o'>.</span>(i) <span class='o'>&#60;-</span> number_for_a_byte i
   <span class='k'>done</span><span class='o'>;</span>
   a
-<a href="javascript:octry('(* this table is computed only once *)
-let table =
-  let number_for_a_byte b =
-    let r = ref 0 in
-    for i = 0 to 7 do
-      if (b lsr i) land 1 = 0 then
-        decr r
-      else
-        incr r
-    done;
-    !r
-  in
-  let a = Array.make 256 0 in
-  for i = 0 to 255 do
-    a.(i) &#60;- number_for_a_byte i
-  done;
-  a');">[try]</a></code></pre>
+<a href="javascript:octry('(* this table is computed only once *)\nlet table =\n  let number_for_a_byte b =\n    let r = ref 0 in\n    for i = 0 to 7 do\n      if (b lsr i) land 1 = 0 then\n        decr r\n      else\n        incr r\n    done;\n    !r\n  in\n  let a = Array.make 256 0 in\n  for i = 0 to 255 do\n    a.(i) &#60;- number_for_a_byte i\n  done;\n  a\n');">[try]</a></code></pre>
 <p>Then let&#39;s abstract from the means  to read new 0s and 1s, by assuming
 we&#39;ll be provided a function <code>f</code> that given <code>()</code> will return 8 bits in
 a value  of type  <code>char</code>, and will  raise the  exception <code>End_of_file</code>
@@ -769,17 +738,7 @@ when it has no more bits to give.</p>
     More_zeros
   <span class='k'>else</span>
     More_ones
-<a href="javascript:octry('let more_zeros_or_ones f =
-  let c = ref 0 in
-  begin try while true do
-    c := !c + table.(int_of_char(f()))
-  done with End_of_file -&#62; () end;
-  if !c = 0 then
-    Equal
-  else if !c &#62; 0 then
-    More_zeros
-  else
-    More_ones');">[try]</a></code></pre>
+<a href="javascript:octry('let more_zeros_or_ones f =\n  let c = ref 0 in\n  begin try while true do\n    c := !c + table.(int_of_char(f()))\n  done with End_of_file -&#62; () end;\n  if !c = 0 then\n    Equal\n  else if !c &#62; 0 then\n    More_zeros\n  else\n    More_ones\n');">[try]</a></code></pre>
 <p>Note  that <code>int_of_char</code>  has a  zero-cost (i.e.,  it  &quot;disappears&quot; at
 compile-time because  <code>int</code> and <code>char</code>  sort of share the  same memory
 representation).  If  you want  better performance, you  should inline
@@ -806,16 +765,7 @@ Boolean value!</p>
     <span class='k'>done</span>
   <span class='k'>done</span><span class='o'>;</span>
   res<span class='o'>.</span>contents
-<a href="javascript:octry('let has_an_odd_number_of_1 s =
-  let res = ref false in
-  for i = 0 to String.length s - 1 do
-    let x = int_of_char s.[i] in
-    for j = 0 to 7 do
-      if (x lsr j) land 1 = 1 then
-        res.contents &#60;- not res.contents;
-    done
-  done;
-  res.contents');">[try]</a></code></pre>
+<a href="javascript:octry('let has_an_odd_number_of_1 s =\n  let res = ref false in\n  for i = 0 to String.length s - 1 do\n    let x = int_of_char s.[i] in\n    for j = 0 to 7 do\n      if (x lsr j) land 1 = 1 then\n        res.contents &#60;- not res.contents;\n    done\n  done;\n  res.contents\n');">[try]</a></code></pre>
 <p>But there&#39;s way more efficient than that! Indeed, unless we really don&#39;t have a choice,
 we shouldn&#39;t read bits one by one, because it&#39;s slow.</p>
 <p>So what can we do instead?</p>
@@ -842,19 +792,7 @@ whole string had an odd number of 1 or not.</p>
     <span class='k'>else</span>
       loop (c <span class='k'>lxor</span> int_of_char s<span class='o'>.</span><span class='o'>[</span>i<span class='o'>]</span>) 
   <span class='k'>in</span> loop 0 0
-<a href="javascript:octry('let has_an_odd_number_of_1__efficient s =
-  let sl = String.length s in
-  let rec loop c i =
-    if i = l then
-      let res = ref false in
-      for j = 0 to 7 do
-        if (c lsr j) land 1 = 1 then
-          res.contents &#60;- not res.contents;
-      done;
-      res.contents
-    else
-      loop (c lxor int_of_char s.[i]) 
-  in loop 0 0');">[try]</a></code></pre>
+<a href="javascript:octry('let has_an_odd_number_of_1__efficient s =\n  let sl = String.length s in\n  let rec loop c i =\n    if i = l then\n      let res = ref false in\n      for j = 0 to 7 do\n        if (c lsr j) land 1 = 1 then\n          res.contents &#60;- not res.contents;\n      done;\n      res.contents\n    else\n      loop (c lxor int_of_char s.[i]) \n  in loop 0 0\n');">[try]</a></code></pre>
 <p>And... There we go!  :-)</p>
 <p>Note that <code>int_of_char</code> is a zero-cost operation.</p>
           </div>
