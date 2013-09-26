@@ -43,7 +43,7 @@ _tmp/blogposts.list.tmp.md:posts/*.md.ml.mpp _tmp/common.ml
 		cat $$i ; \
 		echo "# 1 \"$$i - print\"" ; \
 		echo "let space = ' '" ;\
-		echo 'let () = printf "* %s [%s](http://pw374.github.io/posts/%s)\n" (String.sub date 0 (String.index date space)) title id' ; \
+		echo 'let () = printf "* %s [%s](http://pw374.github.io/%s)\n" (String.sub date 0 (String.index date space)) title id' ; \
 	done) | ocaml -stdin > $@
 
 ################################################################################
