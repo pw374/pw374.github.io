@@ -8,7 +8,7 @@
  let tags = [ ]
  let disqus = true
  let stamp = true
- let tryocaml = false
+ let tryocaml = true
 end
 include Meta
 >}
