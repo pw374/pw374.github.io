@@ -1,4 +1,4 @@
-<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Fri, 27 Sep 2013 00:36:14 +0100</pubDate><lastBuildDate>Fri, 27 Sep 2013 00:36:14 +0100</lastBuildDate>
+<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Fri, 27 Sep 2013 00:46:51 +0100</pubDate><lastBuildDate>Fri, 27 Sep 2013 00:46:51 +0100</lastBuildDate>
 
 
     <item>
@@ -9,213 +9,6 @@
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
       <guid>http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html</guid>
       <description><![CDATA[
-
-&#60;h3 id=&#34;Motivations&#34;&#62; Motivations&#60;/h3&#62;
-&#60;p&#62;There  are  so many  existing  implementations  of  Markdown, why  yet
-another one?   Well, after asking  the OCaml community  about existing
-ways to parse and manipulate  Markdown documents, it seemed that there
-were no stand-alone complete Markdown parser written in OCaml, meaning
-that they  were incomplete (i.e., not fully  compatible with Markdown)
-or  interfaces  to  some  Markdown  parsers  implemented  using  other
-languages than OCaml.&#60;/p&#62;
-&#60;p&#62;Since in OCaml  Labs we&#38;#39;re working a lot with  Github, and Github uses
-Markdown a  lot (Github  web pages hosting,  Github issues,  etc.) and
-other  sites are also  using Markdown  as well,  and Markdown  is very
-popular and  easy to  learn, and  flexible in the  sense that  you can
-always  fall back  to HTML  when you  want to  express  something that
-doesn&#38;#39;t have  a special syntax in  Markdown, blah blah blah,  it was -
-somehow - time to have  a Markdown parser implemented using OCaml. And
-preferably  OCaml alone,  meaning that  one that  has  OCaml installed
-should be able  to use it easily without having to  deal with too many
-dependencies. Well, there it is: OMD!&#60;/p&#62;
-&#60;h3 id=&#34;IssueswereessentiallywithMarkdownitself&#34;&#62; Issues... were essentially with Markdown itself&#60;/h3&#62;
-&#60;p&#62;Every computer  scientist knows how to  write a parser  for a language
-that is as simple as Markdown. Well, no, not every computer scientist,
-sadly, but at least every programmer should. Ok, sadly it isn&#38;#39;t really
-the case either. Anyways.&#60;/p&#62;
-&#60;p&#62;Markdown is a rather simple language,  if you look at the specs. Well,
-that depends on what you actuall call &#38;quot;specs&#38;quot;, of course. According to
-&#60;a href=&#39;http://en.wikipedia.org/wiki/Markdow&#39;&#62;Wikipedia&#60;/a&#62;,     Markdown    was
-invented by &#60;a href=&#39;http://daringfireball.net&#39;&#62;John Gruber&#60;/a&#62;, and Aaron Swartz
-helped  him. Then the  original document  that describes  the Markdown
-language          is          available         online          there:
-&#60;a href=&#39;http://daringfireball.net/projects/markdown/syntax&#39;&#62;http://daringfireball.net/projects/markdown/syntax&#60;/a&#62;.  And you can see
-that         searching        for         &#60;a href=&#39;https://www.google.com/#q=Markdown+syntax&#39;&#62;&#38;quot;Markdown+syntax&#38;quot;        on
-Google&#60;/a&#62; makes that page the
-top result (and here again, I&#38;#39;m kind  of helping it be and stay on the
-top...).&#60;/p&#62;
-&#60;p&#62;Actually, Markdown is not that  simple to parse.  Why? Because so many
-things are  just left to the  imagination of the  people who implement
-parsers  for  this  language,   because  programmes  can&#38;#39;t  decide  by
-themselves  what&#38;#39;s right  to do.   It&#38;#39;s  really the  author(s) of  the
-programme that  decides what the  programme does. And in  Markdown, so
-many  things  are ambiguous  and  Gruber&#38;#39;s  document doesn&#38;#39;t  actually
-describe a  grammar at all.  It just tells  you how to write  this and
-that, but if you write it slightly differently, it doesn&#38;#39;t tell you
-what the outcome would be. 
-&#60;em&#62;&#60;strong&#62;In other words, there are no errors in Markdown.&#60;/strong&#62;&#60;/em&#62;
-Every text file is a valid Markdown file, it might just be converted 
-to some HTML you wouldn&#38;#39;t expect. For instance, you may write a link 
-using this  syntax:&#60;/p&#62;
-&#60;pre&#62;&#60;code&#62;[blah blah blah](the-url-which-can-be-absolute-or-relative)
-&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;and it gets converted to&#60;/p&#62;
-&#60;pre&#62;&#60;code&#62;&#38;lt;a href=&#38;quot;the-url-which-can-be-absolute-or-relative&#38;quot;&#38;gt;blah blah blah&#38;lt;/a&#38;gt;
-&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;
-But if you forget the closing parenthesis, then it becomes this instead&#60;/p&#62;
-&#60;pre&#62;&#60;code&#62;&#38;lt;p&#38;gt;[blah blah blah](the-url-which-can-be-absolute-or-relative&#38;lt;/p&#38;gt;
-&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;
-precisely because nothing is wrong in Markdown.&#60;/p&#62;
-&#60;p&#62;And what if there are parentheses in your URL? What if they are unbalanced?&#60;/p&#62;
-&#60;h4 id=&#34;FlagrantAmbiguity&#34;&#62; Flagrant Ambiguity&#60;/h4&#62;
-&#60;p&#62;The following is some text that has to mean something in Markdown...&#60;/p&#62;
-&#60;pre&#62;&#60;code&#62;* Alice is falling in love with Bob.
-    * Bob is secretly in love with Alice, but he&#38;#39;s seeing Eve.
-  * Eve is in-between, she loves both Alice and Bob, she can&#38;#39;t help it.
-&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;So, Pandoc, which a tool that converts a document in language A to a
-document in language B, where A and B can be the same or different
-languages amongst LaTeX, HTML, Markdown and (many) others, considers
-that Eve is on the same level as Bob. So its HTML output is&#60;/p&#62;
-&#60;pre&#62;&#60;code&#62;&#38;lt;ul&#38;gt;
-&#38;lt;li&#38;gt;Alice is falling in love with Bob.
-&#38;lt;ul&#38;gt;
-&#38;lt;li&#38;gt;Bob is secretly in love with Alice, but he&#38;#39;s seeing Eve.&#38;lt;/li&#38;gt;
-&#38;lt;/ul&#38;gt;&#38;lt;/li&#38;gt;
-&#38;lt;li&#38;gt;Eve is in-between, she loves both Alice and Bob, she can&#38;#39;t help it.&#38;lt;/li&#38;gt;
-&#38;lt;/ul&#38;gt;
-&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;But if instead you add Dylan as in&#60;/p&#62;
-&#60;pre&#62;&#60;code&#62;* Alice is falling in love with Bob.
-   * Dylan, a new character, is being conceived here.
-    * Bob is secretly in love with Alice, but he&#38;#39;s seeing Eve.
-  * Eve is in-between, she loves both Alice and Bob, she can&#38;#39;t help it.
-&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;then &#60;em&#62;of course&#60;/em&#62; Eve is not on the same level as Bob anymore and goes
-with Dylan and Alice, Bob is on his own.&#60;/p&#62;
-&#60;pre&#62;&#60;code&#62;&#38;lt;ul&#38;gt;
-&#38;lt;li&#38;gt;Alice is falling in love with Bob.&#38;lt;/li&#38;gt;
-&#38;lt;li&#38;gt;Dylan, a new character, is being conceived here.
-&#38;lt;ul&#38;gt;
-&#38;lt;li&#38;gt;Bob is secretly in love with Alice, but he&#38;#39;s seeing Eve.&#38;lt;/li&#38;gt;
-&#38;lt;/ul&#38;gt;&#38;lt;/li&#38;gt;
-&#38;lt;li&#38;gt;Eve is in-between, she loves both Alice and Bob, she can&#38;#39;t help it.&#38;lt;/li&#38;gt;
-&#38;lt;/ul&#38;gt;
-&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;This doesn&#38;#39;t make much sense...&#60;/p&#62;
-&#60;p&#62;And Github&#38;#39;s embedded Markdown  to HTML converter chooses some similar
-broken semantics. If one writes bullets on different levels, it shouldn&#38;#39;t
-be meaningless.&#60;/p&#62;
-&#60;p&#62;Also, on Github, if you write&#60;/p&#62;
-&#60;pre&#62;&#60;code&#62;* 1
-  * 2
-    * 3
-      * 4
-        * 5
-          * 6
-            * 7
-              * 8
-                * 9
-                  * 10
-&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;Then 2 and 3 are on the same level, as for 4 and 5, 6 and 7, and 8 and 9.
-1 and 10 are on their own. And if you extract 2 and 3, meaning&#60;/p&#62;
-&#60;pre&#62;&#60;code&#62;  * 2
-    * 3
-&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;
-then 2 and 3 are not on the same level anymore! 
-See for yourself:&#60;/p&#62;
-&#60;ul&#62;
- &#60;li&#62;raw version: &#60;a href=&#39;https://raw.github.com/pw374/sandbox/master/mad-lists.md&#39;&#62;https://raw.github.com/pw374/sandbox/master/mad-lists.md&#60;/a&#62;
- &#60;/li&#62;
- &#60;li&#62;rendered-by-Github version: &#60;a href=&#39;https://github.com/pw374/sandbox/blob/master/mad-lists.md&#39;&#62;https://github.com/pw374/sandbox/blob/master/mad-lists.md&#60;/a&#62;&#60;/li&#62;
-&#60;/ul&#62;
-
-&#60;p&#62;With OMD, hopefully, there is a deterministic meaning for each level of indentation. The list where there were Alice, Bob and Eve is converted to this to the least insane semantics I could think of.&#60;/p&#62;
-&#60;p&#62;The idea  is that, since Eve  is neither on  the same level as  Bob or
-Alice, Eve should be in a new list (because, obviously, she&#38;#39;s the only
-one on that  level anyway). So she  is in a new list.  And since she&#38;#39;s
-not on a deeper level than Bob, she shouldn&#38;#39;t be on a sub-list of his.
-But  she is  on a  deeper level  than Alice,  so she  has to  be  on a
-sub-list of hers. So, here is the HTML that OMD produces:&#60;/p&#62;
-&#60;pre&#62;&#60;code&#62;&#38;lt;ul&#38;gt;
- &#38;lt;li&#38;gt;Alice is falling in love with Bob.
-  &#38;lt;ul&#38;gt;
-   &#38;lt;li&#38;gt;Bob is secretly in love with Alice, but he&#38;amp;apos;s seeing Eve.
-   &#38;lt;/li&#38;gt;
-  &#38;lt;/ul&#38;gt;
-  &#38;lt;ul&#38;gt;
-   &#38;lt;li&#38;gt;Eve is in-between, she loves both Alice and Bob, she can&#38;amp;apos;t help it.
-   &#38;lt;/li&#38;gt;
-  &#38;lt;/ul&#38;gt;
- &#38;lt;/li&#38;gt;
-&#38;lt;/ul&#38;gt;
-&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;Oh,  you might  have  noticed  that OMD  converts  quotes to  &#60;code&#62;&#38;amp;apos;&#60;/code&#62;
-because otherwise I  would need to differentiate when  they have to be
-converted from when it&#38;#39;s optional.&#60;/p&#62;
-&#60;h3 id=&#34;Implementation&#34;&#62; Implementation&#60;/h3&#62;
-&#60;p&#62;Pandoc&#38;#39;s documentation says&#60;/p&#62;
-&#60;blockquote&#62;&#60;p&#62;
-In contrast to most existing tools for converting markdown to HTML,
-which use regex substitutions, Pandoc has a modular design: it
-consists of a set of readers, which parse text in a given format and
-produce a native representation of the document, and a set of writers,
-which convert this native representation into a target format.
-Thus, adding an input or output format requires only adding a reader
-or writer.&#60;/p&#62;
-&#60;/blockquote&#62;
-&#60;p&#62;Come on,  most tools are using regular  expressions substitutions?!  I
-can only imagine the nightmare that  it must be to implement and debug
-such an implementation  -- no wait, I can&#38;#39;t because  I just don&#38;#39;t want
-to imagine such a nightmare.&#60;/p&#62;
-&#60;p&#62;I used functions and function calls, a lot of them are tail recursive,
-not  all of  them but  then it  means  I don&#38;#39;t  need them  to be  tail
-recursive, and  those functions  basically take a  list of  tokens and
-return a  new list  with possibly fewer  tokens and the  expression to
-which the missing ones were converted into.&#60;/p&#62;
-&#60;p&#62;So far, in version 0.4 (which is  not released yet at the time I write
-this), there&#38;#39;s a little less than  8k lines of pure OCaml code.  (Note
-that I didn&#38;#39;t write &#38;quot;pure functional&#38;quot;, I wrote &#38;quot;pure OCaml&#38;quot;.)&#60;/p&#62;
-&#60;p&#62;OMD is an  open-source free and libre software  library that any OCaml
-developer can use  (hopefully quite easily since it  doesn&#38;#39;t depend on
-anything else  that the standard  OCaml compiler and library).  And of
-course, it&#38;#39;s also  a tool for any one who write  Markdown and wants it
-to be  converted (quickly)  to HTML.  OMD, so far,  is about  10 times
-faster than  Pandoc, and  I didn&#38;#39;t  even make any  efforts to  make it
-fast.&#60;/p&#62;
-&#60;h4 id=&#34;Compatibility&#34;&#62; Compatibility&#60;/h4&#62;
-&#60;p&#62;OMD has been developed using OCaml 4.0.1, &#60;a href=&#39;https://github.com/pw374/omd/issues/19&#39;&#62;Christophe Troestler made
-me make it compatible with OCaml
-3.12.1&#60;/a&#62;.  Then I guess it
-might work with older version of OCaml but it&#38;#39;s not certain (mainly
-because OCaml&#38;#39;s standard library has slightly changed, as I think I
-don&#38;#39;t use any language features that were introduced in 3.12 or 4.0).&#60;/p&#62;
-&#60;p&#62;By  the way,  thank  you  Christophe for  your  support, interest  and
-contributions to OMD :-)&#60;/p&#62;
-&#60;h3 id=&#34;FutureofOMD&#34;&#62; Future of OMD&#60;/h3&#62;
-&#60;p&#62;OMD  already is  in OPAM.   A  very stable  version of  OMD should  be
-released soon.   As a  tool, it takes  Markdown as input  and produces
-HTML as output.   A Markdown backend has been  freshly implemented, so
-you can output  Markdown as well, which is  quite useful for debugging
-or if you  want to know how many iterations you  need before you reach
-the fix  point. You  can also  output &#38;quot;text&#38;quot;, in  the sense  that it&#38;#39;s
-basically the HTML  without the HTML tags, so  it&#38;#39;s very non-formatted
-text.  There  also are  options to output  HTML table of  contents and
-parametrise their depths.&#60;/p&#62;
-&#60;h3 id=&#34;OMDandOCamlorg&#34;&#62; OMD and OCaml.org&#60;/h3&#62;
-&#60;p&#62;We    are    at   OCaml    Labs    making    a    new   website    for
-&#60;a href=&#39;http://ocaml.org&#39;&#62;ocaml.org&#60;/a&#62;.   The  design   is  being  provided  by
-&#60;a href=&#39;http://www.onespacemedia.com&#39;&#62;onespacemedia&#60;/a&#62;.    At   the  time   I&#38;#39;m
-writing  these  lines, I&#38;#39;m  using  the  HTML/CSS/JS  for the  upcoming
-OCaml.org to style my new Github-hosted website, so I can play with it
-&#60;em&#62;more&#60;/em&#62;.&#60;/p&#62;
-&#60;p&#62;Most pages will be written in Markdown instead of HTML, so that people
-of the OCaml community may contribute to it in a more convenient way.&#60;/p&#62;
-&#60;p&#62;And of course, that means that OMD will be used for OCaml.org.&#60;/p&#62;
       ]]></description>
     </item>
 
@@ -524,6 +317,128 @@ and that saves so much time!&#60;/p&#62;
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
       <guid>http://pw374.github.io/posts/2013-09-25-16-19-07-ones-or-zeros.html</guid>
       <description><![CDATA[
+
+&#60;p&#62;The challenge is this:&#60;/p&#62;
+&#60;blockquote&#62;&#60;p&#62;
+Provide a program that will determine,  given a set of 1s and 0s, if
+there are more 0s or more 1s.&#60;/p&#62;
+&#60;/blockquote&#62;
+&#60;p&#62;So  the   first  question  that  comes   to  my  mind   is  about  the
+representation of that set of 1s and 0s. Is it a linked list, a double
+linked list, an array, a tree, a string, or something else?&#60;/p&#62;
+&#60;p&#62;If it&#38;#39;s a list (single linked or double linked actually doesn&#38;#39;t matter
+much), it&#38;#39;s going to be pretty straightforward: just read the list and
+use a counter. Yes, a single counter is enough, you can add one to the
+counter when you meet a 1, and  subtract one when you meet a 0. At the
+end, if  your counter has  its initial value,  then you have  the same
+number of 1s and 0s. If it&#38;#39;s  lesser, then it has more 0s, else it has
+more 1s.&#60;/p&#62;
+&#60;p&#62;Let&#38;#39;s declare a type for the result.&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;type&#60;/span&#62; result &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; Equal &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; More_zeros &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; More_ones
+&#60;a href=&#34;javascript:octry(&#39;type result = Equal | More_zeros | More_ones\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; count l &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;let rec&#60;/span&#62; loop counter &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;function&#60;/span&#62;
+    &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;[&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;]&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; counter
+    &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; 1&#60;span class=&#39;o&#39;&#62;::&#60;/span&#62;tl &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; loop (counter&#60;span class=&#39;o&#39;&#62;+&#60;/span&#62;1) tl
+    &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; 0&#60;span class=&#39;o&#39;&#62;::&#60;/span&#62;tl &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; loop (counter-1) tl
+    &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;_::&#60;/span&#62;tl &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; loop counter tl
+    &#60;span class=&#39;com2&#39;&#62;(* you might want &#60;span class=&#39;ic&#39;&#62;to&#60;/span&#62; debate whether you should stop &#60;/span&#62;
+&#60;span class=&#39;com2&#39;&#62;       &#60;span class=&#39;ic&#39;&#62;when&#60;/span&#62; you get something &#60;span class=&#39;ic&#39;&#62;else&#60;/span&#62; than a 0 &#60;span class=&#39;ic&#39;&#62;or&#60;/span&#62; a 1. *)&#60;/span&#62;&#60;!-- end comment --&#62;
+  &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; r &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; loop 0 l &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; r &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
+    Equal
+  &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; r &#60;span class=&#39;o&#39;&#62;&#38;#62;&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
+    More_ones
+  &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62;
+    More_zeros    
+&#60;a href=&#34;javascript:octry(&#39;let count l =\n  let rec loop counter = function\n    | [] -&#38;#62; counter\n    | 1::tl -&#38;#62; loop (counter+1) tl\n    | 0::tl -&#38;#62; loop (counter-1) tl\n    | _::tl -&#38;#62; loop counter tl\n    (* you might want to debate whether you should stop \n       when you get something else than a 0 or a 1. *)\n  in\n  let r = loop 0 l in\n  if r = 0 then\n    Equal\n  else if r &#38;#62; 0 then\n    More_ones\n  else\n    More_zeros    \n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Well, what&#38;#39;s the risk with this  program? The risk is that the integer
+&#60;code&#62;counter&#60;/code&#62; overflows, of course! If you have a very long list of 1s (or
+0s)  only, you  may  get things  just  wrong.  However,  in OCaml,  in
+reality,  there&#38;#39;s  not really  a  chance  that  the integer  overflows
+because of  the length of a  single linked list,  especially if you&#38;#39;re
+using a 64-bit architecture based OCaml, on which the greatest integer
+is 4_611_686_018_427_387_903 (about 4⨉10&#60;sup&#62;18&#60;/sup&#62;). There&#38;#39;s really
+a long way  to have such a long list because  basically you would need
+to  allocate more  than (about  32⨉10&#60;sup&#62;6&#60;/sup&#62; terabytes)  at once,
+since basically a linked list of  integers is made of blocks that have
+2 cells  each (one for  the integer, one  for the address of  the next
+cell), each cell taking 64 bits (or 8 bytes).&#60;/p&#62;
+&#60;p&#62;But then,  what if you  don&#38;#39;t have linked  lists but some  stream that
+gives you  a very large number of  0s and/or 1s? Well,  to begin with,
+counting from 0 to 4⨉10&#60;sup&#62;18&#60;/sup&#62; takes a really long time. If your
+machine can  count from 0 to  10&#60;sup&#62;9&#60;/sup&#62; in a  single second (that
+would  mean  your   machine  is  very  fast),  it   would  still  take
+4⨉10&#60;sup&#62;9&#60;/sup&#62;  seconds,  which  is about  4000000000/(60&#60;em&#62;60&#60;/em&#62;24*365)
+years.  Oh, that means about 126 years! So let&#38;#39;s just assume that a 63
+bit signed  integer is enough for  us. And if you  really can&#38;#39;t assume
+that for some reason, you can always implement 128 bit signed integers
+quite easily, and  if you don&#38;#39;t know  how to do that or  if you&#38;#39;re too
+lazy to do it, use the Big_int module.&#60;/p&#62;
+&#60;p&#62;But let&#38;#39;s go  back the representation of those 0s and  1s. I&#38;#39;d like to
+make the computation as fast as  possible and I&#38;#39;ll put those 0s and 1s
+in a very compact representation. Each  0 and 1 will now only take one
+bit in the  memory (with a possible constant  overhead for the whole).
+For that,  let&#38;#39;s use  OCaml&#38;#39;s strings, which  are basically  arrays of
+bytes.   The  longest  string I  can  have  on  my machine  will  bear
+1_152_921_504_606_846_904  bits  (I  know  that because  I  multiplied
+Sys.max_string_length   by   8),  and   that&#38;#39;s   a   lot  (more   than
+10&#60;sup&#62;8&#60;/sup&#62;).&#60;/p&#62;
+&#60;p&#62;Now say  we want to know  whether there are more  0s or 1s  as fast as
+possible.  How do we do that?&#60;/p&#62;
+&#60;p&#62;We don&#38;#39;t want  to count all 0s  and 1s bit by bit,  because that would
+have quite  a high cost! Indeed, we  would have to get  each byte, and
+for each byte  we would have to read  each of its 8 bits  (that can be
+done) one by one.  We don&#38;#39;t want to do that.&#60;/p&#62;
+&#60;p&#62;Instead, since we have bytes, we can conveniently allocate an array of
+size 256.   Each cell of that  array will contain the  right number to
+add to the counter. This way, we can read a byte, get its number of 0s
+and 1s in O(1).&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;com2&#39;&#62;(* this table is computed only once *)&#60;/span&#62;&#60;!-- end comment --&#62;
+&#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; table &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; number_for_a_byte b &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
+    &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; r &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; ref 0 &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+    &#60;span class=&#39;k&#39;&#62;for&#60;/span&#62; i &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;to&#60;/span&#62; 7 &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
+      &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; (b &#60;span class=&#39;k&#39;&#62;lsr&#60;/span&#62; i) &#60;span class=&#39;k&#39;&#62;land&#60;/span&#62; 1 &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
+        decr r
+      &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62;
+        incr r
+    &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
+    &#60;span class=&#39;o&#39;&#62;!&#60;/span&#62;r
+  &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; a &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;m&#39;&#62;Array&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;make 256 0 &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;for&#60;/span&#62; i &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;to&#60;/span&#62; 255 &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
+    a&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;(i) &#60;span class=&#39;o&#39;&#62;&#38;#60;-&#60;/span&#62; number_for_a_byte i
+  &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
+  a
+&#60;a href=&#34;javascript:octry(&#39;(* this table is computed only once *)\nlet table =\n  let number_for_a_byte b =\n    let r = ref 0 in\n    for i = 0 to 7 do\n      if (b lsr i) land 1 = 0 then\n        decr r\n      else\n        incr r\n    done;\n    !r\n  in\n  let a = Array.make 256 0 in\n  for i = 0 to 255 do\n    a.(i) &#38;#60;- number_for_a_byte i\n  done;\n  a\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Then let&#38;#39;s abstract from the means  to read new 0s and 1s, by assuming
+we&#38;#39;ll be provided a function &#60;code&#62;f&#60;/code&#62; that given &#60;code&#62;()&#60;/code&#62; will return 8 bits in
+a value  of type  &#60;code&#62;char&#60;/code&#62;, and will  raise the  exception &#60;code&#62;End_of_file&#60;/code&#62;
+when it has no more bits to give.&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; more_zeros_or_ones f &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; c &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; ref 0 &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;try&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;while&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;true&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
+    c &#60;span class=&#39;o&#39;&#62;:=&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;!&#60;/span&#62;c &#60;span class=&#39;o&#39;&#62;+&#60;/span&#62; table&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;(int_of_char(f()))
+  &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;with&#60;/span&#62; End_of_file &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; () &#60;span class=&#39;k&#39;&#62;end&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;!&#60;/span&#62;c &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
+    Equal
+  &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;!&#60;/span&#62;c &#60;span class=&#39;o&#39;&#62;&#38;#62;&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
+    More_zeros
+  &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62;
+    More_ones
+&#60;a href=&#34;javascript:octry(&#39;let more_zeros_or_ones f =\n  let c = ref 0 in\n  begin try while true do\n    c := !c + table.(int_of_char(f()))\n  done with End_of_file -&#38;#62; () end;\n  if !c = 0 then\n    Equal\n  else if !c &#38;#62; 0 then\n    More_zeros\n  else\n    More_ones\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Note  that &#60;code&#62;int_of_char&#60;/code&#62;  has a  zero-cost (i.e.,  it  &#38;quot;disappears&#38;quot; at
+compile-time because  &#60;code&#62;int&#60;/code&#62; and &#60;code&#62;char&#60;/code&#62;  sort of share the  same memory
+representation).  If  you want  better performance, you  should inline
+&#60;code&#62;f&#60;/code&#62;, provided that you  know what it is (you may want  to check if the
+compiler does the inlining itself first, just in case).&#60;/p&#62;
+&#60;p&#62;Also, you may want  to use a table with a size  larger than 256 if you
+have a lot of memory but I&#38;#39;m not so sure you&#38;#39;d gain performance unless
+you  use nasty  tricks to  read larger  integers from  a  string. Then
+again, you may  not end up using  a string, in which case  you have to
+think with the whole problem in mind.&#60;/p&#62;
       ]]></description>
     </item>
 

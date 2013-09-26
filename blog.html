@@ -152,6 +152,649 @@
 I&#39;m trying to make this website my new blog, using OMD and MPP, 
 with OCaml of course, but also the (awful) HTML/CSS/JS triplet.</p>
 <p>Here follow the latest blog posts.</p>
+<h2 id="OMDaMarkdownparserinOCaml"> OMD: a Markdown parser in OCaml</h2>
+<h3 id="Motivations"> Motivations</h3>
+<p>There  are  so many  existing  implementations  of  Markdown, why  yet
+another one?   Well, after asking  the OCaml community  about existing
+ways to parse and manipulate  Markdown documents, it seemed that there
+were no stand-alone complete Markdown parser written in OCaml, meaning
+that they  were incomplete (i.e., not fully  compatible with Markdown)
+or  interfaces  to  some  Markdown  parsers  implemented  using  other
+languages than OCaml.</p>
+<p>Since in OCaml  Labs we&#39;re working a lot with  Github, and Github uses
+Markdown a  lot (Github  web pages hosting,  Github issues,  etc.) and
+other  sites are also  using Markdown  as well,  and Markdown  is very
+popular and  easy to  learn, and  flexible in the  sense that  you can
+always  fall back  to HTML  when you  want to  express  something that
+doesn&#39;t have  a special syntax in  Markdown, blah blah blah,  it was -
+somehow - time to have  a Markdown parser implemented using OCaml. And
+preferably  OCaml alone,  meaning that  one that  has  OCaml installed
+should be able  to use it easily without having to  deal with too many
+dependencies. Well, there it is: OMD!</p>
+<h3 id="IssueswereessentiallywithMarkdownitself"> Issues... were essentially with Markdown itself</h3>
+<p>Every computer  scientist knows how to  write a parser  for a language
+that is as simple as Markdown. Well, no, not every computer scientist,
+sadly, but at least every programmer should. Ok, sadly it isn&#39;t really
+the case either. Anyways.</p>
+<p>Markdown is a rather simple language,  if you look at the specs. Well,
+that depends on what you actuall call &quot;specs&quot;, of course. According to
+<a href='http://en.wikipedia.org/wiki/Markdow'>Wikipedia</a>,     Markdown    was
+invented by <a href='http://daringfireball.net'>John Gruber</a>, and Aaron Swartz
+helped  him. Then the  original document  that describes  the Markdown
+language          is          available         online          there:
+<a href='http://daringfireball.net/projects/markdown/syntax'>http://daringfireball.net/projects/markdown/syntax</a>.  And you can see
+that         searching        for         <a href='https://www.google.com/#q=Markdown+syntax'>&quot;Markdown+syntax&quot;        on
+Google</a> makes that page the
+top result (and here again, I&#39;m kind  of helping it be and stay on the
+top...).</p>
+<p>Actually, Markdown is not that  simple to parse.  Why? Because so many
+things are  just left to the  imagination of the  people who implement
+parsers  for  this  language,   because  programmes  can&#39;t  decide  by
+themselves  what&#39;s right  to do.   It&#39;s  really the  author(s) of  the
+programme that  decides what the  programme does. And in  Markdown, so
+many  things  are ambiguous  and  Gruber&#39;s  document doesn&#39;t  actually
+describe a  grammar at all.  It just tells  you how to write  this and
+that, but if you write it slightly differently, it doesn&#39;t tell you
+what the outcome would be. 
+<em><strong>In other words, there are no errors in Markdown.</strong></em>
+Every text file is a valid Markdown file, it might just be converted 
+to some HTML you wouldn&#39;t expect. For instance, you may write a link 
+using this  syntax:</p>
+<pre><code>[blah blah blah](the-url-which-can-be-absolute-or-relative)
+</code></pre>
+<p>and it gets converted to</p>
+<pre><code>&lt;a href=&quot;the-url-which-can-be-absolute-or-relative&quot;&gt;blah blah blah&lt;/a&gt;
+</code></pre>
+<p>
+But if you forget the closing parenthesis, then it becomes this instead</p>
+<pre><code>&lt;p&gt;[blah blah blah](the-url-which-can-be-absolute-or-relative&lt;/p&gt;
+</code></pre>
+<p>
+precisely because nothing is wrong in Markdown.</p>
+<p>And what if there are parentheses in your URL? What if they are unbalanced?</p>
+<h4 id="FlagrantAmbiguity"> Flagrant Ambiguity</h4>
+<p>The following is some text that has to mean something in Markdown...</p>
+<pre><code>* Alice is falling in love with Bob.
+    * Bob is secretly in love with Alice, but he&#39;s seeing Eve.
+  * Eve is in-between, she loves both Alice and Bob, she can&#39;t help it.
+</code></pre>
+<p>So, Pandoc, which a tool that converts a document in language A to a
+document in language B, where A and B can be the same or different
+languages amongst LaTeX, HTML, Markdown and (many) others, considers
+that Eve is on the same level as Bob. So its HTML output is</p>
+<pre><code>&lt;ul&gt;
+&lt;li&gt;Alice is falling in love with Bob.
+&lt;ul&gt;
+&lt;li&gt;Bob is secretly in love with Alice, but he&#39;s seeing Eve.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Eve is in-between, she loves both Alice and Bob, she can&#39;t help it.&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<p>But if instead you add Dylan as in</p>
+<pre><code>* Alice is falling in love with Bob.
+   * Dylan, a new character, is being conceived here.
+    * Bob is secretly in love with Alice, but he&#39;s seeing Eve.
+  * Eve is in-between, she loves both Alice and Bob, she can&#39;t help it.
+</code></pre>
+<p>then <em>of course</em> Eve is not on the same level as Bob anymore and goes
+with Dylan and Alice, Bob is on his own.</p>
+<pre><code>&lt;ul&gt;
+&lt;li&gt;Alice is falling in love with Bob.&lt;/li&gt;
+&lt;li&gt;Dylan, a new character, is being conceived here.
+&lt;ul&gt;
+&lt;li&gt;Bob is secretly in love with Alice, but he&#39;s seeing Eve.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Eve is in-between, she loves both Alice and Bob, she can&#39;t help it.&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<p>This doesn&#39;t make much sense...</p>
+<p>And Github&#39;s embedded Markdown  to HTML converter chooses some similar
+broken semantics. If one writes bullets on different levels, it shouldn&#39;t
+be meaningless.</p>
+<p>Also, on Github, if you write</p>
+<pre><code>* 1
+  * 2
+    * 3
+      * 4
+        * 5
+          * 6
+            * 7
+              * 8
+                * 9
+                  * 10
+</code></pre>
+<p>Then 2 and 3 are on the same level, as for 4 and 5, 6 and 7, and 8 and 9.
+1 and 10 are on their own. And if you extract 2 and 3, meaning</p>
+<pre><code>  * 2
+    * 3
+</code></pre>
+<p>
+then 2 and 3 are not on the same level anymore! 
+See for yourself:</p>
+<ul>
+ <li>raw version: <a href='https://raw.github.com/pw374/sandbox/master/mad-lists.md'>https://raw.github.com/pw374/sandbox/master/mad-lists.md</a>
+ </li>
+ <li>rendered-by-Github version: <a href='https://github.com/pw374/sandbox/blob/master/mad-lists.md'>https://github.com/pw374/sandbox/blob/master/mad-lists.md</a></li>
+</ul>
+
+<p>With OMD, hopefully, there is a deterministic meaning for each level of indentation. The list where there were Alice, Bob and Eve is converted to this to the least insane semantics I could think of.</p>
+<p>The idea  is that, since Eve  is neither on  the same level as  Bob or
+Alice, Eve should be in a new list (because, obviously, she&#39;s the only
+one on that  level anyway). So she  is in a new list.  And since she&#39;s
+not on a deeper level than Bob, she shouldn&#39;t be on a sub-list of his.
+But  she is  on a  deeper level  than Alice,  so she  has to  be  on a
+sub-list of hers. So, here is the HTML that OMD produces:</p>
+<pre><code>&lt;ul&gt;
+ &lt;li&gt;Alice is falling in love with Bob.
+  &lt;ul&gt;
+   &lt;li&gt;Bob is secretly in love with Alice, but he&amp;apos;s seeing Eve.
+   &lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;ul&gt;
+   &lt;li&gt;Eve is in-between, she loves both Alice and Bob, she can&amp;apos;t help it.
+   &lt;/li&gt;
+  &lt;/ul&gt;
+ &lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+<p>Oh,  you might  have  noticed  that OMD  converts  quotes to  <code>&amp;apos;</code>
+because otherwise I  would need to differentiate when  they have to be
+converted from when it&#39;s optional.</p>
+<h3 id="Implementation"> Implementation</h3>
+<p>Pandoc&#39;s documentation says</p>
+<blockquote><p>
+In contrast to most existing tools for converting markdown to HTML,
+which use regex substitutions, Pandoc has a modular design: it
+consists of a set of readers, which parse text in a given format and
+produce a native representation of the document, and a set of writers,
+which convert this native representation into a target format.
+Thus, adding an input or output format requires only adding a reader
+or writer.</p>
+</blockquote>
+<p>Come on,  most tools are using regular  expressions substitutions?!  I
+can only imagine the nightmare that  it must be to implement and debug
+such an implementation  -- no wait, I can&#39;t because  I just don&#39;t want
+to imagine such a nightmare.</p>
+<p>I used functions and function calls, a lot of them are tail recursive,
+not  all of  them but  then it  means  I don&#39;t  need them  to be  tail
+recursive, and  those functions  basically take a  list of  tokens and
+return a  new list  with possibly fewer  tokens and the  expression to
+which the missing ones were converted into.</p>
+<p>So far, in version 0.4 (which is  not released yet at the time I write
+this), there&#39;s a little less than  8k lines of pure OCaml code.  (Note
+that I didn&#39;t write &quot;pure functional&quot;, I wrote &quot;pure OCaml&quot;.)</p>
+<p>OMD is an  open-source free and libre software  library that any OCaml
+developer can use  (hopefully quite easily since it  doesn&#39;t depend on
+anything else  that the standard  OCaml compiler and library).  And of
+course, it&#39;s also  a tool for any one who write  Markdown and wants it
+to be  converted (quickly)  to HTML.  OMD, so far,  is about  10 times
+faster than  Pandoc, and  I didn&#39;t  even make any  efforts to  make it
+fast.</p>
+<h4 id="Compatibility"> Compatibility</h4>
+<p>OMD has been developed using OCaml 4.0.1, <a href='https://github.com/pw374/omd/issues/19'>Christophe Troestler made
+me make it compatible with OCaml
+3.12.1</a>.  Then I guess it
+might work with older version of OCaml but it&#39;s not certain (mainly
+because OCaml&#39;s standard library has slightly changed, as I think I
+don&#39;t use any language features that were introduced in 3.12 or 4.0).</p>
+<p>By  the way,  thank  you  Christophe for  your  support, interest  and
+contributions to OMD :-)</p>
+<h3 id="FutureofOMD"> Future of OMD</h3>
+<p>OMD  already is  in OPAM.   A  very stable  version of  OMD should  be
+released soon.   As a  tool, it takes  Markdown as input  and produces
+HTML as output.   A Markdown backend has been  freshly implemented, so
+you can output  Markdown as well, which is  quite useful for debugging
+or if you  want to know how many iterations you  need before you reach
+the fix  point. You  can also  output &quot;text&quot;, in  the sense  that it&#39;s
+basically the HTML  without the HTML tags, so  it&#39;s very non-formatted
+text.  There  also are  options to output  HTML table of  contents and
+parametrise their depths.</p>
+<h3 id="OMDandOCamlorg"> OMD and OCaml.org</h3>
+<p>We    are    at   OCaml    Labs    making    a    new   website    for
+<a href='http://ocaml.org'>ocaml.org</a>.   The  design   is  being  provided  by
+<a href='http://www.onespacemedia.com'>onespacemedia</a>.    At   the  time   I&#39;m
+writing  these  lines, I&#39;m  using  the  HTML/CSS/JS  for the  upcoming
+OCaml.org to style my new Github-hosted website, so I can play with it
+<em>more</em>.</p>
+<p>Most pages will be written in Markdown instead of HTML, so that people
+of the OCaml community may contribute to it in a more convenient way.</p>
+<p>And of course, that means that OMD will be used for OCaml.org.</p>
+<h2 id="OPAMDOCwithmultipleOCamlpackages"> OPAM-DOC with multiple OCaml packages</h2><h3 id="OPAMDOC"> <a href='https://github.com/ocamllabs/opam-doc/'>OPAM-DOC</a></h3>
+<p>The tool <code>ocamldoc</code> shipped with the standard distribution of the
+OCaml compiler suffers from some limitations because it doesn&#39;t have
+access to all the information it needs. Notably, if you want to build
+the documentation of some package <code>a</code> that depends on some package
+<code>b</code>, you&#39;ll find out that the documentation of the package <code>a</code> will
+not automatically refer to the documentation of the package <code>b</code>.
+Well, opamdoc solves this problem and it&#39;s very nice.</p>
+<p>On <a href='http://ocaml-redesign.github.io/'>this site</a>, which is work in progress,
+you can find a <a href='http://ocaml-redesign.github.io/pkg/'>list of packages</a> 
+with their descriptions. This list is built using <a href='https://github.com/OCamlPro/opam2web'>opam2web</a>.
+And each package description links to its documentation. And the documentation
+for all packages is built as a whole, which means that if the documentation of 
+a package links to all other packages on which it depends. Isn&#39;t it nice? 
+:)</p>
+<h3 id="Installandrunopamdoc"> Install and run opamdoc</h3>
+<p>opamdoc is still under active development, the current step is
+<a href='https://github.com/ocamllabs/opam-doc/issues/'>finding and fixing remaining issues</a> and
+packaging.</p>
+<p>If you want to use opamdoc now, here&#39;s some instructions based on
+<a href='https://github.com/ocamllabs/opam-doc/issues/1#issuecomment-23430108'>Anil&#39;s instructions</a>, 
+which are those:</p>
+<blockquote><pre><code>opam remote add opamdoc git://github.com/avsm/opamdoc-dev
+opam switch 4.01.0beta1+opamdoc
+eval `opam config env`
+opam install opamdoc
+opamdoc-rebuild
+opamdoc-generate
+open ~/.opam/4.01.0beta1+opamdoc/opamhtml/index.html
+</code></pre>
+<ul>
+ <li><code>opamdoc-rebuild</code> builds a database of cmt/cmd files in <code>~/.opam/4.01.0beta1+opamdoc/opamdoc</code>.
+ </li>
+ <li><code>opamdoc-generate</code> builds a package HTML list in <code>~/.opam/4.01.0beta+opamdoc/opamhtml</code>.</li>
+</ul>
+</blockquote>
+<p>Well, they work quite well, except <code>opamdoc-rebuild</code> uses <code>.cmd</code>  files as a base, whereas
+it should use <code>.cmt</code> files instead because sometimes <code>.cmt</code> files exist while <code>.cmd</code> don&#39;t.
+This is a problem for a few packages (<code>Core</code> is one of them).</p>
+<p>My advice: if something doesn&#39;t work as expect, 
+please <a href='https://github.com/ocamllabs/opam-doc/issues'>open an issue</a>, 
+and if you want to customize the way the documentation is built, 
+don&#39;t hesitate to edit <code>opamdoc-rebuild</code> and/or <code>opamdoc-generate</code> (they are Bash scripts).</p>
+<h4 id="Afewnotesaboutthoseinstructions"> A few notes about those instructions</h4>
+<p>The first line, which is <code>opam remote add opamdoc git://github.com/avsm/opamdoc-dev</code>, 
+will give sense to the second one, which is <code>opam switch 4.01.0beta1+opamdoc</code>.
+And <code>4.01.0beta1+opamdoc</code> is a customised compiler that produces on the side the <code>.cm{t,d}{,i}</code> files
+that are used by opamdoc. Using it is very convenient! If you don&#39;t use it, you need to produce
+those files in an other way <strong>of your choice</strong> (really? you want to go through such trouble?).</p>
+<p>Note that opamdoc is written in such  a way that it would ask a lot of
+work to  make it work  with versions of  the compiler prior  to 4.01.0
+because it uses features introduced by this very version.</p>
+<p>Just in case, here follow the customised version of <code>opamdoc-rebuild</code> and <code>opamdoc-generate</code> that 
+I used to build the documentation available on <a href='http://ocaml-redesign.github.io/pkg/docs/'>http://ocaml-redesign.github.io/pkg/docs/</a>.</p>
+<h4 id="opamdocrebuild"> <code>opamdoc-rebuild</code></h4>
+<p>Here&#39;s my customised version of <code>opamdoc-rebuild</code>:</p>
+<pre><code>#!/usr/bin/env bash
+# Rebuild the cmd/cmt archive in ~/.opam/&lt;switch&gt;/opamdoc
+# Copies all the cmt/cmti/cmd files found in the OPAM build
+# dir into a single directory structure, separated by MD5
+# to keep files distinct.
+
+set -e
+#dry=echo
+SWITCH=$(opam switch show)
+if [ &quot;${SWITCH}&quot; = &quot;system&quot; ]; then
+  echo Must be using a custom OPAM switch for this to work.
+  exit 1
+fi
+
+function calc_md5_for_file()
+{
+  if builtin command -v md5 &gt; /dev/null; then
+    md5=$(cat $1 | md5)
+  elif builtin command -v md5sum &gt; /dev/null ; then
+    md5=$(cat $1 | md5sum | awk &#39;{print $1}&#39;)
+  else
+    echo &quot;Neither md5 nor md5sum were found in the PATH&quot;
+    exit 1
+  fi
+}
+
+BASE=&quot;$(dirname $(dirname $(ocamlc -where)))&quot;
+BUILD=${BASE}/build
+DOC=${BASE}/opamdoc
+rm -rf ${DOC}
+mkdir -p ${DOC}
+
+PKGS=$(find ${BUILD}/ -mindepth 1 -maxdepth 1 -type d &quot;$@&quot;)
+echo ${PKGS}
+
+for pkg in ${PKGS}; do
+  pkgname=$(basename $pkg)
+  echo $pkgname
+  mkdir -p ${DOC}/$pkgname
+
+  CMTS=$(find ${pkg} -type f -name &#39;*.cmt&#39;)
+  for cmt in ${CMTS}; do
+    d=$(dirname $cmt)
+    calc_md5_for_file &quot;$cmt&quot;;
+
+    f=$(basename $cmt .cmt)
+    mkdir -p ${DOC}/$pkgname/$md5
+    r=${DOC}/$pkgname/$md5/$f
+    for ext in cmt cmti cmd cmdi cmi ; do
+        if [ -e $d/$f.$ext ]; then
+            $dry cp $d/$f.$ext $r.$ext
+        fi
+    done
+  done
+done
+</code></pre>
+<h4 id="opamdocgenerate"> <code>opamdoc-generate</code></h4>
+<p>Here&#39;s my customised version of <code>opamdoc-generate</code>.</p>
+<pre><code>#!/usr/bin/env bash
+# Rebuild the cmd/cmt archive in ~/.opam/&lt;switch&gt;/opamdoc
+# Copies all the cmt/cmti/cmd files found in the OPAM build
+# dir into a single directory structure, separated by MD5
+# to keep files distinct.
+
+set -e
+#dry=echo
+SWITCH=$(opam switch show)
+if [ &quot;${SWITCH}&quot; = &quot;system&quot; ]; then
+  echo Must be using a custom OPAM switch for this to work.
+  exit 1
+fi
+
+OPAMDOC=${OPAMDOC:-opamdoc}
+
+
+BASE=&quot;$(dirname $(dirname $(ocamlc -where)))&quot;
+BUILD=${BASE}/build
+DOC=${BASE}/opamdoc
+HTML=${BASE}/opamhtml
+
+rm -rf ${HTML}
+mkdir -p ${HTML}
+
+# Grab the build dir in reverse mtime order to get the
+# ordering of generation &quot;correct&quot;.
+PKGS=$(ls -1tr $BUILD)
+
+rm -rf $HTML
+mkdir -p $HTML
+cd $HTML
+for pkg in ${PKGS}; do
+  fs=&quot;$(find $DOC/$pkg -type f)&quot;
+  if [ &quot;$fs&quot; != &quot;&quot; ]; then
+    name=$(echo $pkg | awk -F. &#39;{print $1}&#39;)
+    echo $pkg $name
+    $dry $OPAMDOC -p $name $fs
+  fi
+done
+</code></pre>
+<p>Enjoy.</p>
+<h2 id="OntheImplementationofOPAMDOC"> On the Implementation of OPAMDOC</h2><p>
+<a href='https://github.com/ocamllabs/opam-doc/commits/master'>Early this year, Leo White started the implementation of
+opamdoc</a>.
+Then <a href='https://github.com/vincent-botbol'>Vincent Botbol</a> worked on it
+from late May to mid August during his stay in Cambridge.</p>
+<p>Now, Vincent&#39;s back to studying &quot;computer science research&quot; in Paris,
+and he continues working on opam-doc when he can on his free time.</p>
+<p>I didn&#39;t really want to get involved too deep in the implementation of
+opamdoc (mainly  because it takes time). Eventually,  since I&#39;ve ended
+up        doing        most        of       the        <a href='https://github.com/ocamllabs/sandbox-ocaml.org'>technical-side
+implementation</a> of the
+<a href='http://ocaml-redesign.github.io'>new  ocaml.org web  site</a>, I  had to
+eventually get into  opamdoc&#39;s source code to integrate  its output in
+the website.</p>
+<p>If you look at the <a href='https://github.com/ocamllabs/opam-doc/'>source code of
+opamdoc</a>, you&#39;ll see there&#39;s a
+bunch of files at the root directory. Well, some of them are inherited
+from the implementation of ocamldoc, and some are new.  I&#39;ve mostly
+contributed to
+<a href='https://github.com/ocamllabs/opam-doc/blob/master/generate.ml'><code>generate.ml</code></a>
+and
+<a href='https://github.com/ocamllabs/opam-doc/blob/master/opam_doc_config.ml'><code>opam_doc_config.ml</code></a>.
+The former implements the HTML backend of opamdoc, and the latter
+contains the JavaScript engine that loads the documentation. This blog
+post is mostly about my experience with those two files.</p>
+<h3 id="generateml"> generate.ml</h3>
+<p>This big file (about 1.5 kloc) contains the functions to retrieve
+the information from cmt, cmd, cmti, cmdi and cmi files in order to
+build the HTML document.</p>
+<p>Side note:</p>
+<blockquote><p>
+The <a href='http://www.ocamlpro.com/blog/2012/08/20/ocamlpro-and-4.00.0.html'><code>.cmt</code> files were officially introduced in the standard OCaml
+compiler in version
+4.00.0</a>,
+so it&#39;s pretty recent work. Previously, they were produced by a
+separate tool developed at OCamlPro for
+<a href='http://www.typerex.org'>TypeRex</a>.</p>
+</blockquote>
+<h4 id="Tworeasonswhyit39snotsupereasy"> Two reasons why it&#39;s not super easy</h4>
+<p>Well, this  can actually  be explain  in just a  few words.   To begin
+with, there  are many cases to  address. Well, that is  not <em>exact</em>. I
+should say that  there are may cases to address  <em>and</em> those cases are
+fairly <strong>poorly  documented</strong>, which is &quot;normal&quot; given  that there was
+probably no  particular motivation to put  efforts into documentation.
+This is  true for the source  code of ocamldoc <em>and</em>  for its official
+documentation.</p>
+<p>For instance, if you look into
+<a href='https://github.com/ocamllabs/opam-doc/blob/master/info.mli'><code>info.mli</code></a>, you
+can see that the first type definition is:</p>
+<pre><code class='ocaml'><span class='k'>type</span> style_kind <span class='k'>=</span>
+  <span class='o'>|</span> SK_bold
+  <span class='o'>|</span> SK_italic
+  <span class='o'>|</span> SK_emphasize
+  <span class='o'>|</span> SK_center
+  <span class='o'>|</span> SK_left
+  <span class='o'>|</span> SK_right
+  <span class='o'>|</span> SK_superscript
+  <span class='o'>|</span> SK_subscript
+  <span class='o'>|</span> SK_custom <span class='k'>of</span> string
+</code></pre>
+<p>and the only documentation for this type is
+<code>(** The differents kinds of style.  *)</code>.
+Well, you can see that there&#39;s not really any
+documentation needed for those <code>SK_...</code> until... you see
+<code>SK_custom of string</code>.  There you go! You have to guess...</p>
+<p>It&#39;s not that hard when you have to guess a few times, it&#39;s
+a lot harder when you keep having to guess. That&#39;s my point.</p>
+<p>Well, the other issue is more interesting.  At the time <code>ocamldoc</code> was
+designed  and  implemented,  I  bet  no one  imagined  what  folks  at
+JaneStreet would do with  OCaml!  I&#39;m talking about the implementation
+of their  open source library, known  as <code>Core</code>.  &quot;<code>Core</code> &amp;  co&quot; use a
+<em><strong>lot</strong></em> of  <code>include</code> directives.  The module  <code>Core.Std</code> includes a
+lot  of other  modules, which  also include  modules. If  you  want to
+generate a single  full HTML page for <code>Core.Std</code>, you&#39;d  end up with a
+<em><strong>huge</strong></em> page.  And  such a page would contain  a lot of information
+coming straight  from other  pages, so you&#39;d  end up with  hundreds of
+megabytes.  Instead of  doing so, opamdoc generates only  one page per
+package and one per module. If a module includes another one, then the
+first will fetch the documentation of the second and there you go.  So
+we  only  have 8.4MB  of  HTML  for  {async, async_core,  async_extra,
+async_unix,  core, core_bench,  core_extended,  core_kernel} in  total
+(well, this  number should  increase in the  future, but  linearly, as
+people  will hopefully  start  documenting all  those packages).   And
+that&#39;s why we have a JavaScript loader.</p>
+<h3 id="opamdocconfigmlordocsloaderjs"> opam_doc_config.ml, or docs_loader.js</h3>
+<p>Since the JavaScript  may have to load tens of  megabytes of HTML, you
+have to program some nasty functions and loops... and at some point it
+does become big enough for  your browser to stop responding while it&#39;s
+busy  loading your documentation.  So there  are several  solutions to
+that. The best would probably be to stop writing in JavaScript (and
+use something else that compiles to JavaScript). But that&#39;s for next
+step. Now, we&#39;re trying to make the JavaScript work.</p>
+<p>The problem  with JavaScript  is that basically  there is  one &quot;event&quot;
+loop,  and  all events  are  happening  sequentially or  concurrently,
+depending on how  you wrote your JS, but when one  event is making the
+browser busy,  the browser is unable  to do anything  else. That&#39;s why
+your browser may tell you at  some point that you have a script making
+it ill and ask you whether  you want it to stop executing that script.
+One workaround  for that problem  when you know  you ask for a  lot of
+computation time is to divide  your big computation into smaller ones.
+You can  use <code>window.setTimeout</code> for that, meaning  you transform your
+recursive calls like <code>f()</code>  into <code>window.setTimeout(f, 0)</code> so that <code>f</code>
+will be called at some point. And if you have iterative loops instead,
+write them recursive and use <code>window.setTimeout</code>. That&#39;s bad.  Because
+then the browser  is unable to tell that it&#39;s  crazy busy...  and it&#39;s
+still really busy. So you can increase the value 0 to 1 or 10 or more.
+But if you increase it too much, it&#39;ll become too slow...</p>
+<p>Ok, well, don&#39;t use JavaScript. It&#39;s a nightmare.</p>
+<p>We will probably rewrite the script using Js_of_ocaml at some point,
+mainly because when you write in OCaml, you have static type checking,
+and that saves so much time!</p>
+<p>To be followed...</p>
+<h2 id="ExerciseAretheremore1sor0s"> (Exercise) Are there more 1s or 0s?</h2><p>
+The challenge is this:</p>
+<blockquote><p>
+Provide a program that will determine,  given a set of 1s and 0s, if
+there are more 0s or more 1s.</p>
+</blockquote>
+<p>So  the   first  question  that  comes   to  my  mind   is  about  the
+representation of that set of 1s and 0s. Is it a linked list, a double
+linked list, an array, a tree, a string, or something else?</p>
+<p>If it&#39;s a list (single linked or double linked actually doesn&#39;t matter
+much), it&#39;s going to be pretty straightforward: just read the list and
+use a counter. Yes, a single counter is enough, you can add one to the
+counter when you meet a 1, and  subtract one when you meet a 0. At the
+end, if  your counter has  its initial value,  then you have  the same
+number of 1s and 0s. If it&#39;s  lesser, then it has more 0s, else it has
+more 1s.</p>
+<p>Let&#39;s declare a type for the result.</p>
+<pre><code class='tryocaml'><span class='k'>type</span> result <span class='k'>=</span> Equal <span class='o'>|</span> More_zeros <span class='o'>|</span> More_ones
+<a href="javascript:octry('type result = Equal | More_zeros | More_ones\n');">[try]</a></code></pre>
+<pre><code class='tryocaml'><span class='k'>let</span> count l <span class='k'>=</span>
+  <span class='k'>let rec</span> loop counter <span class='k'>=</span> <span class='k'>function</span>
+    <span class='o'>|</span> <span class='o'>[</span><span class='o'>]</span> <span class='k'>-></span> counter
+    <span class='o'>|</span> 1<span class='o'>::</span>tl <span class='k'>-></span> loop (counter<span class='o'>+</span>1) tl
+    <span class='o'>|</span> 0<span class='o'>::</span>tl <span class='k'>-></span> loop (counter-1) tl
+    <span class='o'>|</span> <span class='o'>_::</span>tl <span class='k'>-></span> loop counter tl
+    <span class='com2'>(* you might want <span class='ic'>to</span> debate whether you should stop </span>
+<span class='com2'>       <span class='ic'>when</span> you get something <span class='ic'>else</span> than a 0 <span class='ic'>or</span> a 1. *)</span><!-- end comment -->
+  <span class='k'>in</span>
+  <span class='k'>let</span> r <span class='k'>=</span> loop 0 l <span class='k'>in</span>
+  <span class='k'>if</span> r <span class='k'>=</span> 0 <span class='k'>then</span>
+    Equal
+  <span class='k'>else</span> <span class='k'>if</span> r <span class='o'>&#62;</span> 0 <span class='k'>then</span>
+    More_ones
+  <span class='k'>else</span>
+    More_zeros    
+<a href="javascript:octry('let count l =\n  let rec loop counter = function\n    | [] -&#62; counter\n    | 1::tl -&#62; loop (counter+1) tl\n    | 0::tl -&#62; loop (counter-1) tl\n    | _::tl -&#62; loop counter tl\n    (* you might want to debate whether you should stop \n       when you get something else than a 0 or a 1. *)\n  in\n  let r = loop 0 l in\n  if r = 0 then\n    Equal\n  else if r &#62; 0 then\n    More_ones\n  else\n    More_zeros    \n');">[try]</a></code></pre>
+<p>Well, what&#39;s the risk with this  program? The risk is that the integer
+<code>counter</code> overflows, of course! If you have a very long list of 1s (or
+0s)  only, you  may  get things  just  wrong.  However,  in OCaml,  in
+reality,  there&#39;s  not really  a  chance  that  the integer  overflows
+because of  the length of a  single linked list,  especially if you&#39;re
+using a 64-bit architecture based OCaml, on which the greatest integer
+is 4_611_686_018_427_387_903 (about 4⨉10<sup>18</sup>). There&#39;s really
+a long way  to have such a long list because  basically you would need
+to  allocate more  than (about  32⨉10<sup>6</sup> terabytes)  at once,
+since basically a linked list of  integers is made of blocks that have
+2 cells  each (one for  the integer, one  for the address of  the next
+cell), each cell taking 64 bits (or 8 bytes).</p>
+<p>But then,  what if you  don&#39;t have linked  lists but some  stream that
+gives you  a very large number of  0s and/or 1s? Well,  to begin with,
+counting from 0 to 4⨉10<sup>18</sup> takes a really long time. If your
+machine can  count from 0 to  10<sup>9</sup> in a  single second (that
+would  mean  your   machine  is  very  fast),  it   would  still  take
+4⨉10<sup>9</sup>  seconds,  which  is about  4000000000/(60<em>60</em>24*365)
+years.  Oh, that means about 126 years! So let&#39;s just assume that a 63
+bit signed  integer is enough for  us. And if you  really can&#39;t assume
+that for some reason, you can always implement 128 bit signed integers
+quite easily, and  if you don&#39;t know  how to do that or  if you&#39;re too
+lazy to do it, use the Big_int module.</p>
+<p>But let&#39;s go  back the representation of those 0s and  1s. I&#39;d like to
+make the computation as fast as  possible and I&#39;ll put those 0s and 1s
+in a very compact representation. Each  0 and 1 will now only take one
+bit in the  memory (with a possible constant  overhead for the whole).
+For that,  let&#39;s use  OCaml&#39;s strings, which  are basically  arrays of
+bytes.   The  longest  string I  can  have  on  my machine  will  bear
+1_152_921_504_606_846_904  bits  (I  know  that because  I  multiplied
+Sys.max_string_length   by   8),  and   that&#39;s   a   lot  (more   than
+10<sup>8</sup>).</p>
+<p>Now say  we want to know  whether there are more  0s or 1s  as fast as
+possible.  How do we do that?</p>
+<p>We don&#39;t want  to count all 0s  and 1s bit by bit,  because that would
+have quite  a high cost! Indeed, we  would have to get  each byte, and
+for each byte  we would have to read  each of its 8 bits  (that can be
+done) one by one.  We don&#39;t want to do that.</p>
+<p>Instead, since we have bytes, we can conveniently allocate an array of
+size 256.   Each cell of that  array will contain the  right number to
+add to the counter. This way, we can read a byte, get its number of 0s
+and 1s in O(1).</p>
+<pre><code class='tryocaml'><span class='com2'>(* this table is computed only once *)</span><!-- end comment -->
+<span class='k'>let</span> table <span class='k'>=</span>
+  <span class='k'>let</span> number_for_a_byte b <span class='k'>=</span>
+    <span class='k'>let</span> r <span class='k'>=</span> ref 0 <span class='k'>in</span>
+    <span class='k'>for</span> i <span class='k'>=</span> 0 <span class='k'>to</span> 7 <span class='k'>do</span>
+      <span class='k'>if</span> (b <span class='k'>lsr</span> i) <span class='k'>land</span> 1 <span class='k'>=</span> 0 <span class='k'>then</span>
+        decr r
+      <span class='k'>else</span>
+        incr r
+    <span class='k'>done</span><span class='o'>;</span>
+    <span class='o'>!</span>r
+  <span class='k'>in</span>
+  <span class='k'>let</span> a <span class='k'>=</span> <span class='m'>Array</span><span class='o'>.</span>make 256 0 <span class='k'>in</span>
+  <span class='k'>for</span> i <span class='k'>=</span> 0 <span class='k'>to</span> 255 <span class='k'>do</span>
+    a<span class='o'>.</span>(i) <span class='o'>&#60;-</span> number_for_a_byte i
+  <span class='k'>done</span><span class='o'>;</span>
+  a
+<a href="javascript:octry('(* this table is computed only once *)\nlet table =\n  let number_for_a_byte b =\n    let r = ref 0 in\n    for i = 0 to 7 do\n      if (b lsr i) land 1 = 0 then\n        decr r\n      else\n        incr r\n    done;\n    !r\n  in\n  let a = Array.make 256 0 in\n  for i = 0 to 255 do\n    a.(i) &#60;- number_for_a_byte i\n  done;\n  a\n');">[try]</a></code></pre>
+<p>Then let&#39;s abstract from the means  to read new 0s and 1s, by assuming
+we&#39;ll be provided a function <code>f</code> that given <code>()</code> will return 8 bits in
+a value  of type  <code>char</code>, and will  raise the  exception <code>End_of_file</code>
+when it has no more bits to give.</p>
+<pre><code class='tryocaml'><span class='k'>let</span> more_zeros_or_ones f <span class='k'>=</span>
+  <span class='k'>let</span> c <span class='k'>=</span> ref 0 <span class='k'>in</span>
+  <span class='k'>begin</span> <span class='k'>try</span> <span class='k'>while</span> <span class='o'>true</span> <span class='k'>do</span>
+    c <span class='o'>:=</span> <span class='o'>!</span>c <span class='o'>+</span> table<span class='o'>.</span>(int_of_char(f()))
+  <span class='k'>done</span> <span class='k'>with</span> End_of_file <span class='k'>-></span> () <span class='k'>end</span><span class='o'>;</span>
+  <span class='k'>if</span> <span class='o'>!</span>c <span class='k'>=</span> 0 <span class='k'>then</span>
+    Equal
+  <span class='k'>else</span> <span class='k'>if</span> <span class='o'>!</span>c <span class='o'>&#62;</span> 0 <span class='k'>then</span>
+    More_zeros
+  <span class='k'>else</span>
+    More_ones
+<a href="javascript:octry('let more_zeros_or_ones f =\n  let c = ref 0 in\n  begin try while true do\n    c := !c + table.(int_of_char(f()))\n  done with End_of_file -&#62; () end;\n  if !c = 0 then\n    Equal\n  else if !c &#62; 0 then\n    More_zeros\n  else\n    More_ones\n');">[try]</a></code></pre>
+<p>Note  that <code>int_of_char</code>  has a  zero-cost (i.e.,  it  &quot;disappears&quot; at
+compile-time because  <code>int</code> and <code>char</code>  sort of share the  same memory
+representation).  If  you want  better performance, you  should inline
+<code>f</code>, provided that you  know what it is (you may want  to check if the
+compiler does the inlining itself first, just in case).</p>
+<p>Also, you may want  to use a table with a size  larger than 256 if you
+have a lot of memory but I&#39;m not so sure you&#39;d gain performance unless
+you  use nasty  tricks to  read larger  integers from  a  string. Then
+again, you may  not end up using  a string, in which case  you have to
+think with the whole problem in mind.</p>
+<h2 id="ExerciseOddoreven"> (Exercise) Odd or even?</h2><p>
+Given a string (of bytes), is the number of bits set to 1 odd or even?</p>
+<p>The most naive way is to count them all, and then see if the number is 
+even or odd. But it&#39;s probably better not to use an integer to count them
+all, and instead, use a Boolean: each time we see a 1, we can simply flip the
+Boolean value!</p>
+<pre><code class='tryocaml'><span class='k'>let</span> has_an_odd_number_of_1 s <span class='k'>=</span>
+  <span class='k'>let</span> res <span class='k'>=</span> ref <span class='o'>false</span> <span class='k'>in</span>
+  <span class='k'>for</span> i <span class='k'>=</span> 0 <span class='k'>to</span> <span class='m'>String</span><span class='o'>.</span>length s <span class='o'>-</span> 1 <span class='k'>do</span>
+    <span class='k'>let</span> x <span class='k'>=</span> int_of_char s<span class='o'>.</span><span class='o'>[</span>i<span class='o'>]</span> <span class='k'>in</span>
+    <span class='k'>for</span> j <span class='k'>=</span> 0 <span class='k'>to</span> 7 <span class='k'>do</span>
+      <span class='k'>if</span> (x <span class='k'>lsr</span> j) <span class='k'>land</span> 1 <span class='k'>=</span> 1 <span class='k'>then</span>
+        res<span class='o'>.</span>contents <span class='o'>&#60;-</span> not res<span class='o'>.</span>contents<span class='o'>;</span>
+    <span class='k'>done</span>
+  <span class='k'>done</span><span class='o'>;</span>
+  res<span class='o'>.</span>contents
+<a href="javascript:octry('let has_an_odd_number_of_1 s =\n  let res = ref false in\n  for i = 0 to String.length s - 1 do\n    let x = int_of_char s.[i] in\n    for j = 0 to 7 do\n      if (x lsr j) land 1 = 1 then\n        res.contents &#60;- not res.contents;\n    done\n  done;\n  res.contents\n');">[try]</a></code></pre>
+<p>But there&#39;s way more efficient than that! Indeed, unless we really don&#39;t have a choice,
+we shouldn&#39;t read bits one by one, because it&#39;s slow.</p>
+<p>So what can we do instead?</p>
+<p>Well, there&#39;s a very very convenient logical operation on integers.
+It&#39;s called XOR (and the OCaml operator for that is <code>lxor</code>), and yes
+we can use it!</p>
+<p>You see, 1 XOR 1 = 0; 0 XOR 0 = 0; but 1 XOR 0 or 0 XOR 1 = 1.
+It&#39;s very convenient because it&#39;s basically giving us the answer!
+When we have two 1s, we can eliminate them, that&#39;s what happens with XOR.
+When we have a 1 and a 0, we keep the 1.
+So if we take those bytes byte by byte, and XOR them with each other,
+at the end we will have one remaining byte that will tell us if the
+whole string had an odd number of 1 or not.</p>
+<pre><code class='tryocaml'><span class='k'>let</span> has_an_odd_number_of_1__efficient s <span class='k'>=</span>
+  <span class='k'>let</span> sl <span class='k'>=</span> <span class='m'>String</span><span class='o'>.</span>length s <span class='k'>in</span>
+  <span class='k'>let rec</span> loop c i <span class='k'>=</span>
+    <span class='k'>if</span> i <span class='k'>=</span> l <span class='k'>then</span>
+      <span class='k'>let</span> res <span class='k'>=</span> ref <span class='o'>false</span> <span class='k'>in</span>
+      <span class='k'>for</span> j <span class='k'>=</span> 0 <span class='k'>to</span> 7 <span class='k'>do</span>
+        <span class='k'>if</span> (c <span class='k'>lsr</span> j) <span class='k'>land</span> 1 <span class='k'>=</span> 1 <span class='k'>then</span>
+          res<span class='o'>.</span>contents <span class='o'>&#60;-</span> not res<span class='o'>.</span>contents<span class='o'>;</span>
+      <span class='k'>done</span><span class='o'>;</span>
+      res<span class='o'>.</span>contents
+    <span class='k'>else</span>
+      loop (c <span class='k'>lxor</span> int_of_char s<span class='o'>.</span><span class='o'>[</span>i<span class='o'>]</span>) 
+  <span class='k'>in</span> loop 0 0
+<a href="javascript:octry('let has_an_odd_number_of_1__efficient s =\n  let sl = String.length s in\n  let rec loop c i =\n    if i = l then\n      let res = ref false in\n      for j = 0 to 7 do\n        if (c lsr j) land 1 = 1 then\n          res.contents &#60;- not res.contents;\n      done;\n      res.contents\n    else\n      loop (c lxor int_of_char s.[i]) \n  in loop 0 0\n');">[try]</a></code></pre>
+<p>And... There we go!  :-)</p>
+<p>Note that <code>int_of_char</code> is a zero-cost operation.</p>
 <hr/><p></p>          </div>
         </div>
       </div>
