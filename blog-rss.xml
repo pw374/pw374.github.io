@@ -1,4 +1,4 @@
-<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Fri, 27 Sep 2013 00:04:27 +0100</pubDate><lastBuildDate>Fri, 27 Sep 2013 00:04:27 +0100</lastBuildDate>
+<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Fri, 27 Sep 2013 00:11:26 +0100</pubDate><lastBuildDate>Fri, 27 Sep 2013 00:11:26 +0100</lastBuildDate>
 
 
     <item>
@@ -392,319 +392,39 @@ done
 
 
     <item>
-      <title>on the Implementation of OPAMDOC</title>
+      <title>On the Implementation of OPAMDOC</title>
       <link>http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html</link>
       <category>ocaml</category><category>opamdoc</category>
       <pubDate>Tue, 24 Sep 2013 14:21:00 +0000</pubDate>
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
       <guid>http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html</guid>
       <description><![CDATA[
-
-&#60;p&#62;&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/commits/master&#39;&#62;Early this year, Leo White started the implementation of
-opamdoc&#60;/a&#62;.
-Then &#60;a href=&#39;https://github.com/vincent-botbol&#39;&#62;Vincent Botbol&#60;/a&#62; worked on it
-from late May to mid August during his stay in Cambridge.&#60;/p&#62;
-&#60;p&#62;Now, Vincent&#38;#39;s back to studying &#38;quot;computer science research&#38;quot; in Paris,
-and he continues working on opam-doc when he can on his free time.&#60;/p&#62;
-&#60;p&#62;I didn&#38;#39;t really want to get involved too deep in the implementation of
-opamdoc (mainly  because it takes time). Eventually,  since I&#38;#39;ve ended
-up        doing        most        of       the        &#60;a href=&#39;https://github.com/ocamllabs/sandbox-ocaml.org&#39;&#62;technical-side
-implementation&#60;/a&#62; of the
-&#60;a href=&#39;http://ocaml-redesign.github.io&#39;&#62;new  ocaml.org web  site&#60;/a&#62;, I  had to
-eventually get into  opamdoc&#38;#39;s source code to integrate  its output in
-the website.&#60;/p&#62;
-&#60;p&#62;If you look at the &#60;a href=&#39;https://github.com/ocamllabs/opam-doc/&#39;&#62;source code of
-opamdoc&#60;/a&#62;, you&#38;#39;ll see there&#38;#39;s a
-bunch of files at the root directory. Well, some of them are inherited
-from the implementation of ocamldoc, and some are new.  I&#38;#39;ve mostly
-contributed to
-&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/blob/master/generate.ml&#39;&#62;&#60;code&#62;generate.ml&#60;/code&#62;&#60;/a&#62;
-and
-&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/blob/master/opam_doc_config.ml&#39;&#62;&#60;code&#62;opam_doc_config.ml&#60;/code&#62;&#60;/a&#62;.
-The former implements the HTML backend of opamdoc, and the latter
-contains the JavaScript engine that loads the documentation. This blog
-post is mostly about my experience with those two files.&#60;/p&#62;
-&#60;h3 id=&#34;generateml&#34;&#62; generate.ml&#60;/h3&#62;
-&#60;p&#62;This big file (about 1.5 kloc) contains the functions to retrieve
-the information from cmt, cmd, cmti, cmdi and cmi files in order to
-build the HTML document.&#60;/p&#62;
-&#60;p&#62;Side note:&#60;/p&#62;
-&#60;blockquote&#62;&#60;p&#62;
-The &#60;a href=&#39;http://www.ocamlpro.com/blog/2012/08/20/ocamlpro-and-4.00.0.html&#39;&#62;&#60;code&#62;.cmt&#60;/code&#62; files were officially introduced in the standard OCaml
-compiler in version
-4.00.0&#60;/a&#62;,
-so it&#38;#39;s pretty recent work. Previously, they were produced by a
-separate tool developed at OCamlPro for
-&#60;a href=&#39;http://www.typerex.org&#39;&#62;TypeRex&#60;/a&#62;.&#60;/p&#62;
-&#60;/blockquote&#62;
-&#60;h4 id=&#34;Tworeasonswhyit39snotsupereasy&#34;&#62; Two reasons why it&#38;#39;s not super easy&#60;/h4&#62;
-&#60;p&#62;Well, this  can actually  be explain  in just a  few words.   To begin
-with, there  are many cases to  address. Well, that is  not &#60;em&#62;exact&#60;/em&#62;. I
-should say that  there are may cases to address  &#60;em&#62;and&#60;/em&#62; those cases are
-fairly &#60;strong&#62;poorly  documented&#60;/strong&#62;, which is &#38;quot;normal&#38;quot; given  that there was
-probably no  particular motivation to put  efforts into documentation.
-This is  true for the source  code of ocamldoc &#60;em&#62;and&#60;/em&#62;  for its official
-documentation.&#60;/p&#62;
-&#60;p&#62;For instance, if you look into
-&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/blob/master/info.mli&#39;&#62;&#60;code&#62;info.mli&#60;/code&#62;&#60;/a&#62;, you
-can see that the first type definition is:&#60;/p&#62;
-&#60;pre&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;type&#60;/span&#62; style_kind &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
-  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_bold
-  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_italic
-  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_emphasize
-  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_center
-  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_left
-  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_right
-  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_superscript
-  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_subscript
-  &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; SK_custom &#60;span class=&#39;k&#39;&#62;of&#60;/span&#62; string
-&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;and the only documentation for this type is
-&#60;code&#62;(** The differents kinds of style.  *)&#60;/code&#62;.
-Well, you can see that there&#38;#39;s not really any
-documentation needed for those &#60;code&#62;SK_...&#60;/code&#62; until... you see
-&#60;code&#62;SK_custom of string&#60;/code&#62;.  There you go! You have to guess...&#60;/p&#62;
-&#60;p&#62;It&#38;#39;s not that hard when you have to guess a few times, it&#38;#39;s
-a lot harder when you keep having to guess. That&#38;#39;s my point.&#60;/p&#62;
-&#60;p&#62;Well, the other issue is more interesting.  At the time &#60;code&#62;ocamldoc&#60;/code&#62; was
-designed  and  implemented,  I  bet  no one  imagined  what  folks  at
-JaneStreet would do with  OCaml!  I&#38;#39;m talking about the implementation
-of their  open source library, known  as &#60;code&#62;Core&#60;/code&#62;.  &#38;quot;&#60;code&#62;Core&#60;/code&#62; &#38;amp;  co&#38;quot; use a
-&#60;em&#62;&#60;strong&#62;lot&#60;/strong&#62;&#60;/em&#62; of  &#60;code&#62;include&#60;/code&#62; directives.  The module  &#60;code&#62;Core.Std&#60;/code&#62; includes a
-lot  of other  modules, which  also include  modules. If  you  want to
-generate a single  full HTML page for &#60;code&#62;Core.Std&#60;/code&#62;, you&#38;#39;d  end up with a
-&#60;em&#62;&#60;strong&#62;huge&#60;/strong&#62;&#60;/em&#62; page.  And  such a page would contain  a lot of information
-coming straight  from other  pages, so you&#38;#39;d  end up with  hundreds of
-megabytes.  Instead of  doing so, opamdoc generates only  one page per
-package and one per module. If a module includes another one, then the
-first will fetch the documentation of the second and there you go.  So
-we  only  have 8.4MB  of  HTML  for  {async, async_core,  async_extra,
-async_unix,  core, core_bench,  core_extended,  core_kernel} in  total
-(well, this  number should  increase in the  future, but  linearly, as
-people  will hopefully  start  documenting all  those packages).   And
-that&#38;#39;s why we have a JavaScript loader.&#60;/p&#62;
-&#60;h3 id=&#34;opamdocconfigmlordocsloaderjs&#34;&#62; opam_doc_config.ml, or docs_loader.js&#60;/h3&#62;
-&#60;p&#62;Since the JavaScript  may have to load tens of  megabytes of HTML, you
-have to program some nasty functions and loops... and at some point it
-does become big enough for  your browser to stop responding while it&#38;#39;s
-busy  loading your documentation.  So there  are several  solutions to
-that. The best would probably be to stop writing in JavaScript (and
-use something else that compiles to JavaScript). But that&#38;#39;s for next
-step. Now, we&#38;#39;re trying to make the JavaScript work.&#60;/p&#62;
-&#60;p&#62;The problem  with JavaScript  is that basically  there is  one &#38;quot;event&#38;quot;
-loop,  and  all events  are  happening  sequentially or  concurrently,
-depending on how  you wrote your JS, but when one  event is making the
-browser busy,  the browser is unable  to do anything  else. That&#38;#39;s why
-your browser may tell you at  some point that you have a script making
-it ill and ask you whether  you want it to stop executing that script.
-One workaround  for that problem  when you know  you ask for a  lot of
-computation time is to divide  your big computation into smaller ones.
-You can  use &#60;code&#62;window.setTimeout&#60;/code&#62; for that, meaning  you transform your
-recursive calls like &#60;code&#62;f()&#60;/code&#62;  into &#60;code&#62;window.setTimeout(f, 0)&#60;/code&#62; so that &#60;code&#62;f&#60;/code&#62;
-will be called at some point. And if you have iterative loops instead,
-write them recursive and use &#60;code&#62;window.setTimeout&#60;/code&#62;. That&#38;#39;s bad.  Because
-then the browser  is unable to tell that it&#38;#39;s  crazy busy...  and it&#38;#39;s
-still really busy. So you can increase the value 0 to 1 or 10 or more.
-But if you increase it too much, it&#38;#39;ll become too slow...&#60;/p&#62;
-&#60;p&#62;Ok, well, don&#38;#39;t use JavaScript. It&#38;#39;s a nightmare.&#60;/p&#62;
-&#60;p&#62;We will probably rewrite the script using Js_of_ocaml at some point,
-mainly because when you write in OCaml, you have static type checking,
-and that saves so much time!&#60;/p&#62;
-&#60;p&#62;To be followed...&#60;/p&#62;
       ]]></description>
     </item>
 
 
 
     <item>
-      <title>Are there more 1s or 0s?</title>
+      <title>(Exercise) Are there more 1s or 0s?</title>
       <link>http://pw374.github.io/posts/2013-09-25-16-19-07-ones-or-zeros.html</link>
       <category>ocaml</category><category>exercise</category>
       <pubDate>Wed, 25 Sep 2013 16:19:07 +0000</pubDate>
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
       <guid>http://pw374.github.io/posts/2013-09-25-16-19-07-ones-or-zeros.html</guid>
       <description><![CDATA[
-
-&#60;p&#62;The challenge is this:&#60;/p&#62;
-&#60;blockquote&#62;&#60;p&#62;
-Provide a program that will determine,  given a set of 1s and 0s, if
-there are more 0s or more 1s.&#60;/p&#62;
-&#60;/blockquote&#62;
-&#60;p&#62;So  the   first  question  that  comes   to  my  mind   is  about  the
-representation of that set of 1s and 0s. Is it a linked list, a double
-linked list, an array, a tree, a string, or something else?&#60;/p&#62;
-&#60;p&#62;If it&#38;#39;s a list (single linked or double linked actually doesn&#38;#39;t matter
-much), it&#38;#39;s going to be pretty straightforward: just read the list and
-use a counter. Yes, a single counter is enough, you can add one to the
-counter when you meet a 1, and  subtract one when you meet a 0. At the
-end, if  your counter has  its initial value,  then you have  the same
-number of 1s and 0s. If it&#38;#39;s  lesser, then it has more 0s, else it has
-more 1s.&#60;/p&#62;
-&#60;p&#62;Let&#38;#39;s declare a type for the result.&#60;/p&#62;
-&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;type&#60;/span&#62; result &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; Equal &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; More_zeros &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; More_ones
-&#60;a href=&#34;javascript:octry(&#39;type result = Equal | More_zeros | More_ones\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
-&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; count l &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
-  &#60;span class=&#39;k&#39;&#62;let rec&#60;/span&#62; loop counter &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;function&#60;/span&#62;
-    &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;[&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;]&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; counter
-    &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; 1&#60;span class=&#39;o&#39;&#62;::&#60;/span&#62;tl &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; loop (counter&#60;span class=&#39;o&#39;&#62;+&#60;/span&#62;1) tl
-    &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; 0&#60;span class=&#39;o&#39;&#62;::&#60;/span&#62;tl &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; loop (counter-1) tl
-    &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;_::&#60;/span&#62;tl &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; loop counter tl
-    &#60;span class=&#39;com2&#39;&#62;(* you might want &#60;span class=&#39;ic&#39;&#62;to&#60;/span&#62; debate whether you should stop &#60;/span&#62;
-&#60;span class=&#39;com2&#39;&#62;       &#60;span class=&#39;ic&#39;&#62;when&#60;/span&#62; you get something &#60;span class=&#39;ic&#39;&#62;else&#60;/span&#62; than a 0 &#60;span class=&#39;ic&#39;&#62;or&#60;/span&#62; a 1. *)&#60;/span&#62;&#60;!-- end comment --&#62;
-  &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
-  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; r &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; loop 0 l &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
-  &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; r &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
-    Equal
-  &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; r &#60;span class=&#39;o&#39;&#62;&#38;#62;&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
-    More_ones
-  &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62;
-    More_zeros    
-&#60;a href=&#34;javascript:octry(&#39;let count l =\n  let rec loop counter = function\n    | [] -&#38;#62; counter\n    | 1::tl -&#38;#62; loop (counter+1) tl\n    | 0::tl -&#38;#62; loop (counter-1) tl\n    | _::tl -&#38;#62; loop counter tl\n    (* you might want to debate whether you should stop \n       when you get something else than a 0 or a 1. *)\n  in\n  let r = loop 0 l in\n  if r = 0 then\n    Equal\n  else if r &#38;#62; 0 then\n    More_ones\n  else\n    More_zeros    \n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;Well, what&#38;#39;s the risk with this  program? The risk is that the integer
-&#60;code&#62;counter&#60;/code&#62; overflows, of course! If you have a very long list of 1s (or
-0s)  only, you  may  get things  just  wrong.  However,  in OCaml,  in
-reality,  there&#38;#39;s  not really  a  chance  that  the integer  overflows
-because of  the length of a  single linked list,  especially if you&#38;#39;re
-using a 64-bit architecture based OCaml, on which the greatest integer
-is 4_611_686_018_427_387_903 (about 4⨉10&#60;sup&#62;18&#60;/sup&#62;). There&#38;#39;s really
-a long way  to have such a long list because  basically you would need
-to  allocate more  than (about  32⨉10&#60;sup&#62;6&#60;/sup&#62; terabytes)  at once,
-since basically a linked list of  integers is made of blocks that have
-2 cells  each (one for  the integer, one  for the address of  the next
-cell), each cell taking 64 bits (or 8 bytes).&#60;/p&#62;
-&#60;p&#62;But then,  what if you  don&#38;#39;t have linked  lists but some  stream that
-gives you  a very large number of  0s and/or 1s? Well,  to begin with,
-counting from 0 to 4⨉10&#60;sup&#62;18&#60;/sup&#62; takes a really long time. If your
-machine can  count from 0 to  10&#60;sup&#62;9&#60;/sup&#62; in a  single second (that
-would  mean  your   machine  is  very  fast),  it   would  still  take
-4⨉10&#60;sup&#62;9&#60;/sup&#62;  seconds,  which  is about  4000000000/(60&#60;em&#62;60&#60;/em&#62;24*365)
-years.  Oh, that means about 126 years! So let&#38;#39;s just assume that a 63
-bit signed  integer is enough for  us. And if you  really can&#38;#39;t assume
-that for some reason, you can always implement 128 bit signed integers
-quite easily, and  if you don&#38;#39;t know  how to do that or  if you&#38;#39;re too
-lazy to do it, use the Big_int module.&#60;/p&#62;
-&#60;p&#62;But let&#38;#39;s go  back the representation of those 0s and  1s. I&#38;#39;d like to
-make the computation as fast as  possible and I&#38;#39;ll put those 0s and 1s
-in a very compact representation. Each  0 and 1 will now only take one
-bit in the  memory (with a possible constant  overhead for the whole).
-For that,  let&#38;#39;s use  OCaml&#38;#39;s strings, which  are basically  arrays of
-bytes.   The  longest  string I  can  have  on  my machine  will  bear
-1_152_921_504_606_846_904  bits  (I  know  that because  I  multiplied
-Sys.max_string_length   by   8),  and   that&#38;#39;s   a   lot  (more   than
-10&#60;sup&#62;8&#60;/sup&#62;).&#60;/p&#62;
-&#60;p&#62;Now say  we want to know  whether there are more  0s or 1s  as fast as
-possible.  How do we do that?&#60;/p&#62;
-&#60;p&#62;We don&#38;#39;t want  to count all 0s  and 1s bit by bit,  because that would
-have quite  a high cost! Indeed, we  would have to get  each byte, and
-for each byte  we would have to read  each of its 8 bits  (that can be
-done) one by one.  We don&#38;#39;t want to do that.&#60;/p&#62;
-&#60;p&#62;Instead, since we have bytes, we can conveniently allocate an array of
-size 256.   Each cell of that  array will contain the  right number to
-add to the counter. This way, we can read a byte, get its number of 0s
-and 1s in O(1).&#60;/p&#62;
-&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;com2&#39;&#62;(* this table is computed only once *)&#60;/span&#62;&#60;!-- end comment --&#62;
-&#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; table &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
-  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; number_for_a_byte b &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
-    &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; r &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; ref 0 &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
-    &#60;span class=&#39;k&#39;&#62;for&#60;/span&#62; i &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;to&#60;/span&#62; 7 &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
-      &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; (b &#60;span class=&#39;k&#39;&#62;lsr&#60;/span&#62; i) &#60;span class=&#39;k&#39;&#62;land&#60;/span&#62; 1 &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
-        decr r
-      &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62;
-        incr r
-    &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
-    &#60;span class=&#39;o&#39;&#62;!&#60;/span&#62;r
-  &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
-  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; a &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;m&#39;&#62;Array&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;make 256 0 &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
-  &#60;span class=&#39;k&#39;&#62;for&#60;/span&#62; i &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;to&#60;/span&#62; 255 &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
-    a&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;(i) &#60;span class=&#39;o&#39;&#62;&#38;#60;-&#60;/span&#62; number_for_a_byte i
-  &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
-  a
-&#60;a href=&#34;javascript:octry(&#39;(* this table is computed only once *)\nlet table =\n  let number_for_a_byte b =\n    let r = ref 0 in\n    for i = 0 to 7 do\n      if (b lsr i) land 1 = 0 then\n        decr r\n      else\n        incr r\n    done;\n    !r\n  in\n  let a = Array.make 256 0 in\n  for i = 0 to 255 do\n    a.(i) &#38;#60;- number_for_a_byte i\n  done;\n  a\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;Then let&#38;#39;s abstract from the means  to read new 0s and 1s, by assuming
-we&#38;#39;ll be provided a function &#60;code&#62;f&#60;/code&#62; that given &#60;code&#62;()&#60;/code&#62; will return 8 bits in
-a value  of type  &#60;code&#62;char&#60;/code&#62;, and will  raise the  exception &#60;code&#62;End_of_file&#60;/code&#62;
-when it has no more bits to give.&#60;/p&#62;
-&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; more_zeros_or_ones f &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
-  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; c &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; ref 0 &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
-  &#60;span class=&#39;k&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;try&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;while&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;true&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
-    c &#60;span class=&#39;o&#39;&#62;:=&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;!&#60;/span&#62;c &#60;span class=&#39;o&#39;&#62;+&#60;/span&#62; table&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;(int_of_char(f()))
-  &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;with&#60;/span&#62; End_of_file &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; () &#60;span class=&#39;k&#39;&#62;end&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
-  &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;!&#60;/span&#62;c &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
-    Equal
-  &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;!&#60;/span&#62;c &#60;span class=&#39;o&#39;&#62;&#38;#62;&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
-    More_zeros
-  &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62;
-    More_ones
-&#60;a href=&#34;javascript:octry(&#39;let more_zeros_or_ones f =\n  let c = ref 0 in\n  begin try while true do\n    c := !c + table.(int_of_char(f()))\n  done with End_of_file -&#38;#62; () end;\n  if !c = 0 then\n    Equal\n  else if !c &#38;#62; 0 then\n    More_zeros\n  else\n    More_ones\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;Note  that &#60;code&#62;int_of_char&#60;/code&#62;  has a  zero-cost (i.e.,  it  &#38;quot;disappears&#38;quot; at
-compile-time because  &#60;code&#62;int&#60;/code&#62; and &#60;code&#62;char&#60;/code&#62;  sort of share the  same memory
-representation).  If  you want  better performance, you  should inline
-&#60;code&#62;f&#60;/code&#62;, provided that you  know what it is (you may want  to check if the
-compiler does the inlining itself first, just in case).&#60;/p&#62;
-&#60;p&#62;Also, you may want  to use a table with a size  larger than 256 if you
-have a lot of memory but I&#38;#39;m not so sure you&#38;#39;d gain performance unless
-you  use nasty  tricks to  read larger  integers from  a  string. Then
-again, you may  not end up using  a string, in which case  you have to
-think with the whole problem in mind.&#60;/p&#62;
       ]]></description>
     </item>
 
 
 
     <item>
-      <title>Odd or even</title>
+      <title>(Exercise) Odd or even?</title>
       <link>http://pw374.github.io/posts/2013-09-26-20-15-24-odd-or-even.html</link>
-      
+      <category>ocaml</category><category>exercise</category>
       <pubDate>Thu, 26 Sep 2013 20:15:24 +0000</pubDate>
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
       <guid>http://pw374.github.io/posts/2013-09-26-20-15-24-odd-or-even.html</guid>
       <description><![CDATA[
-
-&#60;p&#62;Given a string (of bytes), is the number of bits set to 1 odd or even?&#60;/p&#62;
-&#60;p&#62;The most naive way is to count them all, and then see if the number is 
-even or odd. But it&#38;#39;s probably better not to use an integer to count them
-all, and instead, use a Boolean: each time we see a 1, we can simply flip the
-Boolean value!&#60;/p&#62;
-&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; has_an_odd_number_of_1 s &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
-  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; res &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; ref &#60;span class=&#39;o&#39;&#62;false&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
-  &#60;span class=&#39;k&#39;&#62;for&#60;/span&#62; i &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;to&#60;/span&#62; &#60;span class=&#39;m&#39;&#62;String&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;length s &#60;span class=&#39;o&#39;&#62;-&#60;/span&#62; 1 &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
-    &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; x &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; int_of_char s&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;[&#60;/span&#62;i&#60;span class=&#39;o&#39;&#62;]&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
-    &#60;span class=&#39;k&#39;&#62;for&#60;/span&#62; j &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;to&#60;/span&#62; 7 &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
-      &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; (x &#60;span class=&#39;k&#39;&#62;lsr&#60;/span&#62; j) &#60;span class=&#39;k&#39;&#62;land&#60;/span&#62; 1 &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 1 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
-        res&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;contents &#60;span class=&#39;o&#39;&#62;&#38;#60;-&#60;/span&#62; not res&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;contents&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
-    &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62;
-  &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
-  res&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;contents
-&#60;a href=&#34;javascript:octry(&#39;let has_an_odd_number_of_1 s =\n  let res = ref false in\n  for i = 0 to String.length s - 1 do\n    let x = int_of_char s.[i] in\n    for j = 0 to 7 do\n      if (x lsr j) land 1 = 1 then\n        res.contents &#38;#60;- not res.contents;\n    done\n  done;\n  res.contents\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;But there&#38;#39;s way more efficient than that! Indeed, unless we really don&#38;#39;t have a choice,
-we shouldn&#38;#39;t read bits one by one, because it&#38;#39;s slow.&#60;/p&#62;
-&#60;p&#62;So what can we do instead?&#60;/p&#62;
-&#60;p&#62;Well, there&#38;#39;s a very very convenient logical operation on integers.
-It&#38;#39;s called XOR (and the OCaml operator for that is &#60;code&#62;lxor&#60;/code&#62;), and yes
-we can use it!&#60;/p&#62;
-&#60;p&#62;You see, 1 XOR 1 = 0; 0 XOR 0 = 0; but 1 XOR 0 or 0 XOR 1 = 1.
-It&#38;#39;s very convenient because it&#38;#39;s basically giving us the answer!
-When we have two 1s, we can eliminate them, that&#38;#39;s what happens with XOR.
-When we have a 1 and a 0, we keep the 1.
-So if we take those bytes byte by byte, and XOR them with each other,
-at the end we will have one remaining byte that will tell us if the
-whole string had an odd number of 1 or not.&#60;/p&#62;
-&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; has_an_odd_number_of_1__efficient s &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
-  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; sl &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;m&#39;&#62;String&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;length s &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
-  &#60;span class=&#39;k&#39;&#62;let rec&#60;/span&#62; loop c i &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
-    &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; i &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; l &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
-      &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; res &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; ref &#60;span class=&#39;o&#39;&#62;false&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
-      &#60;span class=&#39;k&#39;&#62;for&#60;/span&#62; j &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;to&#60;/span&#62; 7 &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
-        &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; (c &#60;span class=&#39;k&#39;&#62;lsr&#60;/span&#62; j) &#60;span class=&#39;k&#39;&#62;land&#60;/span&#62; 1 &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 1 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
-          res&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;contents &#60;span class=&#39;o&#39;&#62;&#38;#60;-&#60;/span&#62; not res&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;contents&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
-      &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
-      res&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;contents
-    &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62;
-      loop (c &#60;span class=&#39;k&#39;&#62;lxor&#60;/span&#62; int_of_char s&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;[&#60;/span&#62;i&#60;span class=&#39;o&#39;&#62;]&#60;/span&#62;) 
-  &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62; loop 0 0
-&#60;a href=&#34;javascript:octry(&#39;let has_an_odd_number_of_1__efficient s =\n  let sl = String.length s in\n  let rec loop c i =\n    if i = l then\n      let res = ref false in\n      for j = 0 to 7 do\n        if (c lsr j) land 1 = 1 then\n          res.contents &#38;#60;- not res.contents;\n      done;\n      res.contents\n    else\n      loop (c lxor int_of_char s.[i]) \n  in loop 0 0\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;And... There we go!  :-)&#60;/p&#62;
-&#60;p&#62;Note that &#60;code&#62;int_of_char&#60;/code&#62; is a zero-cost operation.&#60;/p&#62;
       ]]></description>
     </item>
 
