@@ -56,7 +56,7 @@ let input_command e =
   
 let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
 
-module Tag_post (Print:Print) =
+module Tag_post (Printer:Printer) =
 struct
   let _ = 
     !! "<p>";
