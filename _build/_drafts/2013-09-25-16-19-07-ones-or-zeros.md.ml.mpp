@@ -105,7 +105,24 @@ size 256.   Each cell of that  array will contain the  right number to
 add to the counter. This way, we can read a byte, get its number of 0s
 and 1s in O(1).
 
-
+```tryocaml
+let table =
+  let number_for_a_byte b =
+    let r = ref 0 in
+    for i = 0 to 7 do
+      if (b lsr i) land 1 = 0 then
+        decr r
+      else
+        incr r
+    done;
+    !r
+  in
+  let a = Array.make 256 0 in
+  for i = 0 to 255 do
+    a.(i) <- number_for_a_byte i
+  done;
+  a
+```
 
 
 
