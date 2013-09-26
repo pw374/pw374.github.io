@@ -60,7 +60,7 @@ let precontents () = ()
 let html = false
 
 
-let tag_post stamp tags = 
+let tag_post stamp date tags = 
   !! "<hr/>";
   if stamp then
   printf "<p style='font-size:80%%;'><em>started on %s, (re)generated on %s</em></p>" 

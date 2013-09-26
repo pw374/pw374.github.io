@@ -64,7 +64,7 @@ _tmp/%.contents.html:_tmp/%.contents.md Makefile
 
 _tmp/%.contents.html.ml:_tmp/%.contents.html Makefile
 	${MPPOCAML} < $< > $@.tmp
-	(printf "module Contents(Printer:Printer) = struct open Printer\n" ; cat $@.tmp ; echo "let () = tag_post(tags) end") > $@
+	(printf "module Contents(Printer:Printer) = struct open Printer\n" ; cat $@.tmp ; echo "let () = tag_post stamp date tags end") > $@
 	rm -f $@.tmp
 
 _tmp/%.toc.html:_tmp/%.contents.md Makefile
@@ -86,7 +86,7 @@ _tmp/blog.md:_tmp/common.ml _tmp/blog.md.ml _tmp/gen_blog_contents.ml
 	make _tmp/blogposts.contents.tmp.md
 	for i in $+ ; do echo "# 1 \"$$i\"" ; cat "$$i" ; done | ocaml -stdin > $@
 _tmp/blog.contents.html.ml:_tmp/blog.md Makefile
-	(printf "module Contents(Printer:Printer) = struct open Printer\n" ; ${OMD} < $< | ${MPPOCAML} ; echo "let () = tag_post(tags) end") > $@
+	(printf "module Contents(Printer:Printer) = struct open Printer\n" ; ${OMD} < $< | ${MPPOCAML} ; echo "let () = tag_post stamp date tags end") > $@
 _tmp/blog.toc.ml:_tmp/blog.toc.html Makefile
 	(printf "module Toc(Printer:Printer) = struct open Printer\n" ; ${MPPOCAML} < $< ; echo "end") > $@
 _tmp/blog.toc.html:_tmp/blog.toc.md Makefile

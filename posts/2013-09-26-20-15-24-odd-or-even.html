@@ -142,7 +142,8 @@ whole string had an odd number of 1 or not.</p>
 <a href="javascript:octry('let has_an_odd_number_of_1__efficient s =\n  let sl = String.length s in\n  let rec loop c i =\n    if i = l then\n      let res = ref false in\n      for j = 0 to 7 do\n        if (c lsr j) land 1 = 1 then\n          res.contents &#60;- not res.contents;\n      done;\n      res.contents\n    else\n      loop (c lxor int_of_char s.[i]) \n  in loop 0 0\n');">[try]</a></code></pre>
 <p>And... There we go!  :-)</p>
 <p>Note that <code>int_of_char</code> is a zero-cost operation.</p>
-<hr/><p>tags:<a href='/ocaml/'>ocaml</a><a href='/exercise/'>exercise</a></p>          </div>
+<hr/><p style='font-size:80%;'><em>started on 2013-09-26 20:15:24+00:00, (re)generated on 2013-09-27 00:36:15+01:00
+</em></p><p>• <a href='/ocaml/'>ocaml</a> • <a href='/exercise/'>exercise</a> </p>          </div>
 
 
 <!-- START: Livefyre Embed -->
