@@ -1,0 +1,116 @@
+%% Copyright (C) 2013  Philippe Wang
+{< module Meta : Meta = struct
+ let title = "Are there more 1s or 0s?"
+ let id = "2013-09-25-16-19-07-ones-or-zeros.html"
+ let xmldate = "2013-09-25T16:19:07+00:00"
+ let rssdate = "Wed, 25 Sep 2013 16:19:07 +0000"
+ let date = "2013-09-25 16:19:07+00:00"
+ let tags = [ "ocaml"; "exercise" ]
+ let disqus = true
+ let stamp = true
+end
+include Meta
+>}
+
+{< module Post(Printer:Printer) = struct open Printer >}
+
+The challenge is this:
+
+> Provide a program that will determine,  given a set of 1s and 0s, if
+there are more 0s or more 1s.
+
+So  the   first  question  that  comes   to  my  mind   is  about  the
+representation of that set of 1s and 0s. Is it a linked list, a double
+linked list, an array, a tree, a string, or something else?
+
+If it's a list (single linked or double linked actually doesn't matter
+much), it's going to be pretty straightforward: just read the list and
+use a counter. Yes, a single counter is enough, you can add one to the
+counter when you meet a 1, and  subtract one when you meet a 0. At the
+end, if  your counter has  its initial value,  then you have  the same
+number of 1s and 0s. If it's  lesser, then it has more 0s, else it has
+more 1s.
+
+Let's declare a type for the result.
+
+```tryocaml
+type result = Equal | More_zeros | More_ones
+```
+
+```tryocaml
+let count l =
+  let rec loop counter = function
+    | [] -> counter
+    | 1::tl -> loop (counter+1) tl
+    | 0::tl -> loop (counter-1) tl
+    | _::tl -> loop counter tl
+    (* you might want to debate whether you should stop 
+       when you get something else than a 0 or a 1. *)
+  in
+  let r = loop 0 l in
+  if r = 0 then
+    Equal
+  else if r > 0 then
+    More_ones
+  else
+    More_zeros    
+```
+
+Well, what's the risk with this  program? The risk is that the integer
+`counter` overflows, of course! If you have a very long list of 1s (or
+0s)  only, you  may  get things  just  wrong.  However,  in OCaml,  in
+reality,  there's  not really  a  chance  that  the integer  overflows
+because of  the length of a  single linked list,  especially if you're
+using a 64-bit architecture based OCaml, on which the greatest integer
+is 4_611_686_018_427_387_903 (about 4⨉10<sup>18</sup>). There's really
+a long way  to have such a long list because  basically you would need
+to  allocate more  than (about  32⨉10<sup>6</sup> terabytes)  at once,
+since basically a linked list of  integers is made of blocks that have
+2 cells  each (one for  the integer, one  for the address of  the next
+cell), each cell taking 64 bits (or 8 bytes).
+
+But then,  what if you  don't have linked  lists but some  stream that
+gives you  a very large number of  0s and/or 1s? Well,  to begin with,
+counting from 0 to 4⨉10<sup>18</sup> takes a really long time. If your
+machine can  count from 0 to  10<sup>9</sup> in a  single second (that
+would  mean  your   machine  is  very  fast),  it   would  still  take
+4⨉10<sup>9</sup>  seconds,  which  is about  4000000000/(60*60*24*365)
+years.  Oh, that means about 126 years! So let's just assume that a 63
+bit signed  integer is enough for  us. And if you  really can't assume
+that for some reason, you can always implement 128 bit signed integers
+quite easily, and  if you don't know  how to do that or  if you're too
+lazy to do it, use the Big_int module.
+
+But let's go  back the representation of those 0s and  1s. I'd like to
+make the computation as fast as  possible and I'll put those 0s and 1s
+in a very compact representation. Each  0 and 1 will now only take one
+bit in the  memory (with a possible constant  overhead for the whole).
+For that,  let's use  OCaml's strings, which  are basically  arrays of
+bytes.   The  longest  string I  can  have  on  my machine  will  bear
+1_152_921_504_606_846_904  bits  (I  know  that because  I  multiplied
+Sys.max_string_length   by   8),  and   that's   a   lot  (more   than
+10<sup>8</sup>).
+
+
+Now say  we want to know  whether there are more  0s or 1s  as fast as
+possible.  How do we do that?
+
+We don't want  to count all 0s  and 1s bit by bit,  because that would
+have quite  a high cost! Indeed, we  would have to get  each byte, and
+for each byte  we would have to read  each of its 8 bits  (that can be
+done) one by one.  We don't want to do that.
+
+Instead, since we have bytes, we can conveniently allocate an array of
+size 256.   Each cell of that  array will contain the  right number to
+add to the counter. This way, we can read a byte, get its number of 0s
+and 1s in O(1).
+
+
+
+
+
+
+
+
+{< end >}
+
