@@ -56,6 +56,18 @@ let input_command e =
   
 let selfbn = try Sys.getenv "selfbn" with Not_found -> ""
 
+module Tag_post (Print:Print) =
+struct
+  let _ = 
+    !! "<p>";
+    !! "tags:";
+    List.iter
+      (fun tag ->
+        printf "<a href='/%s/'>%s</a>" tag tag
+      )
+      tags;
+    !! "</p>"
+end
 
 let precontents () = ()
 let html = false
