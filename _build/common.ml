@@ -60,13 +60,16 @@ let precontents () = ()
 let html = false
 
 
-let tag_post tags = 
+let tag_post stamp tags = 
   !! "<hr/>";
+  if stamp then
+  printf "<p style='font-size:80%%;'><em>started on %s, (re)generated on %s</em></p>" 
+    date
+    (input_command "date --rfc-3339=seconds");
   !! "<p>";
-  !! "tags:";
   List.iter
     (fun tag ->
-      printf "<a href='/%s/'>%s</a>" tag tag
+      printf "• <a href='/%s/'>%s</a> " tag tag
     )
     tags;
   !! "</p>"
