@@ -44,7 +44,7 @@ echo "emacs -nw $target"
 echo "open -a Emacs $target"
 echo "open -a 'Carbon Emacs' $target"
 echo "rm -f '$target'"
-echo "mv '$(basename $target .md.ml.mpp){,}.md.ml.mpp'"
+echo "mv '$(dirname $target)/$(basename $target .md.ml.mpp){,}.md.ml.mpp'"
 
 
 
