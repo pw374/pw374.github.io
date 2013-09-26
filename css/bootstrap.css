@@ -7019,3 +7019,20 @@ blockquote {
     border-color-left:orange;
     padding-left:1em;
 }
+
+.k, .keyword { color: #f47421; font-weight: bold }
+.keywordsign { color: #f47421 }
+.superscript { font-size : 4 }
+.subscript { font-size : 4 }
+.comment { color: #747474; font-style: italic }
+.constructor { color: #15c17a }
+.type { color: #c746cc }
+.string { color: #09a7e2 }
+.warning { color : Red ; font-weight : bold }
+.info { margin-left : 3em; margin-right: 3em }
+.param_info { margin-top: 4px; margin-left : 3em; margin-right : 3em }
+.code { color : #465F91 ; }
+.typetable { border-style : hidden }
+.paramstable { border-style : hidden ; padding: 5pt 5pt}
+
+
