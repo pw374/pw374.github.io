@@ -8,6 +8,7 @@
  let tags = [ "ocaml"; "opamdoc"; "opam" ]
  let disqus = true
  let stamp = true
+ let tryocaml = false
 end
 include Meta
 >}

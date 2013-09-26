@@ -1,6 +1,6 @@
 MPPOCAML = mpp -so '((!' -sc '!))' -son '{{!' -scn '!}}' -soc '' -scc '' -its -snl -l ocaml
 
-OMD = omd -r ocaml=ocamltohtml -r tryocaml=ocamltotryocaml
+OMD = omd -r ocaml=./ocamltohtml -r tryocaml=./ocamltotryocaml
 
 all:
 	make ../index.html ../blog.html ../blog-atom.xml ../blog-rss.xml

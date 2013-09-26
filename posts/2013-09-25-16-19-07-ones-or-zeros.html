@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Are there more 1s or 0s? &ndash; pw374</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Web Fonts -->
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" />
+    <link href="http://fonts.googleapis.com/css?family=Domine:400,700" rel="stylesheet" />
+    <!-- Only part of Bootstrap that we don't load from a CDN is our own customized CSS build. -->
+    <link href="/css/bootstrap.css" rel="stylesheet" media="screen" />
+    <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="/"><img src="https://1.gravatar.com/avatar/bac6aa3e290e47c0aeeb0c6b826d9fa4?d=https%3A%2F%2Fidenticons.github.com%2F81952a25f2c72f330d4eaf04cdbe89e4.png&s=36" alt="[img]"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li ><a href="/">root</a></li>
+<!--
+              <li ><a href="/projects.html">projects</a></li>
+-->
+              <li ><a href="/blog.html">blog</a></li>
+<!--
+              <li class='active'><a href="/tags/ocaml/">#ocaml</a></li>
+-->
+            </ul>
+            <!-- <form class="navbar-search pull-right"> -->
+            <!--   <input class="search-query" type="text" placeholder="Search" /> -->
+            <!-- </form> -->
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="span4">
+          <nav id="nav-secondary">
+            <ul class="nav nav-list">
+              <li class="nav-header"><a href="#">Table of Contents</a></li>
+              <ul>
+ <li><a href='#Aretheremore1sor0s'> Are there more 1s or 0s?</a>
+ </li>
+</ul>
+            </ul>
+          </nav>
+        </div>
+        <div id="content-primary" class="span8">
+          <div class="content">
+              
+<h2 id="Aretheremore1sor0s"> Are there more 1s or 0s?</h2><p>
+The challenge is this:</p>
+<blockquote><p>
+Provide a program that will determine,  given a set of 1s and 0s, if
+there are more 0s or more 1s.</p>
+</blockquote>
+<p>So  the   first  question  that  comes   to  my  mind   is  about  the
+representation of that set of 1s and 0s. Is it a linked list, a double
+linked list, an array, a tree, a string, or something else?</p>
+<p>If it&#39;s a list (single linked or double linked actually doesn&#39;t matter
+much), it&#39;s going to be pretty straightforward: just read the list and
+use a counter. Yes, a single counter is enough, you can add one to the
+counter when you meet a 1, and  subtract one when you meet a 0. At the
+end, if  your counter has  its initial value,  then you have  the same
+number of 1s and 0s. If it&#39;s  lesser, then it has more 0s, else it has
+more 1s.</p>
+<p>Let&#39;s declare a type for the result.</p>
+<pre><code class='tryocaml'><span class='k'>type</span> result <span class='k'>=</span> Equal <span class='o'>|</span> More_zeros <span class='o'>|</span> More_ones
+<a href="javascript:octry('type result = Equal | More_zeros | More_ones');">[try]</a></code></pre>
+<pre><code class='tryocaml'><span class='k'>let</span> count l <span class='k'>=</span>
+  <span class='k'>let rec</span> loop counter <span class='k'>=</span> <span class='k'>function</span>
+    <span class='o'>|</span> <span class='o'>[</span><span class='o'>]</span> <span class='k'>-></span> counter
+    <span class='o'>|</span> 1<span class='o'>::</span>tl <span class='k'>-></span> loop (counter<span class='o'>+</span>1) tl
+    <span class='o'>|</span> 0<span class='o'>::</span>tl <span class='k'>-></span> loop (counter-1) tl
+    <span class='o'>|</span> <span class='o'>_::</span>tl <span class='k'>-></span> loop counter tl
+    <span class='com2'>(* you might want <span class='ic'>to</span> debate whether you should stop </span>
+<span class='com2'>       <span class='ic'>when</span> you get something <span class='ic'>else</span> than a 0 <span class='ic'>or</span> a 1. *)</span><!-- end comment -->
+  <span class='k'>in</span>
+  <span class='k'>let</span> r <span class='k'>=</span> loop 0 l <span class='k'>in</span>
+  <span class='k'>if</span> r <span class='k'>=</span> 0 <span class='k'>then</span>
+    Equal
+  <span class='k'>else</span> <span class='k'>if</span> r <span class='o'>&#62;</span> 0 <span class='k'>then</span>
+    More_ones
+  <span class='k'>else</span>
+    More_zeros    
+<a href="javascript:octry('let count l =
+  let rec loop counter = function
+    | [] -&#62; counter
+    | 1::tl -&#62; loop (counter+1) tl
+    | 0::tl -&#62; loop (counter-1) tl
+    | _::tl -&#62; loop counter tl
+    (* you might want to debate whether you should stop 
+       when you get something else than a 0 or a 1. *)
+  in
+  let r = loop 0 l in
+  if r = 0 then
+    Equal
+  else if r &#62; 0 then
+    More_ones
+  else
+    More_zeros    ');">[try]</a></code></pre>
+<p>Well, what&#39;s the risk with this  program? The risk is that the integer
+<code>counter</code> overflows, of course! If you have a very long list of 1s (or
+0s)  only, you  may  get things  just  wrong.  However,  in OCaml,  in
+reality,  there&#39;s  not really  a  chance  that  the integer  overflows
+because of  the length of a  single linked list,  especially if you&#39;re
+using a 64-bit architecture based OCaml, on which the greatest integer
+is 4_611_686_018_427_387_903 (about 4⨉10<sup>18</sup>). There&#39;s really
+a long way  to have such a long list because  basically you would need
+to  allocate more  than (about  32⨉10<sup>6</sup> terabytes)  at once,
+since basically a linked list of  integers is made of blocks that have
+2 cells  each (one for  the integer, one  for the address of  the next
+cell), each cell taking 64 bits (or 8 bytes).</p>
+<p>But then,  what if you  don&#39;t have linked  lists but some  stream that
+gives you  a very large number of  0s and/or 1s? Well,  to begin with,
+counting from 0 to 4⨉10<sup>18</sup> takes a really long time. If your
+machine can  count from 0 to  10<sup>9</sup> in a  single second (that
+would  mean  your   machine  is  very  fast),  it   would  still  take
+4⨉10<sup>9</sup>  seconds,  which  is about  4000000000/(60<em>60</em>24*365)
+years.  Oh, that means about 126 years! So let&#39;s just assume that a 63
+bit signed  integer is enough for  us. And if you  really can&#39;t assume
+that for some reason, you can always implement 128 bit signed integers
+quite easily, and  if you don&#39;t know  how to do that or  if you&#39;re too
+lazy to do it, use the Big_int module.</p>
+<p>But let&#39;s go  back the representation of those 0s and  1s. I&#39;d like to
+make the computation as fast as  possible and I&#39;ll put those 0s and 1s
+in a very compact representation. Each  0 and 1 will now only take one
+bit in the  memory (with a possible constant  overhead for the whole).
+For that,  let&#39;s use  OCaml&#39;s strings, which  are basically  arrays of
+bytes.   The  longest  string I  can  have  on  my machine  will  bear
+1_152_921_504_606_846_904  bits  (I  know  that because  I  multiplied
+Sys.max_string_length   by   8),  and   that&#39;s   a   lot  (more   than
+10<sup>8</sup>).</p>
+<p>Now say  we want to know  whether there are more  0s or 1s  as fast as
+possible.  How do we do that?</p>
+<p>We don&#39;t want  to count all 0s  and 1s bit by bit,  because that would
+have quite  a high cost! Indeed, we  would have to get  each byte, and
+for each byte  we would have to read  each of its 8 bits  (that can be
+done) one by one.  We don&#39;t want to do that.</p>
+<p>Instead, since we have bytes, we can conveniently allocate an array of
+size 256.   Each cell of that  array will contain the  right number to
+add to the counter. This way, we can read a byte, get its number of 0s
+and 1s in O(1).</p>
+<pre><code class='tryocaml'><span class='com2'>(* this table is computed only once *)</span><!-- end comment -->
+<span class='k'>let</span> table <span class='k'>=</span>
+  <span class='k'>let</span> number_for_a_byte b <span class='k'>=</span>
+    <span class='k'>let</span> r <span class='k'>=</span> ref 0 <span class='k'>in</span>
+    <span class='k'>for</span> i <span class='k'>=</span> 0 <span class='k'>to</span> 7 <span class='k'>do</span>
+      <span class='k'>if</span> (b <span class='k'>lsr</span> i) <span class='k'>land</span> 1 <span class='k'>=</span> 0 <span class='k'>then</span>
+        decr r
+      <span class='k'>else</span>
+        incr r
+    <span class='k'>done</span><span class='o'>;</span>
+    <span class='o'>!</span>r
+  <span class='k'>in</span>
+  <span class='k'>let</span> a <span class='k'>=</span> <span class='m'>Array</span><span class='o'>.</span>make 256 0 <span class='k'>in</span>
+  <span class='k'>for</span> i <span class='k'>=</span> 0 <span class='k'>to</span> 255 <span class='k'>do</span>
+    a<span class='o'>.</span>(i) <span class='o'>&#60;-</span> number_for_a_byte i
+  <span class='k'>done</span><span class='o'>;</span>
+  a
+<a href="javascript:octry('(* this table is computed only once *)
+let table =
+  let number_for_a_byte b =
+    let r = ref 0 in
+    for i = 0 to 7 do
+      if (b lsr i) land 1 = 0 then
+        decr r
+      else
+        incr r
+    done;
+    !r
+  in
+  let a = Array.make 256 0 in
+  for i = 0 to 255 do
+    a.(i) &#60;- number_for_a_byte i
+  done;
+  a');">[try]</a></code></pre>
+<p>Then let&#39;s abstract from the means  to read new 0s and 1s, by assuming
+we&#39;ll be provided a function <code>f</code> that given <code>()</code> will return 8 bits in
+a value  of type  <code>char</code>, and will  raise the  exception <code>End_of_file</code>
+when it has no more bits to give.</p>
+<pre><code class='tryocaml'><span class='k'>let</span> more_zeros_or_ones f <span class='k'>=</span>
+  <span class='k'>let</span> c <span class='k'>=</span> ref 0 <span class='k'>in</span>
+  <span class='k'>begin</span> <span class='k'>try</span> <span class='k'>while</span> <span class='o'>true</span> <span class='k'>do</span>
+    c <span class='o'>:=</span> <span class='o'>!</span>c <span class='o'>+</span> table<span class='o'>.</span>(int_of_char(f()))
+  <span class='k'>done</span> <span class='k'>with</span> End_of_file <span class='k'>-></span> () <span class='k'>end</span><span class='o'>;</span>
+  <span class='k'>if</span> <span class='o'>!</span>c <span class='k'>=</span> 0 <span class='k'>then</span>
+    Equal
+  <span class='k'>else</span> <span class='k'>if</span> <span class='o'>!</span>c <span class='o'>&#62;</span> 0 <span class='k'>then</span>
+    More_zeros
+  <span class='k'>else</span>
+    More_ones
+<a href="javascript:octry('let more_zeros_or_ones f =
+  let c = ref 0 in
+  begin try while true do
+    c := !c + table.(int_of_char(f()))
+  done with End_of_file -&#62; () end;
+  if !c = 0 then
+    Equal
+  else if !c &#62; 0 then
+    More_zeros
+  else
+    More_ones');">[try]</a></code></pre>
+<p>Note  that <code>int_of_char</code>  has a  zero-cost (i.e.,  it  &quot;disappears&quot; at
+compile-time because  <code>int</code> and <code>char</code>  sort of share the  same memory
+representation).  If  you want  better performance, you  should inline
+<code>f</code>, provided that you  know what it is (you may want  to check if the
+compiler does the inlining itself first, just in case).</p>
+<p>Also, you may want  to use a table with a size  larger than 256 if you
+have a lot of memory but I&#39;m not so sure you&#39;d gain performance unless
+you  use nasty  tricks to  read larger  integers from  a  string. Then
+again, you may  not end up using  a string, in which case  you have to
+think with the whole problem in mind.</p>
+          </div>
+
+
+<!-- START: Livefyre Embed -->
+<div id="livefyre-comments"></div>
+<script type="text/javascript" src="http://zor.livefyre.com/wjs/v3.0/javascripts/livefyre.js"></script>
+<script type="text/javascript">
+(function () {
+    var articleId = fyre.conv.load.makeArticleId(null);
+    fyre.conv.load({}, [{
+        el: 'livefyre-comments',
+        network: "livefyre.com",
+        siteId: "343786",
+        articleId: articleId,
+        signed: false,
+        collectionMeta: {
+            articleId: articleId,
+            url: fyre.conv.load.makeCollectionUrl(),
+        }
+    }], function() {});
+}());
+</script>
+<!-- END: Livefyre Embed -->
+
+        </div>
+      </div>
+    </div>
+    <footer id="footer" class="navbar navbar-inverse navbar-fixed-bottom">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <ul class="nav pull-left">
+            <li><a href="/blog-rss.xml">RSS</a></li>
+            <li><a href="/blog-atom.xml">Atom</a></li>
+          </ul>
+          <ul class="nav pull-right">
+            <li><a href="https://github.com/pw374/pw374.github.io">on GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+    <!-- Load javascript from CDN -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+  </body>
+</html>

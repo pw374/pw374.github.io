@@ -1,4 +1,4 @@
-<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-09-25T16:56:44+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
+<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-09-26T21:57:09+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
 
 
   <entry>
@@ -7,7 +7,7 @@
           href="http://pw374.github.io/.html"/>
     <title>OMD: a Markdown parser in OCaml</title>
     <category term='ocaml' /><category term='markdown' /><category term='software development' />    <published>2013-09-05T22:31:26+01:00</published>
-    <updated>2013-09-25T16:56:44+01:00</updated>
+    <updated>2013-09-26T21:57:09+01:00</updated>
     <author>
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html</uri>
@@ -229,7 +229,7 @@ of the OCaml community may contribute to it in a more convenient way.&#60;/p&#62
           href="http://pw374.github.io/.html"/>
     <title>OPAM-DOC with multiple OCaml packages</title>
     <category term='ocaml' /><category term='opamdoc' /><category term='opam' />    <published>2013-09-24T01:50:14+01:00</published>
-    <updated>2013-09-25T16:56:44+01:00</updated>
+    <updated>2013-09-26T21:57:09+01:00</updated>
     <author>
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-24-01-50-14-opamdoc-take1.html</uri>
@@ -401,7 +401,7 @@ done
           href="http://pw374.github.io/.html"/>
     <title>on the Implementation of OPAMDOC</title>
     <category term='ocaml' /><category term='opamdoc' />    <published>2013-09-24T14:21:00+00:00</published>
-    <updated>2013-09-25T16:56:44+01:00</updated>
+    <updated>2013-09-26T21:57:09+01:00</updated>
     <author>
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html</uri>
@@ -518,6 +518,184 @@ But if you increase it too much, it&#38;#39;ll become too slow...&#60;/p&#62;
 mainly because when you write in OCaml, you have static type checking,
 and that saves so much time!&#60;/p&#62;
 &#60;p&#62;To be followed...&#60;/p&#62;
+    </content>
+  </entry>
+
+
+  <entry>
+    <id>http://pw374.github.io/posts/2013-09-25-16-19-07-ones-or-zeros.html</id>
+    <link type="text/html" rel="alternate"
+          href="http://pw374.github.io/.html"/>
+    <title>Are there more 1s or 0s?</title>
+    <category term='ocaml' /><category term='exercise' />    <published>2013-09-25T16:19:07+00:00</published>
+    <updated>2013-09-26T21:57:09+01:00</updated>
+    <author>
+      <name>Philippe Wang</name>
+    <uri>http://pw374.github.io/posts/2013-09-25-16-19-07-ones-or-zeros.html</uri>
+    </author>
+    <content type="html">
+&#60;p&#62;The challenge is this:&#60;/p&#62;
+&#60;blockquote&#62;&#60;p&#62;
+Provide a program that will determine,  given a set of 1s and 0s, if
+there are more 0s or more 1s.&#60;/p&#62;
+&#60;/blockquote&#62;
+&#60;p&#62;So  the   first  question  that  comes   to  my  mind   is  about  the
+representation of that set of 1s and 0s. Is it a linked list, a double
+linked list, an array, a tree, a string, or something else?&#60;/p&#62;
+&#60;p&#62;If it&#38;#39;s a list (single linked or double linked actually doesn&#38;#39;t matter
+much), it&#38;#39;s going to be pretty straightforward: just read the list and
+use a counter. Yes, a single counter is enough, you can add one to the
+counter when you meet a 1, and  subtract one when you meet a 0. At the
+end, if  your counter has  its initial value,  then you have  the same
+number of 1s and 0s. If it&#38;#39;s  lesser, then it has more 0s, else it has
+more 1s.&#60;/p&#62;
+&#60;p&#62;Let&#38;#39;s declare a type for the result.&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;type&#60;/span&#62; result &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; Equal &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; More_zeros &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; More_ones
+&#60;a href=&#34;javascript:octry(&#39;type result = Equal | More_zeros | More_ones&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; count l &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;let rec&#60;/span&#62; loop counter &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;function&#60;/span&#62;
+    &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;[&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;]&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; counter
+    &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; 1&#60;span class=&#39;o&#39;&#62;::&#60;/span&#62;tl &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; loop (counter&#60;span class=&#39;o&#39;&#62;+&#60;/span&#62;1) tl
+    &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; 0&#60;span class=&#39;o&#39;&#62;::&#60;/span&#62;tl &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; loop (counter-1) tl
+    &#60;span class=&#39;o&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;_::&#60;/span&#62;tl &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; loop counter tl
+    &#60;span class=&#39;com2&#39;&#62;(* you might want &#60;span class=&#39;ic&#39;&#62;to&#60;/span&#62; debate whether you should stop &#60;/span&#62;
+&#60;span class=&#39;com2&#39;&#62;       &#60;span class=&#39;ic&#39;&#62;when&#60;/span&#62; you get something &#60;span class=&#39;ic&#39;&#62;else&#60;/span&#62; than a 0 &#60;span class=&#39;ic&#39;&#62;or&#60;/span&#62; a 1. *)&#60;/span&#62;&#60;!-- end comment --&#62;
+  &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; r &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; loop 0 l &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; r &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
+    Equal
+  &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; r &#60;span class=&#39;o&#39;&#62;&#38;#62;&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
+    More_ones
+  &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62;
+    More_zeros    
+&#60;a href=&#34;javascript:octry(&#39;let count l =
+  let rec loop counter = function
+    | [] -&#38;#62; counter
+    | 1::tl -&#38;#62; loop (counter+1) tl
+    | 0::tl -&#38;#62; loop (counter-1) tl
+    | _::tl -&#38;#62; loop counter tl
+    (* you might want to debate whether you should stop 
+       when you get something else than a 0 or a 1. *)
+  in
+  let r = loop 0 l in
+  if r = 0 then
+    Equal
+  else if r &#38;#62; 0 then
+    More_ones
+  else
+    More_zeros    &#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Well, what&#38;#39;s the risk with this  program? The risk is that the integer
+&#60;code&#62;counter&#60;/code&#62; overflows, of course! If you have a very long list of 1s (or
+0s)  only, you  may  get things  just  wrong.  However,  in OCaml,  in
+reality,  there&#38;#39;s  not really  a  chance  that  the integer  overflows
+because of  the length of a  single linked list,  especially if you&#38;#39;re
+using a 64-bit architecture based OCaml, on which the greatest integer
+is 4_611_686_018_427_387_903 (about 4⨉10&#60;sup&#62;18&#60;/sup&#62;). There&#38;#39;s really
+a long way  to have such a long list because  basically you would need
+to  allocate more  than (about  32⨉10&#60;sup&#62;6&#60;/sup&#62; terabytes)  at once,
+since basically a linked list of  integers is made of blocks that have
+2 cells  each (one for  the integer, one  for the address of  the next
+cell), each cell taking 64 bits (or 8 bytes).&#60;/p&#62;
+&#60;p&#62;But then,  what if you  don&#38;#39;t have linked  lists but some  stream that
+gives you  a very large number of  0s and/or 1s? Well,  to begin with,
+counting from 0 to 4⨉10&#60;sup&#62;18&#60;/sup&#62; takes a really long time. If your
+machine can  count from 0 to  10&#60;sup&#62;9&#60;/sup&#62; in a  single second (that
+would  mean  your   machine  is  very  fast),  it   would  still  take
+4⨉10&#60;sup&#62;9&#60;/sup&#62;  seconds,  which  is about  4000000000/(60&#60;em&#62;60&#60;/em&#62;24*365)
+years.  Oh, that means about 126 years! So let&#38;#39;s just assume that a 63
+bit signed  integer is enough for  us. And if you  really can&#38;#39;t assume
+that for some reason, you can always implement 128 bit signed integers
+quite easily, and  if you don&#38;#39;t know  how to do that or  if you&#38;#39;re too
+lazy to do it, use the Big_int module.&#60;/p&#62;
+&#60;p&#62;But let&#38;#39;s go  back the representation of those 0s and  1s. I&#38;#39;d like to
+make the computation as fast as  possible and I&#38;#39;ll put those 0s and 1s
+in a very compact representation. Each  0 and 1 will now only take one
+bit in the  memory (with a possible constant  overhead for the whole).
+For that,  let&#38;#39;s use  OCaml&#38;#39;s strings, which  are basically  arrays of
+bytes.   The  longest  string I  can  have  on  my machine  will  bear
+1_152_921_504_606_846_904  bits  (I  know  that because  I  multiplied
+Sys.max_string_length   by   8),  and   that&#38;#39;s   a   lot  (more   than
+10&#60;sup&#62;8&#60;/sup&#62;).&#60;/p&#62;
+&#60;p&#62;Now say  we want to know  whether there are more  0s or 1s  as fast as
+possible.  How do we do that?&#60;/p&#62;
+&#60;p&#62;We don&#38;#39;t want  to count all 0s  and 1s bit by bit,  because that would
+have quite  a high cost! Indeed, we  would have to get  each byte, and
+for each byte  we would have to read  each of its 8 bits  (that can be
+done) one by one.  We don&#38;#39;t want to do that.&#60;/p&#62;
+&#60;p&#62;Instead, since we have bytes, we can conveniently allocate an array of
+size 256.   Each cell of that  array will contain the  right number to
+add to the counter. This way, we can read a byte, get its number of 0s
+and 1s in O(1).&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;com2&#39;&#62;(* this table is computed only once *)&#60;/span&#62;&#60;!-- end comment --&#62;
+&#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; table &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; number_for_a_byte b &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
+    &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; r &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; ref 0 &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+    &#60;span class=&#39;k&#39;&#62;for&#60;/span&#62; i &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;to&#60;/span&#62; 7 &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
+      &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; (b &#60;span class=&#39;k&#39;&#62;lsr&#60;/span&#62; i) &#60;span class=&#39;k&#39;&#62;land&#60;/span&#62; 1 &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
+        decr r
+      &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62;
+        incr r
+    &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
+    &#60;span class=&#39;o&#39;&#62;!&#60;/span&#62;r
+  &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; a &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;m&#39;&#62;Array&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;make 256 0 &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;for&#60;/span&#62; i &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;to&#60;/span&#62; 255 &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
+    a&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;(i) &#60;span class=&#39;o&#39;&#62;&#38;#60;-&#60;/span&#62; number_for_a_byte i
+  &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
+  a
+&#60;a href=&#34;javascript:octry(&#39;(* this table is computed only once *)
+let table =
+  let number_for_a_byte b =
+    let r = ref 0 in
+    for i = 0 to 7 do
+      if (b lsr i) land 1 = 0 then
+        decr r
+      else
+        incr r
+    done;
+    !r
+  in
+  let a = Array.make 256 0 in
+  for i = 0 to 255 do
+    a.(i) &#38;#60;- number_for_a_byte i
+  done;
+  a&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Then let&#38;#39;s abstract from the means  to read new 0s and 1s, by assuming
+we&#38;#39;ll be provided a function &#60;code&#62;f&#60;/code&#62; that given &#60;code&#62;()&#60;/code&#62; will return 8 bits in
+a value  of type  &#60;code&#62;char&#60;/code&#62;, and will  raise the  exception &#60;code&#62;End_of_file&#60;/code&#62;
+when it has no more bits to give.&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; more_zeros_or_ones f &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; c &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; ref 0 &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;try&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;while&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;true&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
+    c &#60;span class=&#39;o&#39;&#62;:=&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;!&#60;/span&#62;c &#60;span class=&#39;o&#39;&#62;+&#60;/span&#62; table&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;(int_of_char(f()))
+  &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;with&#60;/span&#62; End_of_file &#60;span class=&#39;k&#39;&#62;-&#62;&#60;/span&#62; () &#60;span class=&#39;k&#39;&#62;end&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;!&#60;/span&#62;c &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
+    Equal
+  &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; &#60;span class=&#39;o&#39;&#62;!&#60;/span&#62;c &#60;span class=&#39;o&#39;&#62;&#38;#62;&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
+    More_zeros
+  &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62;
+    More_ones
+&#60;a href=&#34;javascript:octry(&#39;let more_zeros_or_ones f =
+  let c = ref 0 in
+  begin try while true do
+    c := !c + table.(int_of_char(f()))
+  done with End_of_file -&#38;#62; () end;
+  if !c = 0 then
+    Equal
+  else if !c &#38;#62; 0 then
+    More_zeros
+  else
+    More_ones&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Note  that &#60;code&#62;int_of_char&#60;/code&#62;  has a  zero-cost (i.e.,  it  &#38;quot;disappears&#38;quot; at
+compile-time because  &#60;code&#62;int&#60;/code&#62; and &#60;code&#62;char&#60;/code&#62;  sort of share the  same memory
+representation).  If  you want  better performance, you  should inline
+&#60;code&#62;f&#60;/code&#62;, provided that you  know what it is (you may want  to check if the
+compiler does the inlining itself first, just in case).&#60;/p&#62;
+&#60;p&#62;Also, you may want  to use a table with a size  larger than 256 if you
+have a lot of memory but I&#38;#39;m not so sure you&#38;#39;d gain performance unless
+you  use nasty  tricks to  read larger  integers from  a  string. Then
+again, you may  not end up using  a string, in which case  you have to
+think with the whole problem in mind.&#60;/p&#62;
     </content>
   </entry>
 </feed>
