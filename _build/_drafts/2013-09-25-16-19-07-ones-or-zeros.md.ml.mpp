@@ -8,6 +8,7 @@
  let tags = [ "ocaml"; "exercise" ]
  let disqus = true
  let stamp = true
+ let tryocaml = true
 end
 include Meta
 >}
@@ -106,6 +107,7 @@ add to the counter. This way, we can read a byte, get its number of 0s
 and 1s in O(1).
 
 ```tryocaml
+(* this table is computed only once *)
 let table =
   let number_for_a_byte b =
     let r = ref 0 in
@@ -124,10 +126,36 @@ let table =
   a
 ```
 
+Then let's abstract from the means  to read new 0s and 1s, by assuming
+we'll be provided a function `f` that given `()` will return 8 bits in
+a value  of type  `char`, and will  raise the  exception `End_of_file`
+when it has no more bits to give.
 
+```tryocaml
+let more_zeros_or_ones f =
+  let c = ref 0 in
+  begin try while true do
+    c := !c + table.(int_of_char(f()))
+  done with End_of_file -> () end;
+  if !c = 0 then
+    Equal
+  else if !c > 0 then
+    More_zeros
+  else
+    More_ones
+```
 
+Note  that `int_of_char`  has a  zero-cost (i.e.,  it  "disappears" at
+compile-time because  `int` and `char`  sort of share the  same memory
+representation).  If  you want  better performance, you  should inline
+`f`, provided that you  know what it is (you may want  to check if the
+compiler does the inlining itself first, just in case).
 
-
+Also, you may want  to use a table with a size  larger than 256 if you
+have a lot of memory but I'm not so sure you'd gain performance unless
+you  use nasty  tricks to  read larger  integers from  a  string. Then
+again, you may  not end up using  a string, in which case  you have to
+think with the whole problem in mind.
 
 {< end >}
 
