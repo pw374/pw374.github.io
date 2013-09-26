@@ -1,4 +1,4 @@
-<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Thu, 26 Sep 2013 22:36:31 +0100</pubDate><lastBuildDate>Thu, 26 Sep 2013 22:36:31 +0100</lastBuildDate>
+<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Thu, 26 Sep 2013 22:47:45 +0100</pubDate><lastBuildDate>Thu, 26 Sep 2013 22:47:45 +0100</lastBuildDate>
 
 
     <item>
@@ -687,6 +687,86 @@ have a lot of memory but I&#38;#39;m not so sure you&#38;#39;d gain performance 
 you  use nasty  tricks to  read larger  integers from  a  string. Then
 again, you may  not end up using  a string, in which case  you have to
 think with the whole problem in mind.&#60;/p&#62;
+      ]]></description>
+    </item>
+
+
+
+    <item>
+      <title>Odd or even</title>
+      <link>http://pw374.github.io/posts/.html</link>
+      
+      <pubDate>Thu, 26 Sep 2013 20:15:24 +0000</pubDate>
+      <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
+      <guid>http://pw374.github.io/2013-09-26-20-15-24-odd-or-even.html</guid>
+      <description><![CDATA[
+
+&#60;p&#62;Given a string (of bytes), is the number of bits set to 1 odd or even?&#60;/p&#62;
+&#60;p&#62;The most naive way is to count them all, and then see if the number is 
+even or odd. But it&#38;#39;s probably better not to use an integer to count them
+all, and instead, use a Boolean: each time we see a 1, we can simply flip the
+Boolean value!&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; has_an_odd_number_of_1 s &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; res &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; ref &#60;span class=&#39;o&#39;&#62;false&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;for&#60;/span&#62; i &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;to&#60;/span&#62; &#60;span class=&#39;m&#39;&#62;String&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;length s &#60;span class=&#39;o&#39;&#62;-&#60;/span&#62; 1 &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
+    &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; x &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; int_of_char s&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;[&#60;/span&#62;i&#60;span class=&#39;o&#39;&#62;]&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+    &#60;span class=&#39;k&#39;&#62;for&#60;/span&#62; j &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;to&#60;/span&#62; 7 &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
+      &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; (x &#60;span class=&#39;k&#39;&#62;lsr&#60;/span&#62; j) &#60;span class=&#39;k&#39;&#62;land&#60;/span&#62; 1 &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 1 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
+        res&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;contents &#60;span class=&#39;o&#39;&#62;&#38;#60;-&#60;/span&#62; not res&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;contents&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
+    &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
+  res&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;contents
+&#60;a href=&#34;javascript:octry(&#39;let has_an_odd_number_of_1 s =
+  let res = ref false in
+  for i = 0 to String.length s - 1 do
+    let x = int_of_char s.[i] in
+    for j = 0 to 7 do
+      if (x lsr j) land 1 = 1 then
+        res.contents &#38;#60;- not res.contents;
+    done
+  done;
+  res.contents&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;But there&#38;#39;s way more efficient than that! Indeed, unless we really don&#38;#39;t have a choice,
+we shouldn&#38;#39;t read bits one by one, because it&#38;#39;s slow.&#60;/p&#62;
+&#60;p&#62;So what can we do instead?&#60;/p&#62;
+&#60;p&#62;Well, there&#38;#39;s a very very convenient logical operation on integers.
+It&#38;#39;s called XOR (and the OCaml operator for that is &#60;code&#62;lxor&#60;/code&#62;), and yes
+we can use it!&#60;/p&#62;
+&#60;p&#62;You see, 1 XOR 1 = 0; 0 XOR 0 = 0; but 1 XOR 0 or 0 XOR 1 = 1.
+It&#38;#39;s very convenient because it&#38;#39;s basically giving us the answer!
+When we have two 1s, we can eliminate them, that&#38;#39;s what happens with XOR.
+When we have a 1 and a 0, we keep the 1.
+So if we take those bytes byte by byte, and XOR them with each other,
+at the end we will have one remaining byte that will tell us if the
+whole string had an odd number of 1 or not.&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; has_an_odd_number_of_1__efficient s &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; sl &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;m&#39;&#62;String&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;length s &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+  &#60;span class=&#39;k&#39;&#62;let rec&#60;/span&#62; loop c i &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62;
+    &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; i &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; l &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
+      &#60;span class=&#39;k&#39;&#62;let&#60;/span&#62; res &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; ref &#60;span class=&#39;o&#39;&#62;false&#60;/span&#62; &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62;
+      &#60;span class=&#39;k&#39;&#62;for&#60;/span&#62; j &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 0 &#60;span class=&#39;k&#39;&#62;to&#60;/span&#62; 7 &#60;span class=&#39;k&#39;&#62;do&#60;/span&#62;
+        &#60;span class=&#39;k&#39;&#62;if&#60;/span&#62; (c &#60;span class=&#39;k&#39;&#62;lsr&#60;/span&#62; j) &#60;span class=&#39;k&#39;&#62;land&#60;/span&#62; 1 &#60;span class=&#39;k&#39;&#62;=&#60;/span&#62; 1 &#60;span class=&#39;k&#39;&#62;then&#60;/span&#62;
+          res&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;contents &#60;span class=&#39;o&#39;&#62;&#38;#60;-&#60;/span&#62; not res&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;contents&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
+      &#60;span class=&#39;k&#39;&#62;done&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;;&#60;/span&#62;
+      res&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;contents
+    &#60;span class=&#39;k&#39;&#62;else&#60;/span&#62;
+      loop (c &#60;span class=&#39;k&#39;&#62;lxor&#60;/span&#62; int_of_char s&#60;span class=&#39;o&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;o&#39;&#62;[&#60;/span&#62;i&#60;span class=&#39;o&#39;&#62;]&#60;/span&#62;) 
+  &#60;span class=&#39;k&#39;&#62;in&#60;/span&#62; loop 0 0
+&#60;a href=&#34;javascript:octry(&#39;let has_an_odd_number_of_1__efficient s =
+  let sl = String.length s in
+  let rec loop c i =
+    if i = l then
+      let res = ref false in
+      for j = 0 to 7 do
+        if (c lsr j) land 1 = 1 then
+          res.contents &#38;#60;- not res.contents;
+      done;
+      res.contents
+    else
+      loop (c lxor int_of_char s.[i]) 
+  in loop 0 0&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;And... There we go!  :-)&#60;/p&#62;
+&#60;p&#62;Note that &#60;code&#62;int_of_char&#60;/code&#62; is a zero-cost operation.&#60;/p&#62;
       ]]></description>
     </item>
 

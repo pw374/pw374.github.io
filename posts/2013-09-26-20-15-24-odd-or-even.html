@@ -1,0 +1,214 @@
+
+
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Odd or even &ndash; pw374</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Web Fonts -->
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" />
+    <link href="http://fonts.googleapis.com/css?family=Domine:400,700" rel="stylesheet" />
+    <!-- Only part of Bootstrap that we don't load from a CDN is our own customized CSS build. -->
+    <link href="/css/bootstrap.css" rel="stylesheet" media="screen" />
+    <script type="text/javascript">
+      function octry(x){
+        if(document.getElementById('buttons').innerHTML=='') {
+          t = document.getElementById('tryocaml');
+          js = document.createElement("script"); js.type = "text/javascript"; js.src = "/try-ocaml.js";
+          t.appendChild(js);
+        } else {
+          t = document.getElementById('tryocaml');
+          t.style.display = 'block';
+          document.getElementById('console').value = x;
+          document.getElementById('console').focus();
+          document.getElementById('console').select();
+        }
+      }
+    </script>    <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="/"><img src="https://1.gravatar.com/avatar/bac6aa3e290e47c0aeeb0c6b826d9fa4?d=https%3A%2F%2Fidenticons.github.com%2F81952a25f2c72f330d4eaf04cdbe89e4.png&s=36" alt="[img]"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li ><a href="/">root</a></li>
+<!--
+              <li ><a href="/projects.html">projects</a></li>
+-->
+              <li class='active'><a href="/blog.html">blog</a></li>
+<!--
+              <li ><a href="/tags/ocaml/">#ocaml</a></li>
+-->
+            </ul>
+            <!-- <form class="navbar-search pull-right"> -->
+            <!--   <input class="search-query" type="text" placeholder="Search" /> -->
+            <!-- </form> -->
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="span4">
+          <nav id="nav-secondary">
+            <ul class="nav nav-list">
+              <li class="nav-header"><a href="#">Table of Contents</a></li>
+              <ul>
+ <li><a href='#Oddoreven'> Odd or even</a>
+ </li>
+</ul>
+            </ul>
+          </nav>
+        </div>
+        <div id="content-primary" class="span8">
+          <div class="content">
+      <div id='tryocaml' class="content" style='display:none;'>
+        <div class="container">
+          <div class="row">
+            <div id="lesson-message"></div>
+            <div id="languages" style='display:none;'></div>
+            <div id="menu-lessons" style='display:none'>
+              <table class="zebra-striped">
+                <tr><td id="text-x"><code></code></td> <td id=""></td></tr>
+              </table>
+            </div>
+            <div class="span9 ocaml">
+              <div id="toplevel-container">
+                <pre id="output"></pre>
+                <div id="sharp">#</div>
+                <div id="toplevel"></div>
+              </div>
+              <div id="buttons"></div>
+              <div id="graphics-title"></div>
+              <div id="graphics"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+              
+<h2 id="Oddoreven"> Odd or even</h2><p>
+Given a string (of bytes), is the number of bits set to 1 odd or even?</p>
+<p>The most naive way is to count them all, and then see if the number is 
+even or odd. But it&#39;s probably better not to use an integer to count them
+all, and instead, use a Boolean: each time we see a 1, we can simply flip the
+Boolean value!</p>
+<pre><code class='tryocaml'><span class='k'>let</span> has_an_odd_number_of_1 s <span class='k'>=</span>
+  <span class='k'>let</span> res <span class='k'>=</span> ref <span class='o'>false</span> <span class='k'>in</span>
+  <span class='k'>for</span> i <span class='k'>=</span> 0 <span class='k'>to</span> <span class='m'>String</span><span class='o'>.</span>length s <span class='o'>-</span> 1 <span class='k'>do</span>
+    <span class='k'>let</span> x <span class='k'>=</span> int_of_char s<span class='o'>.</span><span class='o'>[</span>i<span class='o'>]</span> <span class='k'>in</span>
+    <span class='k'>for</span> j <span class='k'>=</span> 0 <span class='k'>to</span> 7 <span class='k'>do</span>
+      <span class='k'>if</span> (x <span class='k'>lsr</span> j) <span class='k'>land</span> 1 <span class='k'>=</span> 1 <span class='k'>then</span>
+        res<span class='o'>.</span>contents <span class='o'>&#60;-</span> not res<span class='o'>.</span>contents<span class='o'>;</span>
+    <span class='k'>done</span>
+  <span class='k'>done</span><span class='o'>;</span>
+  res<span class='o'>.</span>contents
+<a href="javascript:octry('let has_an_odd_number_of_1 s =
+  let res = ref false in
+  for i = 0 to String.length s - 1 do
+    let x = int_of_char s.[i] in
+    for j = 0 to 7 do
+      if (x lsr j) land 1 = 1 then
+        res.contents &#60;- not res.contents;
+    done
+  done;
+  res.contents');">[try]</a></code></pre>
+<p>But there&#39;s way more efficient than that! Indeed, unless we really don&#39;t have a choice,
+we shouldn&#39;t read bits one by one, because it&#39;s slow.</p>
+<p>So what can we do instead?</p>
+<p>Well, there&#39;s a very very convenient logical operation on integers.
+It&#39;s called XOR (and the OCaml operator for that is <code>lxor</code>), and yes
+we can use it!</p>
+<p>You see, 1 XOR 1 = 0; 0 XOR 0 = 0; but 1 XOR 0 or 0 XOR 1 = 1.
+It&#39;s very convenient because it&#39;s basically giving us the answer!
+When we have two 1s, we can eliminate them, that&#39;s what happens with XOR.
+When we have a 1 and a 0, we keep the 1.
+So if we take those bytes byte by byte, and XOR them with each other,
+at the end we will have one remaining byte that will tell us if the
+whole string had an odd number of 1 or not.</p>
+<pre><code class='tryocaml'><span class='k'>let</span> has_an_odd_number_of_1__efficient s <span class='k'>=</span>
+  <span class='k'>let</span> sl <span class='k'>=</span> <span class='m'>String</span><span class='o'>.</span>length s <span class='k'>in</span>
+  <span class='k'>let rec</span> loop c i <span class='k'>=</span>
+    <span class='k'>if</span> i <span class='k'>=</span> l <span class='k'>then</span>
+      <span class='k'>let</span> res <span class='k'>=</span> ref <span class='o'>false</span> <span class='k'>in</span>
+      <span class='k'>for</span> j <span class='k'>=</span> 0 <span class='k'>to</span> 7 <span class='k'>do</span>
+        <span class='k'>if</span> (c <span class='k'>lsr</span> j) <span class='k'>land</span> 1 <span class='k'>=</span> 1 <span class='k'>then</span>
+          res<span class='o'>.</span>contents <span class='o'>&#60;-</span> not res<span class='o'>.</span>contents<span class='o'>;</span>
+      <span class='k'>done</span><span class='o'>;</span>
+      res<span class='o'>.</span>contents
+    <span class='k'>else</span>
+      loop (c <span class='k'>lxor</span> int_of_char s<span class='o'>.</span><span class='o'>[</span>i<span class='o'>]</span>) 
+  <span class='k'>in</span> loop 0 0
+<a href="javascript:octry('let has_an_odd_number_of_1__efficient s =
+  let sl = String.length s in
+  let rec loop c i =
+    if i = l then
+      let res = ref false in
+      for j = 0 to 7 do
+        if (c lsr j) land 1 = 1 then
+          res.contents &#60;- not res.contents;
+      done;
+      res.contents
+    else
+      loop (c lxor int_of_char s.[i]) 
+  in loop 0 0');">[try]</a></code></pre>
+<p>And... There we go!  :-)</p>
+<p>Note that <code>int_of_char</code> is a zero-cost operation.</p>
+          </div>
+
+
+<!-- START: Livefyre Embed -->
+<div id="livefyre-comments"></div>
+<script type="text/javascript" src="http://zor.livefyre.com/wjs/v3.0/javascripts/livefyre.js"></script>
+<script type="text/javascript">
+(function () {
+    var articleId = fyre.conv.load.makeArticleId(null);
+    fyre.conv.load({}, [{
+        el: 'livefyre-comments',
+        network: "livefyre.com",
+        siteId: "343786",
+        articleId: articleId,
+        signed: false,
+        collectionMeta: {
+            articleId: articleId,
+            url: fyre.conv.load.makeCollectionUrl(),
+        }
+    }], function() {});
+}());
+</script>
+<!-- END: Livefyre Embed -->
+
+        </div>
+      </div>
+    </div>
+    <footer id="footer" class="navbar navbar-inverse navbar-fixed-bottom">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <ul class="nav pull-left">
+            <li><a href="/blog-rss.xml">RSS</a></li>
+            <li><a href="/blog-atom.xml">Atom</a></li>
+          </ul>
+          <ul class="nav pull-right">
+            <li><a href="https://github.com/pw374/pw374.github.io">on GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+    <!-- Load javascript from CDN -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      // <!--
+if(document.getElementsByTagName('pre').length > 0) octry('')      // -->
+    </script>
+  </body>
+</html>

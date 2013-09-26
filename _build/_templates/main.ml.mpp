@@ -144,8 +144,9 @@ let _ = if tryocaml then printf
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
     <script type="text/javascript">
       // <!--
-      if(document.getElementsByTagName('pre').length > 0)
-         octry('')
+{< let _ = if tryocaml then printf
+      "if(document.getElementsByTagName('pre').length > 0) octry('')"
+>}
       // -->
     </script>
   </body>
