@@ -2,7 +2,7 @@
 
 if [[ "$1" != "" ]]
 then
-    target="$1".md.ml.mpp
+    target=_drafts/"$(date -u +%Y-%m-%d-%H-%M-%S)-$1.md.ml.mpp"
 else
     target=_drafts/"$(date -u +%Y-%m-%d-%H-%M-%S).md.ml.mpp"
 fi
@@ -11,7 +11,7 @@ cat > $target <<EOF
 %% Copyright (C) 2013  Philippe Wang
 {< module Meta : Meta = struct
  let title = ""
- let id = "$(date -u +%Y-%m-%d-%H-%M-%S).html"
+ let id = "$(basename $target .md.ml.mpp).html"
  let xmldate = "$(date -u --rfc-3339=seconds|tr ' ' T)"
  let rssdate = "$(date -u '+%a, %d %b %Y %H:%M:%S %z')"
  let date = "$(date -u --rfc-3339=seconds)"
