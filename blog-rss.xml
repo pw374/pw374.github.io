@@ -1,13 +1,13 @@
-<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Thu, 26 Sep 2013 23:29:41 +0100</pubDate><lastBuildDate>Thu, 26 Sep 2013 23:29:41 +0100</lastBuildDate>
+<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Thu, 26 Sep 2013 23:58:56 +0100</pubDate><lastBuildDate>Thu, 26 Sep 2013 23:58:56 +0100</lastBuildDate>
 
 
     <item>
       <title>OMD: a Markdown parser in OCaml</title>
-      <link>http://pw374.github.io/posts/.html</link>
+      <link>http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html</link>
       <category>ocaml</category><category>markdown</category><category>software development</category>
       <pubDate>Thu, 05 Sep 2013 22:31:26 +0100</pubDate>
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
-      <guid>http://pw374.github.io/2013-09-05-22-31-26-about-omd.html</guid>
+      <guid>http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html</guid>
       <description><![CDATA[
 
 &#60;h3 id=&#34;Motivations&#34;&#62; Motivations&#60;/h3&#62;
@@ -223,11 +223,11 @@ of the OCaml community may contribute to it in a more convenient way.&#60;/p&#62
 
     <item>
       <title>OPAM-DOC with multiple OCaml packages</title>
-      <link>http://pw374.github.io/posts/.html</link>
+      <link>http://pw374.github.io/posts/2013-09-24-01-50-14-opamdoc-take1.html</link>
       <category>ocaml</category><category>opamdoc</category><category>opam</category>
       <pubDate>Tue, 24 Sep 2013 01:50:14 +0100</pubDate>
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
-      <guid>http://pw374.github.io/2013-09-24-01-50-14-opamdoc-take1.html</guid>
+      <guid>http://pw374.github.io/posts/2013-09-24-01-50-14-opamdoc-take1.html</guid>
       <description><![CDATA[
 
 &#60;h3 id=&#34;OPAMDOC&#34;&#62; &#60;a href=&#39;https://github.com/ocamllabs/opam-doc/&#39;&#62;OPAM-DOC&#60;/a&#62;&#60;/h3&#62;
@@ -393,11 +393,11 @@ done
 
     <item>
       <title>on the Implementation of OPAMDOC</title>
-      <link>http://pw374.github.io/posts/.html</link>
+      <link>http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html</link>
       <category>ocaml</category><category>opamdoc</category>
       <pubDate>Tue, 24 Sep 2013 14:21:00 +0000</pubDate>
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
-      <guid>http://pw374.github.io/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html</guid>
+      <guid>http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html</guid>
       <description><![CDATA[
 
 &#60;p&#62;&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/commits/master&#39;&#62;Early this year, Leo White started the implementation of
@@ -518,11 +518,11 @@ and that saves so much time!&#60;/p&#62;
 
     <item>
       <title>Are there more 1s or 0s?</title>
-      <link>http://pw374.github.io/posts/.html</link>
+      <link>http://pw374.github.io/posts/2013-09-25-16-19-07-ones-or-zeros.html</link>
       <category>ocaml</category><category>exercise</category>
       <pubDate>Wed, 25 Sep 2013 16:19:07 +0000</pubDate>
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
-      <guid>http://pw374.github.io/2013-09-25-16-19-07-ones-or-zeros.html</guid>
+      <guid>http://pw374.github.io/posts/2013-09-25-16-19-07-ones-or-zeros.html</guid>
       <description><![CDATA[
       ]]></description>
     </item>
@@ -531,11 +531,11 @@ and that saves so much time!&#60;/p&#62;
 
     <item>
       <title>Odd or even</title>
-      <link>http://pw374.github.io/posts/.html</link>
+      <link>http://pw374.github.io/posts/2013-09-26-20-15-24-odd-or-even.html</link>
       
       <pubDate>Thu, 26 Sep 2013 20:15:24 +0000</pubDate>
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
-      <guid>http://pw374.github.io/2013-09-26-20-15-24-odd-or-even.html</guid>
+      <guid>http://pw374.github.io/posts/2013-09-26-20-15-24-odd-or-even.html</guid>
       <description><![CDATA[
 
 &#60;p&#62;Given a string (of bytes), is the number of bits set to 1 odd or even?&#60;/p&#62;

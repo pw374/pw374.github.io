@@ -1,6 +1,6 @@
     <item>
       <title>{< let _ = print_string title >}</title>
-      <link>http://pw374.github.io/posts/{< let _ = printf "%s.html" selfbn >}</link>
+      <link>http://pw374.github.io/{< let _ = !!id >}</link>
       {< let _ = List.iter (printf "<category>%s</category>") tags >}
 
       <pubDate>{< let _ = print_string rssdate >}</pubDate>
