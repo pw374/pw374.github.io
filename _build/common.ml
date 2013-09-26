@@ -12,6 +12,7 @@ sig
   val tags : string list
   val disqus : bool
   val stamp : bool
+  val tryocaml : bool
 end
 
 let htmlescape s =

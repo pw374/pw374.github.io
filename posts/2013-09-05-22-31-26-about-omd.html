@@ -78,6 +78,29 @@
         </div>
         <div id="content-primary" class="span8">
           <div class="content">
+      <div id='tryocaml' class="content" style='display:none;'>
+        <div class="container">
+          <div class="row">
+            <div id="lesson-message"></div>
+            <div id="languages" style='display:none;'></div>
+            <div id="menu-lessons" style='display:none'>
+              <table class="zebra-striped">
+                <tr><td id="text-x"><code></code></td> <td id=""></td></tr>
+              </table>
+            </div>
+            <div class="span9 ocaml">
+              <div id="toplevel-container">
+                <pre id="output"></pre>
+                <div id="sharp">#</div>
+                <div id="toplevel"></div>
+              </div>
+              <div id="buttons"></div>
+              <div id="graphics-title"></div>
+              <div id="graphics"></div>
+            </div>
+          </div>
+        </div>
+      </div>
               
 <h2 id="OMDaMarkdownparserinOCaml"> OMD: a Markdown parser in OCaml</h2>
 <h3 id="Motivations"> Motivations</h3>
@@ -327,7 +350,13 @@ of the OCaml community may contribute to it in a more convenient way.</p>
       </div>
     </footer>
     <!-- Load javascript from CDN -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      // <!--
+      if(document.getElementsByTagName('pre').length > 0)
+         octry('')
+      // -->
+    </script>
   </body>
 </html>

@@ -8,6 +8,7 @@
  let tags = [ "root"; ]
  let disqus = false
  let stamp = false
+ let tryocaml = false
 end
 include Meta
 >}
