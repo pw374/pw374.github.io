@@ -18,6 +18,7 @@ cat > $target <<EOF
  let tags = [ ]
  let disqus = true
  let stamp = true
+ let tryocaml = false
 end
 include Meta
 >}
@@ -43,6 +44,7 @@ echo "emacs -nw $target"
 echo "open -a Emacs $target"
 echo "open -a 'Carbon Emacs' $target"
 echo "rm -f '$target'"
+echo "mv '$(basename $target .md.ml.mpp){,}.md.ml.mpp'"
 
 
 
