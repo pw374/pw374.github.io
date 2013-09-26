@@ -196,3 +196,5 @@ clean:
 
 .PHONY:clean
 
+../try-ocaml.js:try-ocaml.js
+	cp $< $@
