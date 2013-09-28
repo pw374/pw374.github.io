@@ -65,7 +65,7 @@ let has_an_odd_number_of_1__efficient s =
       done;
       res.contents
     else
-      loop (c lxor int_of_char s.[i]) 
+      loop (c lxor int_of_char s.[i]) (succ i)
   in loop 0 0
 ```
 
