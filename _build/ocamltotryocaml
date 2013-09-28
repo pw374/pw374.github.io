@@ -20,7 +20,7 @@ function hash() {
 ./ocamltohtml < $tmpfile.ml > $tmpfile.html
 
 e="$(./htmlescape < $tmpfile.ml)"
-echo -n "<a href=\"javascript:octry('$e');\">[try]</a>" >> $tmpfile.html
+echo -n "<a href=\"javascript:octry('$(sed 's/\&#39;/\\&/g'<<<"$e")');\">[try]</a>" >> $tmpfile.html
 
 cat $tmpfile.html
 
