@@ -272,7 +272,7 @@ let read_upper (stream:stream) =
   let rec f () =
     match stream#get_c with
     | Some('A' .. 'Z' as c) -> Buffer.add_char res c; f ()
-    | Some('a' .. 'z' | '0' .. '9' | '_' as c) ->
+    | Some('a' .. 'z' | '0' .. '9' | '_' | '\'' as c) ->
       if Buffer.length res = 0 then failwith "bad use of lexer (read_upper)";
       Buffer.add_char res c;
       f ()
@@ -289,7 +289,7 @@ let read_lower (stream:stream) =
   let rec f res =
     match stream#get_c with
     | Some('a' .. 'z' | '_' as c) -> f (res ^ (string_of_char c))
-    | Some('A' .. 'Z' | '0' .. '9' as c) ->
+    | Some('A' .. 'Z' | '0' .. '9' | '\'' as c) ->
       if res = "" then failwith "bad use of lexer (read_lower)";
       f (res ^ (string_of_char c))
     | Some(c) -> stream#put_c c; res
