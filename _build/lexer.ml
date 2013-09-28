@@ -18,12 +18,17 @@ type t = {
     kind : kind;
   }
 and kind =
-  | Number   of number * string
-  | String   of string * string
-  | Char of char * string
-  | Upper    of string    | Lower    of string
-  | Keyword  of keyword   | Keyop    of keyop     | Infix    of string
-  | Prefix   of string    | Operator of string    | Comment  of string
+  | Number   of number  * string
+  | String   of string  * string
+  | Char     of char    * string
+  | Keyword  of keyword * string
+  | Keyop    of keyop   * string
+  | Upper    of string
+  | Lower    of string
+  | Infix    of string
+  | Prefix   of string
+  | Operator of string
+  | Comment  of string
   | Spaces   of string
 
 and number = Int of int | Float of float
@@ -128,14 +133,14 @@ let stream_of_inchannel inchan : stream =
       | [] ->
         (try match input_char inchan with
          | '\n' as c ->
-           line <- line + 1 ;
-           column <- 0 ; Some c
-         | c -> column <- column + 1 ; Some c
+           line <- line + 1;
+           column <- 0; Some c
+         | c -> column <- column + 1; Some c
          with End_of_file -> None)
       | c::tl ->
         match c with
         | '\n' -> line <- line+1; column <- 0; buffer <- tl; Some c
-        | _ -> column <- column + 1 ; buffer <- tl ; Some c
+        | _ -> column <- column + 1; buffer <- tl; Some c
     method put_c c =
       match buffer with
       | [] ->
@@ -162,15 +167,15 @@ let stream_of_string s : stream =
         if index < length then
           match s.[index] with
           | '\n' as c ->
-            line <- line + 1 ;
-            column <- 0 ; Some c
-          | c -> column <- column + 1 ; Some c
+            line <- line + 1;
+            column <- 0; Some c
+          | c -> column <- column + 1; Some c
         else
           None
       | c::tl ->
         match c with
         | '\n' -> line <- line + 1; column <- 0; buffer <- tl; Some c
-        | _ -> column <- column + 1 ; buffer <- tl ; Some c
+        | _ -> column <- column + 1; buffer <- tl; Some c
     method put_c c =
       if index >= 0 && index <= String.length s && c = s.[index] && buffer = [] then
         index <- index - 1
@@ -187,8 +192,8 @@ let stream_of_string s : stream =
 exception Lexical_error of location
 
 let read_number (stream:stream) =
-  let loc = { sl = stream#line ; sc = stream#column ;
-              el = stream#line ; ec = stream#column ; } in
+  let loc = { sl = stream#line; sc = stream#column;
+              el = stream#line; ec = stream#column; } in
   let res = Buffer.create 42 in
   let float = ref false in
   let int = ref false in
@@ -211,7 +216,7 @@ let read_number (stream:stream) =
          Buffer.add_char res '0';
          Buffer.add_char res c;
          f()
-       | Some(c) -> stream#put_c c ; Buffer.add_char res '0')
+       | Some(c) -> stream#put_c c; Buffer.add_char res '0')
     | Some('1' .. '9' as c) ->
       Buffer.add_char res c;
       f ()
@@ -275,11 +280,11 @@ let read_upper (stream:stream) =
     | None -> ()
   in
   let res = f(); Buffer.contents res in
-  { kind = Upper res ; loc = {loc with el = stream#line; ec = stream#column} }
+  { kind = Upper res; loc = {loc with el = stream#line; ec = stream#column} }
 
 let read_lower (stream:stream) =
-  let loc = { sl = stream#line ; sc = stream#column ;
-              el = stream#line ; ec = stream#column ; } in
+  let loc = { sl = stream#line; sc = stream#column;
+              el = stream#line; ec = stream#column; } in
   let string_of_char c = String.make 1 c in
   let rec f res =
     match stream#get_c with
@@ -287,22 +292,22 @@ let read_lower (stream:stream) =
     | Some('A' .. 'Z' | '0' .. '9' as c) ->
       if res = "" then failwith "bad use of lexer (read_lower)";
       f (res ^ (string_of_char c))
-    | Some(c) -> stream#put_c c ; res
+    | Some(c) -> stream#put_c c; res
     | None -> res
   in
   let res = f "" in
-  try { kind = Keyword (List.assoc res keywords) ;
+  try { kind = Keyword (List.assoc res keywords, res);
         loc = {loc with el = stream#line; ec = stream#column}}
   with Not_found ->
-    try { kind = Keyop (List.assoc res keyops) ;
+    try { kind = Keyop (List.assoc res keyops, res);
           loc = {loc with el = stream#line; ec = stream#column}}
     with Not_found ->
       { kind = Lower res;
         loc = {loc with el = stream#line; ec = stream#column}}
 
 let read_infix (stream:stream) =
-  let loc = { sl = stream#line ; sc = stream#column ;
-              el = stream#line ; ec = stream#column ; } in
+  let loc = { sl = stream#line; sc = stream#column;
+              el = stream#line; ec = stream#column; } in
   let string_of_char c = String.make 1 c in
   let rec f res =
     match stream#get_c with
@@ -312,19 +317,19 @@ let read_infix (stream:stream) =
     | Some('$' | '%' | '&' | '*' | '+' | '-' | '.' | '/' | ':' | '<' | '=' | '>'
           | '@' | '^' | '|' as c) ->
       f (res ^ (string_of_char c))
-    | Some(c) -> stream#put_c c ; res
+    | Some(c) -> stream#put_c c; res
     | None -> res
   in
   let res = f "" in
-  try { kind = Keyop (List.assoc res keyops);
+  try { kind = Keyop (List.assoc res keyops, res);
         loc = {loc with el = stream#line; ec = stream#column}}
   with Not_found ->
-    { kind = Infix res ; loc = {loc with el = stream#line; ec = stream#column}}
+    { kind = Infix res; loc = {loc with el = stream#line; ec = stream#column}}
 
 let read_prefix (stream:stream) =
-  let loc = { sl = stream#line ; sc = stream#column ;
-              el = stream#line ; ec = stream#column ; } in
-  let string_of_char c = let s = " " in s.[0] <- c ; s  in
+  let loc = { sl = stream#line; sc = stream#column;
+              el = stream#line; ec = stream#column; } in
+  let string_of_char c = let s = " " in s.[0] <- c; s  in
   let rec f res =
     match stream#get_c with
     | Some('!' | '?' | '~' as c) ->
@@ -333,19 +338,19 @@ let read_prefix (stream:stream) =
           | '@' | '^' | '|' as c) ->
       if res = "" then failwith "bad use of lexer (read_prefix)";
       f (res ^ (string_of_char c))
-    | Some(c) -> stream#put_c c ; res
+    | Some(c) -> stream#put_c c; res
     | None -> res
   in
   let res = f "" in
-  try { kind = Keyop (List.assoc res keyops);
+  try { kind = Keyop (List.assoc res keyops, res);
         loc = {loc with el = stream#line; ec = stream#column}}
   with Not_found ->
-    { kind = Prefix res ;
+    { kind = Prefix res;
       loc = {loc with el = stream#line; ec = stream#column}}
 
 let read_char (stream:stream) =
-  let loc = { sl = stream#line ; sc = stream#column ;
-              el = stream#line ; ec = stream#column ; } in
+  let loc = { sl = stream#line; sc = stream#column;
+              el = stream#line; ec = stream#column; } in
   let buffer = Buffer.create 10 in
   let rec int i =
     match stream#get_c with
@@ -424,7 +429,7 @@ let read_char (stream:stream) =
        (match stream#get_c with
         | Some('\'' as c) -> Buffer.add_char buffer c;
           if stream#get_c = Some '\'' then
-            { kind = Char ('\'', "'\\''") ;
+            { kind = Char ('\'', "'\\''");
               loc = {loc with el = stream#line; ec = stream#column}}
           else
             error
@@ -432,7 +437,7 @@ let read_char (stream:stream) =
 	      "Lexical error: Illegal backslash escape in character"
         | Some('n' as c) -> Buffer.add_char buffer c;
           if stream#get_c = Some '\'' then
-            { kind = Char ('\n', "'\\n'") ;
+            { kind = Char ('\n', "'\\n'");
               loc = {loc with el = stream#line; ec = stream#column}}
           else
             error
@@ -440,7 +445,7 @@ let read_char (stream:stream) =
 	      "Lexical error: Illegal backslash escape in character"
         | Some('r' as c) -> Buffer.add_char buffer c;
           if stream#get_c = Some '\'' then
-            { kind = Char ('\r',"'\\r'") ;
+            { kind = Char ('\r',"'\\r'");
               loc = {loc with el = stream#line; ec = stream#column}}
           else
             error
@@ -448,7 +453,7 @@ let read_char (stream:stream) =
 	      "Lexical error: Illegal backslash escape in character"
         | Some('t' as c) -> Buffer.add_char buffer c;
           if stream#get_c = Some '\'' then
-            { kind = Char ('\t', "'\\t'") ;
+            { kind = Char ('\t', "'\\t'");
               loc = {loc with el = stream#line; ec = stream#column}}
           else
             error
@@ -458,7 +463,7 @@ let read_char (stream:stream) =
         | Some('x'|'X' as c) -> Buffer.add_char buffer c; hex 0
         | Some('\\' as c) -> Buffer.add_char buffer c;
           if stream#get_c = Some '\'' then
-            { kind = Char ('\\', "'\\\\'") ;
+            { kind = Char ('\\', "'\\\\'");
               loc = {loc with el = stream#line; ec = stream#column}}
           else
             error
@@ -476,7 +481,7 @@ let read_char (stream:stream) =
            loc = {loc with el = stream#line; ec = stream#column}}
        else
          (stream#put_c c;
-          { kind = Keyop Quote ;
+          { kind = Keyop (Quote, "'");
             loc = {loc with el = stream#line; ec = stream#column}})
      | None -> 
        error
@@ -487,9 +492,10 @@ let read_char (stream:stream) =
 
 let read_string (stream:stream) =
   let b = Buffer.create 42 in
+  let () = Buffer.add_char b '"' in
   let res =
-    let loc = { sl = stream#line ; sc = stream#column ;
-                el = stream#line ; ec = stream#column ; } in
+    let loc = { sl = stream#line; sc = stream#column;
+                el = stream#line; ec = stream#column; } in
     let string_of_char c = String.make 1 c in
     let rec f res =
       match stream#get_c with
@@ -514,14 +520,15 @@ let read_string (stream:stream) =
     match stream#get_c with
     | Some('"') ->
       let r = f "" in
+      let () = Buffer.add_char b '"' in
       { kind = String (r, Buffer.contents b);
         loc = {loc with el = stream#line; ec = stream#column}}
     | _ -> assert false
   in res
 
 let read_comment (stream:stream) =
-  let loc = { sl = stream#line ; sc = stream#column ;
-              el = stream#line ; ec = stream#column ; } in
+  let loc = { sl = stream#line; sc = stream#column;
+              el = stream#line; ec = stream#column; } in
   let string_of_char c = String.make 1 c in
   let rec f res level =
     match stream#get_c with
@@ -546,16 +553,16 @@ let read_comment (stream:stream) =
        | Some(')') ->
          if level = 1 then res ^ "*)"
          else f (res ^ "*)") (level-1)
-       | Some('*') -> stream#put_c '*' ; f (res ^ "*") level
+       | Some('*') -> stream#put_c '*'; f (res ^ "*") level
        | Some(c) -> f (res ^ "*" ^(string_of_char c)) level)
     | Some(c) -> f (res ^ (string_of_char c)) level
   in
-  { kind = Comment ( f "" 0) ;
+  { kind = Comment ( f "" 0);
     loc = {loc with el = stream#line; ec = stream#column}}
 
 let read_op (stream:stream) =
-  let loc = { sl = stream#line ; sc = stream#column ;
-              el = stream#line ; ec = stream#column ; } in
+  let loc = { sl = stream#line; sc = stream#column;
+              el = stream#line; ec = stream#column; } in
   let string_of_char c = String.make 1 c in
   let rec f res =
     match stream#get_c with
@@ -563,34 +570,34 @@ let read_op (stream:stream) =
           | '<' | '=' | '>' | '?'
           | '[' | ']' | '`' | '{' | '|' | '}'
           | '~' as c) -> f (res ^ (string_of_char c))
-    | Some('(') -> if res = "" then "(" else (stream#put_c '(' ; res)
-    | Some(')') -> if res = "" then ")" else (stream#put_c ')' ; res)
-    | Some('#') -> if res = "" then "#" else (stream#put_c '#' ; res)
+    | Some('(') -> if res = "" then "(" else (stream#put_c '('; res)
+    | Some(')') -> if res = "" then ")" else (stream#put_c ')'; res)
+    | Some('#') -> if res = "" then "#" else (stream#put_c '#'; res)
     | Some('_') -> if res = "" then "_" else
 	error
 	  {loc with el = stream#line; ec = stream#column}
 	  "Lexical error while reading an operator"
-    | Some(',') -> if res = "" then "," else  (stream#put_c ',' ; res)
+    | Some(',') -> if res = "" then "," else  (stream#put_c ','; res)
     | Some(';') ->
       if res = "" then
         (match stream#get_c with
          | None -> ";"
          | Some(';') -> ";;"
          | Some(c) -> stream#put_c c; ";")
-      else (stream#put_c ';' ; res)
-    | Some(c) -> stream#put_c c ; res
+      else (stream#put_c ';'; res)
+    | Some(c) -> stream#put_c c; res
     | None -> assert(res<>""); res
   in
   let res = f "" in
-  try { kind = Keyop (List.assoc res keyops);
+  try { kind = Keyop (List.assoc res keyops, res);
         loc = {loc with el = stream#line; ec = stream#column}}
   with Not_found ->
-    { kind = Operator res ;
+    { kind = Operator res;
       loc = {loc with el = stream#line; ec = stream#column}}
 
 let read_spaces (stream:stream) =
-  let loc = { sl = stream#line ; sc = stream#column ;
-              el = stream#line ; ec = stream#column ; } in
+  let loc = { sl = stream#line; sc = stream#column;
+              el = stream#line; ec = stream#column; } in
   let res = Buffer.create 42 in
   let rec f () =
     match stream#get_c with
@@ -604,18 +611,18 @@ let read_spaces (stream:stream) =
 
 let read (stream:stream) =
   let rec f res =
-    let loc = { sl = stream#line ; sc = stream#column ;
-                el = stream#line ; ec = stream#column ; } in
+    let loc = { sl = stream#line; sc = stream#column;
+                el = stream#line; ec = stream#column; } in
     match stream#get_c with
-    | Some('0' .. '9' as c) -> stream#put_c c ; f ((read_number stream)::res)
-    | Some('A' .. 'Z' as c) -> stream#put_c c ; f ((read_upper  stream)::res)
-    | Some('a' .. 'z' | '_' as c) -> stream#put_c c ; f ((read_lower  stream)::res)
-    | Some(' ' | '\t' | '\n' | '\r' as c) -> stream#put_c c ; f ((read_spaces stream)::res)
+    | Some('0' .. '9' as c) -> stream#put_c c; f ((read_number stream)::res)
+    | Some('A' .. 'Z' as c) -> stream#put_c c; f ((read_upper  stream)::res)
+    | Some('a' .. 'z' | '_' as c) -> stream#put_c c; f ((read_lower  stream)::res)
+    | Some(' ' | '\t' | '\n' | '\r' as c) -> stream#put_c c; f ((read_spaces stream)::res)
     | Some('!' | '?'  | '~' as c) ->
-      stream#put_c c ; f ((read_prefix stream)::res)
+      stream#put_c c; f ((read_prefix stream)::res)
     | Some('=' | '<' | '>' | '@' | '^' | '|' | '&' | '+' | '-' | '*' | '/'
           | '$' | '%' as c) ->
-      stream#put_c c ; f ((read_infix stream)::res)
+      stream#put_c c; f ((read_infix stream)::res)
     | Some('(') ->
       (match stream#get_c with
        | None ->
@@ -664,14 +671,10 @@ let to_string t =
   let b = Buffer.create 42 in
   begin
     match t.kind with
-    | String (_, s) ->
-      Buffer.add_char b '"';
-      Buffer.add_string b s;
-      Buffer.add_char b '"'
-    | Char (_, s) ->
-      Buffer.add_string b s;
-    | Keyword k -> Buffer.add_string b (string_of_keyword k)
-    | Keyop k -> Buffer.add_string b (string_of_keyop k)
+    | Keyword (_, s)
+    | Keyop (_, s)
+    | String (_, s)
+    | Char (_, s)
     | Number (_, s)
     | Upper s
     | Lower s

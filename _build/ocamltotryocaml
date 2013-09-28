@@ -17,12 +17,8 @@ function hash() {
     cat | (md5 || md5sum) | sed -e 's| ./*||g'
 }
 
-if which -s ocamltohtml
-then
-    ocamltohtml < $tmpfile.ml > $tmpfile.html
-else
-    ./ocamltohtml < $tmpfile.ml > $tmpfile.html
-fi
+./ocamltohtml < $tmpfile.ml > $tmpfile.html
+
 e="$(./htmlescape < $tmpfile.ml)"
 echo -n "<a href=\"javascript:octry('$e');\">[try]</a>" >> $tmpfile.html
 
