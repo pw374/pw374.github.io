@@ -29,15 +29,15 @@ let to_html t =
     | Number (_, s) ->
       bprintf b "<span class='number'>%s</span>" (html_escape s)
     | Upper s ->
-      bprintf b "<span class='constructor'>%s</span>" (html_escape s)
+      bprintf b "<span class='constructor module'>%s</span>" (html_escape s)
     | Lower s ->
       bprintf b "<span class='lower'>%s</span>" (html_escape s)
     | Infix s ->
-      bprintf b "<span class='infix'>%s</span>" (html_escape s)
+      bprintf b "<span class='keywordsign infix'>%s</span>" (html_escape s)
     | Prefix s ->
-      bprintf b "<span class='prefix'>%s</span>" (html_escape s)
+      bprintf b "<span class='keywordsign prefix'>%s</span>" (html_escape s)
     | Operator s ->
-      bprintf b "<span class='operator'>%s</span>" (html_escape s)
+      bprintf b "<span class='keywordsign operator'>%s</span>" (html_escape s)
     | Comment s ->
       bprintf b "<span class='comment'>%s</span>" (html_escape s)
     | Spaces s -> Buffer.add_string b s
