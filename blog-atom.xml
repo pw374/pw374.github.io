@@ -1,4 +1,4 @@
-<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-09-28T03:22:53+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
+<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-09-28T03:31:03+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
 
 
   <entry>
@@ -6,7 +6,7 @@
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html"/>
     <title>OMD: a Markdown parser in OCaml</title>
     <category term='ocaml' /><category term='markdown' /><category term='software development' />    <published>2013-09-05T22:31:26+01:00</published>
-    <updated>2013-09-28T03:22:53+01:00</updated>
+    <updated>2013-09-28T03:31:03+01:00</updated>
     <author>
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html</uri>
@@ -227,7 +227,7 @@ of the OCaml community may contribute to it in a more convenient way.&#60;/p&#62
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-24-01-50-14-opamdoc-take1.html"/>
     <title>OPAM-DOC with multiple OCaml packages</title>
     <category term='ocaml' /><category term='opamdoc' /><category term='opam' />    <published>2013-09-24T01:50:14+01:00</published>
-    <updated>2013-09-28T03:22:53+01:00</updated>
+    <updated>2013-09-28T03:31:03+01:00</updated>
     <author>
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-24-01-50-14-opamdoc-take1.html</uri>
@@ -398,7 +398,7 @@ done
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html"/>
     <title>On the Implementation of OPAMDOC</title>
     <category term='ocaml' /><category term='opamdoc' />    <published>2013-09-24T14:21:00+00:00</published>
-    <updated>2013-09-28T03:22:53+01:00</updated>
+    <updated>2013-09-28T03:31:03+01:00</updated>
     <author>
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html</uri>
@@ -453,15 +453,15 @@ documentation.&#60;/p&#62;
 &#60;a href=&#39;https://github.com/ocamllabs/opam-doc/blob/master/info.mli&#39;&#62;&#60;code&#62;info.mli&#60;/code&#62;&#60;/a&#62;, you
 can see that the first type definition is:&#60;/p&#62;
 &#60;pre&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;type&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;style_kind&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62;
-  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor&#39;&#62;SK_bold&#60;/span&#62;
-  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor&#39;&#62;SK_italic&#60;/span&#62;
-  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor&#39;&#62;SK_emphasize&#60;/span&#62;
-  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor&#39;&#62;SK_center&#60;/span&#62;
-  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor&#39;&#62;SK_left&#60;/span&#62;
-  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor&#39;&#62;SK_right&#60;/span&#62;
-  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor&#39;&#62;SK_superscript&#60;/span&#62;
-  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor&#39;&#62;SK_subscript&#60;/span&#62;
-  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor&#39;&#62;SK_custom&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;of&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;string&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;SK_bold&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;SK_italic&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;SK_emphasize&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;SK_center&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;SK_left&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;SK_right&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;SK_superscript&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;SK_subscript&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;SK_custom&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;of&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;string&#60;/span&#62;
 &#60;/code&#62;&#60;/pre&#62;
 &#60;p&#62;and the only documentation for this type is
 &#60;code&#62;(** The differents kinds of style.  *)&#60;/code&#62;.
@@ -524,7 +524,7 @@ and that saves so much time!&#60;/p&#62;
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-25-16-19-07-ones-or-zeros.html"/>
     <title>(Exercise) Are there more 1s or 0s?</title>
     <category term='ocaml' /><category term='exercise' />    <published>2013-09-25T16:19:07+00:00</published>
-    <updated>2013-09-28T03:22:53+01:00</updated>
+    <updated>2013-09-28T03:31:03+01:00</updated>
     <author>
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-25-16-19-07-ones-or-zeros.html</uri>
@@ -546,23 +546,24 @@ end, if  your counter has  its initial value,  then you have  the same
 number of 1s and 0s. If it&#38;#39;s  lesser, then it has more 0s, else it has
 more 1s.&#60;/p&#62;
 &#60;p&#62;Let&#38;#39;s declare a type for the result.&#60;/p&#62;
-&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;type&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;result&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;constructor&#39;&#62;Equal&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor&#39;&#62;More_zeros&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor&#39;&#62;More_ones&#60;/span&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;type&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;result&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Equal&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;More_zeros&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;More_ones&#60;/span&#62;
 &#60;a href=&#34;javascript:octry(&#39;type result = Equal | More_zeros | More_ones\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
 &#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;count&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;rec&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;loop&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;counter&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62;
-    &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;operator&#39;&#62;[]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;counter&#60;/span&#62;
+    &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;counter&#60;/span&#62;
     &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;loop&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;counter&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;+&#60;/span&#62;&#60;span class=&#39;number&#39;&#62;1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;
     &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;loop&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;counter&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;-&#60;/span&#62;&#60;span class=&#39;number&#39;&#62;1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;
     &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;loop&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;counter&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;
-    &#60;span class=&#39;comment&#39;&#62;(* you might want to debate whether you should stop \n       when you get something else than a 0 or a 1. *)&#60;/span&#62;
+    &#60;span class=&#39;comment&#39;&#62;(* you might want to debate whether you should stop 
+       when you get something else than a 0 or a 1. *)&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;in&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;r&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;loop&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;in&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;if&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;r&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;then&#60;/span&#62;
-    &#60;span class=&#39;constructor&#39;&#62;Equal&#60;/span&#62;
+    &#60;span class=&#39;constructor module&#39;&#62;Equal&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;else&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;if&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;r&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;&#38;#62;&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;then&#60;/span&#62;
-    &#60;span class=&#39;constructor&#39;&#62;More_ones&#60;/span&#62;
+    &#60;span class=&#39;constructor module&#39;&#62;More_ones&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;else&#60;/span&#62;
-    &#60;span class=&#39;constructor&#39;&#62;More_zeros&#60;/span&#62;    
+    &#60;span class=&#39;constructor module&#39;&#62;More_zeros&#60;/span&#62;    
 &#60;a href=&#34;javascript:octry(&#39;let count l =\n  let rec loop counter = function\n    | [] -&#38;#62; counter\n    | 1::tl -&#38;#62; loop (counter+1) tl\n    | 0::tl -&#38;#62; loop (counter-1) tl\n    | _::tl -&#38;#62; loop counter tl\n    (* you might want to debate whether you should stop \n       when you get something else than a 0 or a 1. *)\n  in\n  let r = loop 0 l in\n  if r = 0 then\n    Equal\n  else if r &#38;#62; 0 then\n    More_ones\n  else\n    More_zeros    \n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
 &#60;p&#62;Well, what&#38;#39;s the risk with this  program? The risk is that the integer
 &#60;code&#62;counter&#60;/code&#62; overflows, of course! If you have a very long list of 1s (or
@@ -616,9 +617,9 @@ and 1s in O(1).&#60;/p&#62;
       &#60;span class=&#39;keyword&#39;&#62;else&#60;/span&#62;
         &#60;span class=&#39;lower&#39;&#62;incr&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;r&#60;/span&#62;
     &#60;span class=&#39;keyword&#39;&#62;done&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;;&#60;/span&#62;
-    &#60;span class=&#39;prefix&#39;&#62;!&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;r&#60;/span&#62;
+    &#60;span class=&#39;keywordsign prefix&#39;&#62;!&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;r&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;in&#60;/span&#62;
-  &#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;a&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;constructor&#39;&#62;Array&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;make&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;256&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;in&#60;/span&#62;
+  &#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;a&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Array&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;make&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;256&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;in&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;for&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;i&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;to&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;255&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;do&#60;/span&#62;
     &#60;span class=&#39;lower&#39;&#62;a&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;i&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;&#38;#60;-&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;number_for_a_byte&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;i&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;done&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;;&#60;/span&#62;
@@ -631,14 +632,14 @@ when it has no more bits to give.&#60;/p&#62;
 &#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;more_zeros_or_ones&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;c&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;ref&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;in&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;try&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;while&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;true&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;do&#60;/span&#62;
-    &#60;span class=&#39;lower&#39;&#62;c&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;:=&#60;/span&#62; &#60;span class=&#39;prefix&#39;&#62;!&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;c&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;+&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;table&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;int_of_char&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
-  &#60;span class=&#39;keyword&#39;&#62;done&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62; &#60;span class=&#39;constructor&#39;&#62;End_of_file&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;;&#60;/span&#62;
-  &#60;span class=&#39;keyword&#39;&#62;if&#60;/span&#62; &#60;span class=&#39;prefix&#39;&#62;!&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;c&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;then&#60;/span&#62;
-    &#60;span class=&#39;constructor&#39;&#62;Equal&#60;/span&#62;
-  &#60;span class=&#39;keyword&#39;&#62;else&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;if&#60;/span&#62; &#60;span class=&#39;prefix&#39;&#62;!&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;c&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;&#38;#62;&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;then&#60;/span&#62;
-    &#60;span class=&#39;constructor&#39;&#62;More_zeros&#60;/span&#62;
+    &#60;span class=&#39;lower&#39;&#62;c&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;:=&#60;/span&#62; &#60;span class=&#39;keywordsign prefix&#39;&#62;!&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;c&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;+&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;table&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;int_of_char&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+  &#60;span class=&#39;keyword&#39;&#62;done&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;End_of_file&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;;&#60;/span&#62;
+  &#60;span class=&#39;keyword&#39;&#62;if&#60;/span&#62; &#60;span class=&#39;keywordsign prefix&#39;&#62;!&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;c&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;then&#60;/span&#62;
+    &#60;span class=&#39;constructor module&#39;&#62;Equal&#60;/span&#62;
+  &#60;span class=&#39;keyword&#39;&#62;else&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;if&#60;/span&#62; &#60;span class=&#39;keywordsign prefix&#39;&#62;!&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;c&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;&#38;#62;&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;then&#60;/span&#62;
+    &#60;span class=&#39;constructor module&#39;&#62;More_zeros&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;else&#60;/span&#62;
-    &#60;span class=&#39;constructor&#39;&#62;More_ones&#60;/span&#62;
+    &#60;span class=&#39;constructor module&#39;&#62;More_ones&#60;/span&#62;
 &#60;a href=&#34;javascript:octry(&#39;let more_zeros_or_ones f =\n  let c = ref 0 in\n  begin try while true do\n    c := !c + table.(int_of_char(f()))\n  done with End_of_file -&#38;#62; () end;\n  if !c = 0 then\n    Equal\n  else if !c &#38;#62; 0 then\n    More_zeros\n  else\n    More_ones\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
 &#60;p&#62;Note  that &#60;code&#62;int_of_char&#60;/code&#62;  has a  zero-cost (i.e.,  it  &#38;quot;disappears&#38;quot; at
 compile-time because  &#60;code&#62;int&#60;/code&#62; and &#60;code&#62;char&#60;/code&#62;  sort of share the  same memory
@@ -659,7 +660,7 @@ think with the whole problem in mind.&#60;/p&#62;
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-26-20-15-24-odd-or-even.html"/>
     <title>(Exercise) Odd or even?</title>
     <category term='ocaml' /><category term='exercise' />    <published>2013-09-26T20:15:24+00:00</published>
-    <updated>2013-09-28T03:22:53+01:00</updated>
+    <updated>2013-09-28T03:31:03+01:00</updated>
     <author>
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-26-20-15-24-odd-or-even.html</uri>

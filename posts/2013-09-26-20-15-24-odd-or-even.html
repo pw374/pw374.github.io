@@ -64,7 +64,7 @@
             <ul class="nav nav-list">
               <li class="nav-header"><a href="#">Table of Contents</a></li>
               <ul>
- <li><a href='#ExerciseOddoreven'> (Exercise) Odd or even?</a>
+ <li><a href='#ExerciseOddoreven'> <a href='/posts/2013-09-26-20-15-24-odd-or-even.html'>(Exercise) Odd or even?</a></a>
  </li>
 </ul>
             </ul>
@@ -96,7 +96,7 @@
         </div>
       </div>
               
-<h2 id="ExerciseOddoreven"> (Exercise) Odd or even?</h2><p>
+<h2 id="ExerciseOddoreven"> <a href='/posts/2013-09-26-20-15-24-odd-or-even.html'>(Exercise) Odd or even?</a></h2><p>
 Given a string (of bytes), is the number of bits set to 1 odd or even?</p>
 <p>The most naive way is to count them all, and then see if the number is 
 even or odd. But it&#39;s probably better not to use an integer to count them
@@ -142,7 +142,7 @@ whole string had an odd number of 1 or not.</p>
 <a href="javascript:octry('let has_an_odd_number_of_1__efficient s =\n  let l = String.length s in\n  let rec loop c i =\n    if i = l then\n      let res = ref false in\n      for j = 0 to 7 do\n        if (c lsr j) land 1 = 1 then\n          res.contents &#60;- not res.contents;\n      done;\n      res.contents\n    else\n      loop (c lxor int_of_char s.[i]) (succ i)\n  in loop 0 0\n');">[try]</a></code></pre>
 <p>And... There we go!  :-)</p>
 <p>Note that <code>int_of_char</code> is a zero-cost operation.</p>
-<hr/><p style='font-size:80%;'><em>started on 2013-09-26 20:15:24+00:00, (re)generated on 2013-09-28 03:22:54+01:00
+<hr/><p style='font-size:80%;'><em>started on 2013-09-26 20:15:24+00:00, (re)generated on 2013-09-28 03:31:04+01:00
 </em></p><p>• <a href='/ocaml/'>ocaml</a> • <a href='/exercise/'>exercise</a> </p>          </div>
 
 

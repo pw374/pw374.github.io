@@ -4,8 +4,8 @@ OMD = omd -r ocaml=./ocamltohtml -r tryocaml=./ocamltotryocaml
 
 all:
 	make htmlescape ocamltohtml
-	make -j 2 ../index.html ../blog.html ../blog-atom.xml ../blog-rss.xml ../try-ocaml.js 
-	make -j 2 $$(for i in posts/*.md.ml.mpp ; do \
+	make ../index.html ../blog.html ../blog-atom.xml ../blog-rss.xml ../try-ocaml.js 
+	make -j 4 $$(for i in posts/*.md.ml.mpp ; do \
 	  echo ../posts/$$(basename $$i .md.ml.mpp).html ; \
 	done)
 	git add ../posts/*.html ../tags/*/*.html
@@ -57,7 +57,7 @@ _tmp/blogposts.list.tmp.md:posts/*.md.ml.mpp _tmp/common.ml
 _tmp/%.md.ml:posts/%.md.ml.mpp Makefile
 	${MPPOCAML} < $< > $@
 _tmp/gen_post_contents.ml: Makefile
-	echo 'let () = printf "## %s" title ; let module M = Post(Printer) in ()' > $@
+	echo 'let () = printf "## [%s](/%s)" title id ; let module M = Post(Printer) in ()' > $@
 
 _tmp/%.contents.md:_tmp/%.md.ml _tmp/gen_post_contents.ml _tmp/tag.ml Makefile
 	 for i in _tmp/common.ml $< _tmp/tag.ml _tmp/gen_post_contents.ml ; do echo "# 1 \"$$i\"" ; cat "$$i" ; done | ocaml -stdin > $@

@@ -50,7 +50,7 @@
             <ul class="nav nav-list">
               <li class="nav-header"><a href="#">Table of Contents</a></li>
               <ul>
- <li><a href='#OntheImplementationofOPAMDOC'> On the Implementation of OPAMDOC</a>
+ <li><a href='#OntheImplementationofOPAMDOC'> <a href='/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html'>On the Implementation of OPAMDOC</a></a>
   <ul>
    <li><a href='#generateml'> generate.ml</a>
     <ul>
@@ -92,7 +92,7 @@
         </div>
       </div>
               
-<h2 id="OntheImplementationofOPAMDOC"> On the Implementation of OPAMDOC</h2><p>
+<h2 id="OntheImplementationofOPAMDOC"> <a href='/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html'>On the Implementation of OPAMDOC</a></h2><p>
 <a href='https://github.com/ocamllabs/opam-doc/commits/master'>Early this year, Leo White started the implementation of
 opamdoc</a>.
 Then <a href='https://github.com/vincent-botbol'>Vincent Botbol</a> worked on it
@@ -142,15 +142,15 @@ documentation.</p>
 <a href='https://github.com/ocamllabs/opam-doc/blob/master/info.mli'><code>info.mli</code></a>, you
 can see that the first type definition is:</p>
 <pre><code class='ocaml'><span class='keyword'>type</span> <span class='lower'>style_kind</span> <span class='keywordsign'>=</span>
-  <span class='keywordsign'>|</span> <span class='constructor'>SK_bold</span>
-  <span class='keywordsign'>|</span> <span class='constructor'>SK_italic</span>
-  <span class='keywordsign'>|</span> <span class='constructor'>SK_emphasize</span>
-  <span class='keywordsign'>|</span> <span class='constructor'>SK_center</span>
-  <span class='keywordsign'>|</span> <span class='constructor'>SK_left</span>
-  <span class='keywordsign'>|</span> <span class='constructor'>SK_right</span>
-  <span class='keywordsign'>|</span> <span class='constructor'>SK_superscript</span>
-  <span class='keywordsign'>|</span> <span class='constructor'>SK_subscript</span>
-  <span class='keywordsign'>|</span> <span class='constructor'>SK_custom</span> <span class='keyword'>of</span> <span class='lower'>string</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>SK_bold</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>SK_italic</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>SK_emphasize</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>SK_center</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>SK_left</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>SK_right</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>SK_superscript</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>SK_subscript</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>SK_custom</span> <span class='keyword'>of</span> <span class='lower'>string</span>
 </code></pre>
 <p>and the only documentation for this type is
 <code>(** The differents kinds of style.  *)</code>.
@@ -204,7 +204,7 @@ But if you increase it too much, it&#39;ll become too slow...</p>
 mainly because when you write in OCaml, you have static type checking,
 and that saves so much time!</p>
 <p>To be followed...</p>
-<hr/><p style='font-size:80%;'><em>started on 2013-09-24 14:21:00+00:00, (re)generated on 2013-09-28 01:16:51+01:00
+<hr/><p style='font-size:80%;'><em>started on 2013-09-24 14:21:00+00:00, (re)generated on 2013-09-28 03:31:04+01:00
 </em></p><p>• <a href='/ocaml/'>ocaml</a> • <a href='/opamdoc/'>opamdoc</a> </p>          </div>
 
 
