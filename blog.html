@@ -564,16 +564,16 @@ documentation.</p>
 <p>For instance, if you look into
 <a href='https://github.com/ocamllabs/opam-doc/blob/master/info.mli'><code>info.mli</code></a>, you
 can see that the first type definition is:</p>
-<pre><code class='ocaml'><span class='k'>type</span> style_kind <span class='k'>=</span>
-  <span class='o'>|</span> SK_bold
-  <span class='o'>|</span> SK_italic
-  <span class='o'>|</span> SK_emphasize
-  <span class='o'>|</span> SK_center
-  <span class='o'>|</span> SK_left
-  <span class='o'>|</span> SK_right
-  <span class='o'>|</span> SK_superscript
-  <span class='o'>|</span> SK_subscript
-  <span class='o'>|</span> SK_custom <span class='k'>of</span> string
+<pre><code class='ocaml'><span class='keyword'>type</span> <span class='lower'>style_kind</span> <span class='keywordsign'>=</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_bold</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_italic</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_emphasize</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_center</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_left</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_right</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_superscript</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_subscript</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_custom</span> <span class='keyword'>of</span> <span class='lower'>string</span>
 </code></pre>
 <p>and the only documentation for this type is
 <code>(** The differents kinds of style.  *)</code>.
@@ -644,24 +644,23 @@ end, if  your counter has  its initial value,  then you have  the same
 number of 1s and 0s. If it&#39;s  lesser, then it has more 0s, else it has
 more 1s.</p>
 <p>Let&#39;s declare a type for the result.</p>
-<pre><code class='tryocaml'><span class='k'>type</span> result <span class='k'>=</span> Equal <span class='o'>|</span> More_zeros <span class='o'>|</span> More_ones
+<pre><code class='tryocaml'><span class='keyword'>type</span> <span class='lower'>result</span> <span class='keywordsign'>=</span> <span class='constructor'>Equal</span> <span class='keywordsign'>|</span> <span class='constructor'>More_zeros</span> <span class='keywordsign'>|</span> <span class='constructor'>More_ones</span>
 <a href="javascript:octry('type result = Equal | More_zeros | More_ones\n');">[try]</a></code></pre>
-<pre><code class='tryocaml'><span class='k'>let</span> count l <span class='k'>=</span>
-  <span class='k'>let rec</span> loop counter <span class='k'>=</span> <span class='k'>function</span>
-    <span class='o'>|</span> <span class='o'>[</span><span class='o'>]</span> <span class='k'>-></span> counter
-    <span class='o'>|</span> 1<span class='o'>::</span>tl <span class='k'>-></span> loop (counter<span class='o'>+</span>1) tl
-    <span class='o'>|</span> 0<span class='o'>::</span>tl <span class='k'>-></span> loop (counter-1) tl
-    <span class='o'>|</span> <span class='o'>_::</span>tl <span class='k'>-></span> loop counter tl
-    <span class='com2'>(* you might want <span class='ic'>to</span> debate whether you should stop </span>
-<span class='com2'>       <span class='ic'>when</span> you get something <span class='ic'>else</span> than a 0 <span class='ic'>or</span> a 1. *)</span><!-- end comment -->
-  <span class='k'>in</span>
-  <span class='k'>let</span> r <span class='k'>=</span> loop 0 l <span class='k'>in</span>
-  <span class='k'>if</span> r <span class='k'>=</span> 0 <span class='k'>then</span>
-    Equal
-  <span class='k'>else</span> <span class='k'>if</span> r <span class='o'>&#62;</span> 0 <span class='k'>then</span>
-    More_ones
-  <span class='k'>else</span>
-    More_zeros    
+<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>count</span> <span class='lower'>l</span> <span class='keywordsign'>=</span>
+  <span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>loop</span> <span class='lower'>counter</span> <span class='keywordsign'>=</span> <span class='keyword'>function</span>
+    <span class='keywordsign'>|</span> <span class='operator'>[]</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>counter</span>
+    <span class='keywordsign'>|</span> <span class='number'>1</span><span class='keywordsign'>::</span><span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>loop</span> <span class='keywordsign'>(</span><span class='lower'>counter</span><span class='keywordsign'>+</span><span class='number'>1</span><span class='keywordsign'>)</span> <span class='lower'>tl</span>
+    <span class='keywordsign'>|</span> <span class='number'>0</span><span class='keywordsign'>::</span><span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>loop</span> <span class='keywordsign'>(</span><span class='lower'>counter</span><span class='keywordsign'>-</span><span class='number'>1</span><span class='keywordsign'>)</span> <span class='lower'>tl</span>
+    <span class='keywordsign'>|</span> <span class='keywordsign'>_</span><span class='keywordsign'>::</span><span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>loop</span> <span class='lower'>counter</span> <span class='lower'>tl</span>
+    <span class='comment'>(* you might want to debate whether you should stop \n       when you get something else than a 0 or a 1. *)</span>
+  <span class='keyword'>in</span>
+  <span class='keyword'>let</span> <span class='lower'>r</span> <span class='keywordsign'>=</span> <span class='lower'>loop</span> <span class='number'>0</span> <span class='lower'>l</span> <span class='keyword'>in</span>
+  <span class='keyword'>if</span> <span class='lower'>r</span> <span class='keywordsign'>=</span> <span class='number'>0</span> <span class='keyword'>then</span>
+    <span class='constructor'>Equal</span>
+  <span class='keyword'>else</span> <span class='keyword'>if</span> <span class='lower'>r</span> <span class='keywordsign'>&#62;</span> <span class='number'>0</span> <span class='keyword'>then</span>
+    <span class='constructor'>More_ones</span>
+  <span class='keyword'>else</span>
+    <span class='constructor'>More_zeros</span>    
 <a href="javascript:octry('let count l =\n  let rec loop counter = function\n    | [] -&#62; counter\n    | 1::tl -&#62; loop (counter+1) tl\n    | 0::tl -&#62; loop (counter-1) tl\n    | _::tl -&#62; loop counter tl\n    (* you might want to debate whether you should stop \n       when you get something else than a 0 or a 1. *)\n  in\n  let r = loop 0 l in\n  if r = 0 then\n    Equal\n  else if r &#62; 0 then\n    More_ones\n  else\n    More_zeros    \n');">[try]</a></code></pre>
 <p>Well, what&#39;s the risk with this  program? The risk is that the integer
 <code>counter</code> overflows, of course! If you have a very long list of 1s (or
@@ -705,39 +704,39 @@ done) one by one.  We don&#39;t want to do that.</p>
 size 256.   Each cell of that  array will contain the  right number to
 add to the counter. This way, we can read a byte, get its number of 0s
 and 1s in O(1).</p>
-<pre><code class='tryocaml'><span class='com2'>(* this table is computed only once *)</span><!-- end comment -->
-<span class='k'>let</span> table <span class='k'>=</span>
-  <span class='k'>let</span> number_for_a_byte b <span class='k'>=</span>
-    <span class='k'>let</span> r <span class='k'>=</span> ref 0 <span class='k'>in</span>
-    <span class='k'>for</span> i <span class='k'>=</span> 0 <span class='k'>to</span> 7 <span class='k'>do</span>
-      <span class='k'>if</span> (b <span class='k'>lsr</span> i) <span class='k'>land</span> 1 <span class='k'>=</span> 0 <span class='k'>then</span>
-        decr r
-      <span class='k'>else</span>
-        incr r
-    <span class='k'>done</span><span class='o'>;</span>
-    <span class='o'>!</span>r
-  <span class='k'>in</span>
-  <span class='k'>let</span> a <span class='k'>=</span> <span class='m'>Array</span><span class='o'>.</span>make 256 0 <span class='k'>in</span>
-  <span class='k'>for</span> i <span class='k'>=</span> 0 <span class='k'>to</span> 255 <span class='k'>do</span>
-    a<span class='o'>.</span>(i) <span class='o'>&#60;-</span> number_for_a_byte i
-  <span class='k'>done</span><span class='o'>;</span>
-  a
+<pre><code class='tryocaml'><span class='comment'>(* this table is computed only once *)</span>
+<span class='keyword'>let</span> <span class='lower'>table</span> <span class='keywordsign'>=</span>
+  <span class='keyword'>let</span> <span class='lower'>number_for_a_byte</span> <span class='lower'>b</span> <span class='keywordsign'>=</span>
+    <span class='keyword'>let</span> <span class='lower'>r</span> <span class='keywordsign'>=</span> <span class='lower'>ref</span> <span class='number'>0</span> <span class='keyword'>in</span>
+    <span class='keyword'>for</span> <span class='lower'>i</span> <span class='keywordsign'>=</span> <span class='number'>0</span> <span class='keyword'>to</span> <span class='number'>7</span> <span class='keyword'>do</span>
+      <span class='keyword'>if</span> <span class='keywordsign'>(</span><span class='lower'>b</span> <span class='keywordsign'>lsr</span> <span class='lower'>i</span><span class='keywordsign'>)</span> <span class='keywordsign'>land</span> <span class='number'>1</span> <span class='keywordsign'>=</span> <span class='number'>0</span> <span class='keyword'>then</span>
+        <span class='lower'>decr</span> <span class='lower'>r</span>
+      <span class='keyword'>else</span>
+        <span class='lower'>incr</span> <span class='lower'>r</span>
+    <span class='keyword'>done</span><span class='keywordsign'>;</span>
+    <span class='prefix'>!</span><span class='lower'>r</span>
+  <span class='keyword'>in</span>
+  <span class='keyword'>let</span> <span class='lower'>a</span> <span class='keywordsign'>=</span> <span class='constructor'>Array</span><span class='keywordsign'>.</span><span class='lower'>make</span> <span class='number'>256</span> <span class='number'>0</span> <span class='keyword'>in</span>
+  <span class='keyword'>for</span> <span class='lower'>i</span> <span class='keywordsign'>=</span> <span class='number'>0</span> <span class='keyword'>to</span> <span class='number'>255</span> <span class='keyword'>do</span>
+    <span class='lower'>a</span><span class='keywordsign'>.</span><span class='keywordsign'>(</span><span class='lower'>i</span><span class='keywordsign'>)</span> <span class='keywordsign'>&#60;-</span> <span class='lower'>number_for_a_byte</span> <span class='lower'>i</span>
+  <span class='keyword'>done</span><span class='keywordsign'>;</span>
+  <span class='lower'>a</span>
 <a href="javascript:octry('(* this table is computed only once *)\nlet table =\n  let number_for_a_byte b =\n    let r = ref 0 in\n    for i = 0 to 7 do\n      if (b lsr i) land 1 = 0 then\n        decr r\n      else\n        incr r\n    done;\n    !r\n  in\n  let a = Array.make 256 0 in\n  for i = 0 to 255 do\n    a.(i) &#60;- number_for_a_byte i\n  done;\n  a\n');">[try]</a></code></pre>
 <p>Then let&#39;s abstract from the means  to read new 0s and 1s, by assuming
 we&#39;ll be provided a function <code>f</code> that given <code>()</code> will return 8 bits in
 a value  of type  <code>char</code>, and will  raise the  exception <code>End_of_file</code>
 when it has no more bits to give.</p>
-<pre><code class='tryocaml'><span class='k'>let</span> more_zeros_or_ones f <span class='k'>=</span>
-  <span class='k'>let</span> c <span class='k'>=</span> ref 0 <span class='k'>in</span>
-  <span class='k'>begin</span> <span class='k'>try</span> <span class='k'>while</span> <span class='o'>true</span> <span class='k'>do</span>
-    c <span class='o'>:=</span> <span class='o'>!</span>c <span class='o'>+</span> table<span class='o'>.</span>(int_of_char(f()))
-  <span class='k'>done</span> <span class='k'>with</span> End_of_file <span class='k'>-></span> () <span class='k'>end</span><span class='o'>;</span>
-  <span class='k'>if</span> <span class='o'>!</span>c <span class='k'>=</span> 0 <span class='k'>then</span>
-    Equal
-  <span class='k'>else</span> <span class='k'>if</span> <span class='o'>!</span>c <span class='o'>&#62;</span> 0 <span class='k'>then</span>
-    More_zeros
-  <span class='k'>else</span>
-    More_ones
+<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>more_zeros_or_ones</span> <span class='lower'>f</span> <span class='keywordsign'>=</span>
+  <span class='keyword'>let</span> <span class='lower'>c</span> <span class='keywordsign'>=</span> <span class='lower'>ref</span> <span class='number'>0</span> <span class='keyword'>in</span>
+  <span class='keyword'>begin</span> <span class='keyword'>try</span> <span class='keyword'>while</span> <span class='keyword'>true</span> <span class='keyword'>do</span>
+    <span class='lower'>c</span> <span class='keywordsign'>:=</span> <span class='prefix'>!</span><span class='lower'>c</span> <span class='keywordsign'>+</span> <span class='lower'>table</span><span class='keywordsign'>.</span><span class='keywordsign'>(</span><span class='lower'>int_of_char</span><span class='keywordsign'>(</span><span class='lower'>f</span><span class='keywordsign'>(</span><span class='keywordsign'>)</span><span class='keywordsign'>)</span><span class='keywordsign'>)</span>
+  <span class='keyword'>done</span> <span class='keyword'>with</span> <span class='constructor'>End_of_file</span> <span class='keywordsign'>-&#62;</span> <span class='keywordsign'>(</span><span class='keywordsign'>)</span> <span class='keyword'>end</span><span class='keywordsign'>;</span>
+  <span class='keyword'>if</span> <span class='prefix'>!</span><span class='lower'>c</span> <span class='keywordsign'>=</span> <span class='number'>0</span> <span class='keyword'>then</span>
+    <span class='constructor'>Equal</span>
+  <span class='keyword'>else</span> <span class='keyword'>if</span> <span class='prefix'>!</span><span class='lower'>c</span> <span class='keywordsign'>&#62;</span> <span class='number'>0</span> <span class='keyword'>then</span>
+    <span class='constructor'>More_zeros</span>
+  <span class='keyword'>else</span>
+    <span class='constructor'>More_ones</span>
 <a href="javascript:octry('let more_zeros_or_ones f =\n  let c = ref 0 in\n  begin try while true do\n    c := !c + table.(int_of_char(f()))\n  done with End_of_file -&#62; () end;\n  if !c = 0 then\n    Equal\n  else if !c &#62; 0 then\n    More_zeros\n  else\n    More_ones\n');">[try]</a></code></pre>
 <p>Note  that <code>int_of_char</code>  has a  zero-cost (i.e.,  it  &quot;disappears&quot; at
 compile-time because  <code>int</code> and <code>char</code>  sort of share the  same memory
@@ -755,16 +754,16 @@ Given a string (of bytes), is the number of bits set to 1 odd or even?</p>
 even or odd. But it&#39;s probably better not to use an integer to count them
 all, and instead, use a Boolean: each time we see a 1, we can simply flip the
 Boolean value!</p>
-<pre><code class='tryocaml'><span class='k'>let</span> has_an_odd_number_of_1 s <span class='k'>=</span>
-  <span class='k'>let</span> res <span class='k'>=</span> ref <span class='o'>false</span> <span class='k'>in</span>
-  <span class='k'>for</span> i <span class='k'>=</span> 0 <span class='k'>to</span> <span class='m'>String</span><span class='o'>.</span>length s <span class='o'>-</span> 1 <span class='k'>do</span>
-    <span class='k'>let</span> x <span class='k'>=</span> int_of_char s<span class='o'>.</span><span class='o'>[</span>i<span class='o'>]</span> <span class='k'>in</span>
-    <span class='k'>for</span> j <span class='k'>=</span> 0 <span class='k'>to</span> 7 <span class='k'>do</span>
-      <span class='k'>if</span> (x <span class='k'>lsr</span> j) <span class='k'>land</span> 1 <span class='k'>=</span> 1 <span class='k'>then</span>
-        res<span class='o'>.</span>contents <span class='o'>&#60;-</span> not res<span class='o'>.</span>contents<span class='o'>;</span>
-    <span class='k'>done</span>
-  <span class='k'>done</span><span class='o'>;</span>
-  res<span class='o'>.</span>contents
+<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>has_an_odd_number_of_1</span> <span class='lower'>s</span> <span class='keywordsign'>=</span>
+  <span class='keyword'>let</span> <span class='lower'>res</span> <span class='keywordsign'>=</span> <span class='lower'>ref</span> <span class='keyword'>false</span> <span class='keyword'>in</span>
+  <span class='keyword'>for</span> <span class='lower'>i</span> <span class='keywordsign'>=</span> <span class='number'>0</span> <span class='keyword'>to</span> <span class='constructor'>String</span><span class='keywordsign'>.</span><span class='lower'>length</span> <span class='lower'>s</span> <span class='keywordsign'>-</span> <span class='number'>1</span> <span class='keyword'>do</span>
+    <span class='keyword'>let</span> <span class='lower'>x</span> <span class='keywordsign'>=</span> <span class='lower'>int_of_char</span> <span class='lower'>s</span><span class='operator'>.[</span><span class='lower'>i</span><span class='keywordsign'>]</span> <span class='keyword'>in</span>
+    <span class='keyword'>for</span> <span class='lower'>j</span> <span class='keywordsign'>=</span> <span class='number'>0</span> <span class='keyword'>to</span> <span class='number'>7</span> <span class='keyword'>do</span>
+      <span class='keyword'>if</span> <span class='keywordsign'>(</span><span class='lower'>x</span> <span class='keywordsign'>lsr</span> <span class='lower'>j</span><span class='keywordsign'>)</span> <span class='keywordsign'>land</span> <span class='number'>1</span> <span class='keywordsign'>=</span> <span class='number'>1</span> <span class='keyword'>then</span>
+        <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span> <span class='keywordsign'>&#60;-</span> <span class='lower'>not</span> <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span><span class='keywordsign'>;</span>
+    <span class='keyword'>done</span>
+  <span class='keyword'>done</span><span class='keywordsign'>;</span>
+  <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span>
 <a href="javascript:octry('let has_an_odd_number_of_1 s =\n  let res = ref false in\n  for i = 0 to String.length s - 1 do\n    let x = int_of_char s.[i] in\n    for j = 0 to 7 do\n      if (x lsr j) land 1 = 1 then\n        res.contents &#60;- not res.contents;\n    done\n  done;\n  res.contents\n');">[try]</a></code></pre>
 <p>But there&#39;s way more efficient than that! Indeed, unless we really don&#39;t have a choice,
 we shouldn&#39;t read bits one by one, because it&#39;s slow.</p>
@@ -779,19 +778,19 @@ When we have a 1 and a 0, we keep the 1.
 So if we take those bytes byte by byte, and XOR them with each other,
 at the end we will have one remaining byte that will tell us if the
 whole string had an odd number of 1 or not.</p>
-<pre><code class='tryocaml'><span class='k'>let</span> has_an_odd_number_of_1__efficient s <span class='k'>=</span>
-  <span class='k'>let</span> sl <span class='k'>=</span> <span class='m'>String</span><span class='o'>.</span>length s <span class='k'>in</span>
-  <span class='k'>let rec</span> loop c i <span class='k'>=</span>
-    <span class='k'>if</span> i <span class='k'>=</span> l <span class='k'>then</span>
-      <span class='k'>let</span> res <span class='k'>=</span> ref <span class='o'>false</span> <span class='k'>in</span>
-      <span class='k'>for</span> j <span class='k'>=</span> 0 <span class='k'>to</span> 7 <span class='k'>do</span>
-        <span class='k'>if</span> (c <span class='k'>lsr</span> j) <span class='k'>land</span> 1 <span class='k'>=</span> 1 <span class='k'>then</span>
-          res<span class='o'>.</span>contents <span class='o'>&#60;-</span> not res<span class='o'>.</span>contents<span class='o'>;</span>
-      <span class='k'>done</span><span class='o'>;</span>
-      res<span class='o'>.</span>contents
-    <span class='k'>else</span>
-      loop (c <span class='k'>lxor</span> int_of_char s<span class='o'>.</span><span class='o'>[</span>i<span class='o'>]</span>) 
-  <span class='k'>in</span> loop 0 0
+<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>has_an_odd_number_of_1__efficient</span> <span class='lower'>s</span> <span class='keywordsign'>=</span>
+  <span class='keyword'>let</span> <span class='lower'>sl</span> <span class='keywordsign'>=</span> <span class='constructor'>String</span><span class='keywordsign'>.</span><span class='lower'>length</span> <span class='lower'>s</span> <span class='keyword'>in</span>
+  <span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>loop</span> <span class='lower'>c</span> <span class='lower'>i</span> <span class='keywordsign'>=</span>
+    <span class='keyword'>if</span> <span class='lower'>i</span> <span class='keywordsign'>=</span> <span class='lower'>l</span> <span class='keyword'>then</span>
+      <span class='keyword'>let</span> <span class='lower'>res</span> <span class='keywordsign'>=</span> <span class='lower'>ref</span> <span class='keyword'>false</span> <span class='keyword'>in</span>
+      <span class='keyword'>for</span> <span class='lower'>j</span> <span class='keywordsign'>=</span> <span class='number'>0</span> <span class='keyword'>to</span> <span class='number'>7</span> <span class='keyword'>do</span>
+        <span class='keyword'>if</span> <span class='keywordsign'>(</span><span class='lower'>c</span> <span class='keywordsign'>lsr</span> <span class='lower'>j</span><span class='keywordsign'>)</span> <span class='keywordsign'>land</span> <span class='number'>1</span> <span class='keywordsign'>=</span> <span class='number'>1</span> <span class='keyword'>then</span>
+          <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span> <span class='keywordsign'>&#60;-</span> <span class='lower'>not</span> <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span><span class='keywordsign'>;</span>
+      <span class='keyword'>done</span><span class='keywordsign'>;</span>
+      <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span>
+    <span class='keyword'>else</span>
+      <span class='lower'>loop</span> <span class='keywordsign'>(</span><span class='lower'>c</span> <span class='keywordsign'>lxor</span> <span class='lower'>int_of_char</span> <span class='lower'>s</span><span class='operator'>.[</span><span class='lower'>i</span><span class='keywordsign'>]</span><span class='keywordsign'>)</span> 
+  <span class='keyword'>in</span> <span class='lower'>loop</span> <span class='number'>0</span> <span class='number'>0</span>
 <a href="javascript:octry('let has_an_odd_number_of_1__efficient s =\n  let sl = String.length s in\n  let rec loop c i =\n    if i = l then\n      let res = ref false in\n      for j = 0 to 7 do\n        if (c lsr j) land 1 = 1 then\n          res.contents &#60;- not res.contents;\n      done;\n      res.contents\n    else\n      loop (c lxor int_of_char s.[i]) \n  in loop 0 0\n');">[try]</a></code></pre>
 <p>And... There we go!  :-)</p>
 <p>Note that <code>int_of_char</code> is a zero-cost operation.</p>

@@ -141,16 +141,16 @@ documentation.</p>
 <p>For instance, if you look into
 <a href='https://github.com/ocamllabs/opam-doc/blob/master/info.mli'><code>info.mli</code></a>, you
 can see that the first type definition is:</p>
-<pre><code class='ocaml'><span class='k'>type</span> style_kind <span class='k'>=</span>
-  <span class='o'>|</span> SK_bold
-  <span class='o'>|</span> SK_italic
-  <span class='o'>|</span> SK_emphasize
-  <span class='o'>|</span> SK_center
-  <span class='o'>|</span> SK_left
-  <span class='o'>|</span> SK_right
-  <span class='o'>|</span> SK_superscript
-  <span class='o'>|</span> SK_subscript
-  <span class='o'>|</span> SK_custom <span class='k'>of</span> string
+<pre><code class='ocaml'><span class='keyword'>type</span> <span class='lower'>style_kind</span> <span class='keywordsign'>=</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_bold</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_italic</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_emphasize</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_center</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_left</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_right</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_superscript</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_subscript</span>
+  <span class='keywordsign'>|</span> <span class='constructor'>SK_custom</span> <span class='keyword'>of</span> <span class='lower'>string</span>
 </code></pre>
 <p>and the only documentation for this type is
 <code>(** The differents kinds of style.  *)</code>.
@@ -204,7 +204,7 @@ But if you increase it too much, it&#39;ll become too slow...</p>
 mainly because when you write in OCaml, you have static type checking,
 and that saves so much time!</p>
 <p>To be followed...</p>
-<hr/><p style='font-size:80%;'><em>started on 2013-09-24 14:21:00+00:00, (re)generated on 2013-09-27 00:46:52+01:00
+<hr/><p style='font-size:80%;'><em>started on 2013-09-24 14:21:00+00:00, (re)generated on 2013-09-28 01:16:51+01:00
 </em></p><p>• <a href='/ocaml/'>ocaml</a> • <a href='/opamdoc/'>opamdoc</a> </p>          </div>
 
 

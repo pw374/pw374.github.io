@@ -3,12 +3,15 @@ MPPOCAML = mpp -so '((!' -sc '!))' -son '{{!' -scn '!}}' -soc '' -scc '' -its -s
 OMD = omd -r ocaml=./ocamltohtml -r tryocaml=./ocamltotryocaml
 
 all:
-	make htmlescape
+	make htmlescape ocamltohtml
 	make -j 2 ../index.html ../blog.html ../blog-atom.xml ../blog-rss.xml ../try-ocaml.js 
 	make -j 2 $$(for i in posts/*.md.ml.mpp ; do \
 	  echo ../posts/$$(basename $$i .md.ml.mpp).html ; \
 	done)
 	git add ../posts/*.html ../tags/*/*.html
+
+ocamltohtml:lexer.ml ocamltohtml.ml
+	ocamlc $+ -o $@
 
 htmlescape:htmlescape.ml
 	ocamlc $< -o $@

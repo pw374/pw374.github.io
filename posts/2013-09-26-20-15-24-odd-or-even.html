@@ -102,16 +102,16 @@ Given a string (of bytes), is the number of bits set to 1 odd or even?</p>
 even or odd. But it&#39;s probably better not to use an integer to count them
 all, and instead, use a Boolean: each time we see a 1, we can simply flip the
 Boolean value!</p>
-<pre><code class='tryocaml'><span class='k'>let</span> has_an_odd_number_of_1 s <span class='k'>=</span>
-  <span class='k'>let</span> res <span class='k'>=</span> ref <span class='o'>false</span> <span class='k'>in</span>
-  <span class='k'>for</span> i <span class='k'>=</span> 0 <span class='k'>to</span> <span class='m'>String</span><span class='o'>.</span>length s <span class='o'>-</span> 1 <span class='k'>do</span>
-    <span class='k'>let</span> x <span class='k'>=</span> int_of_char s<span class='o'>.</span><span class='o'>[</span>i<span class='o'>]</span> <span class='k'>in</span>
-    <span class='k'>for</span> j <span class='k'>=</span> 0 <span class='k'>to</span> 7 <span class='k'>do</span>
-      <span class='k'>if</span> (x <span class='k'>lsr</span> j) <span class='k'>land</span> 1 <span class='k'>=</span> 1 <span class='k'>then</span>
-        res<span class='o'>.</span>contents <span class='o'>&#60;-</span> not res<span class='o'>.</span>contents<span class='o'>;</span>
-    <span class='k'>done</span>
-  <span class='k'>done</span><span class='o'>;</span>
-  res<span class='o'>.</span>contents
+<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>has_an_odd_number_of_1</span> <span class='lower'>s</span> <span class='keywordsign'>=</span>
+  <span class='keyword'>let</span> <span class='lower'>res</span> <span class='keywordsign'>=</span> <span class='lower'>ref</span> <span class='keyword'>false</span> <span class='keyword'>in</span>
+  <span class='keyword'>for</span> <span class='lower'>i</span> <span class='keywordsign'>=</span> <span class='number'>0</span> <span class='keyword'>to</span> <span class='constructor'>String</span><span class='keywordsign'>.</span><span class='lower'>length</span> <span class='lower'>s</span> <span class='keywordsign'>-</span> <span class='number'>1</span> <span class='keyword'>do</span>
+    <span class='keyword'>let</span> <span class='lower'>x</span> <span class='keywordsign'>=</span> <span class='lower'>int_of_char</span> <span class='lower'>s</span><span class='operator'>.[</span><span class='lower'>i</span><span class='keywordsign'>]</span> <span class='keyword'>in</span>
+    <span class='keyword'>for</span> <span class='lower'>j</span> <span class='keywordsign'>=</span> <span class='number'>0</span> <span class='keyword'>to</span> <span class='number'>7</span> <span class='keyword'>do</span>
+      <span class='keyword'>if</span> <span class='keywordsign'>(</span><span class='lower'>x</span> <span class='keywordsign'>lsr</span> <span class='lower'>j</span><span class='keywordsign'>)</span> <span class='keywordsign'>land</span> <span class='number'>1</span> <span class='keywordsign'>=</span> <span class='number'>1</span> <span class='keyword'>then</span>
+        <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span> <span class='keywordsign'>&#60;-</span> <span class='lower'>not</span> <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span><span class='keywordsign'>;</span>
+    <span class='keyword'>done</span>
+  <span class='keyword'>done</span><span class='keywordsign'>;</span>
+  <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span>
 <a href="javascript:octry('let has_an_odd_number_of_1 s =\n  let res = ref false in\n  for i = 0 to String.length s - 1 do\n    let x = int_of_char s.[i] in\n    for j = 0 to 7 do\n      if (x lsr j) land 1 = 1 then\n        res.contents &#60;- not res.contents;\n    done\n  done;\n  res.contents\n');">[try]</a></code></pre>
 <p>But there&#39;s way more efficient than that! Indeed, unless we really don&#39;t have a choice,
 we shouldn&#39;t read bits one by one, because it&#39;s slow.</p>
@@ -126,23 +126,23 @@ When we have a 1 and a 0, we keep the 1.
 So if we take those bytes byte by byte, and XOR them with each other,
 at the end we will have one remaining byte that will tell us if the
 whole string had an odd number of 1 or not.</p>
-<pre><code class='tryocaml'><span class='k'>let</span> has_an_odd_number_of_1__efficient s <span class='k'>=</span>
-  <span class='k'>let</span> sl <span class='k'>=</span> <span class='m'>String</span><span class='o'>.</span>length s <span class='k'>in</span>
-  <span class='k'>let rec</span> loop c i <span class='k'>=</span>
-    <span class='k'>if</span> i <span class='k'>=</span> l <span class='k'>then</span>
-      <span class='k'>let</span> res <span class='k'>=</span> ref <span class='o'>false</span> <span class='k'>in</span>
-      <span class='k'>for</span> j <span class='k'>=</span> 0 <span class='k'>to</span> 7 <span class='k'>do</span>
-        <span class='k'>if</span> (c <span class='k'>lsr</span> j) <span class='k'>land</span> 1 <span class='k'>=</span> 1 <span class='k'>then</span>
-          res<span class='o'>.</span>contents <span class='o'>&#60;-</span> not res<span class='o'>.</span>contents<span class='o'>;</span>
-      <span class='k'>done</span><span class='o'>;</span>
-      res<span class='o'>.</span>contents
-    <span class='k'>else</span>
-      loop (c <span class='k'>lxor</span> int_of_char s<span class='o'>.</span><span class='o'>[</span>i<span class='o'>]</span>) 
-  <span class='k'>in</span> loop 0 0
+<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>has_an_odd_number_of_1__efficient</span> <span class='lower'>s</span> <span class='keywordsign'>=</span>
+  <span class='keyword'>let</span> <span class='lower'>sl</span> <span class='keywordsign'>=</span> <span class='constructor'>String</span><span class='keywordsign'>.</span><span class='lower'>length</span> <span class='lower'>s</span> <span class='keyword'>in</span>
+  <span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>loop</span> <span class='lower'>c</span> <span class='lower'>i</span> <span class='keywordsign'>=</span>
+    <span class='keyword'>if</span> <span class='lower'>i</span> <span class='keywordsign'>=</span> <span class='lower'>l</span> <span class='keyword'>then</span>
+      <span class='keyword'>let</span> <span class='lower'>res</span> <span class='keywordsign'>=</span> <span class='lower'>ref</span> <span class='keyword'>false</span> <span class='keyword'>in</span>
+      <span class='keyword'>for</span> <span class='lower'>j</span> <span class='keywordsign'>=</span> <span class='number'>0</span> <span class='keyword'>to</span> <span class='number'>7</span> <span class='keyword'>do</span>
+        <span class='keyword'>if</span> <span class='keywordsign'>(</span><span class='lower'>c</span> <span class='keywordsign'>lsr</span> <span class='lower'>j</span><span class='keywordsign'>)</span> <span class='keywordsign'>land</span> <span class='number'>1</span> <span class='keywordsign'>=</span> <span class='number'>1</span> <span class='keyword'>then</span>
+          <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span> <span class='keywordsign'>&#60;-</span> <span class='lower'>not</span> <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span><span class='keywordsign'>;</span>
+      <span class='keyword'>done</span><span class='keywordsign'>;</span>
+      <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span>
+    <span class='keyword'>else</span>
+      <span class='lower'>loop</span> <span class='keywordsign'>(</span><span class='lower'>c</span> <span class='keywordsign'>lxor</span> <span class='lower'>int_of_char</span> <span class='lower'>s</span><span class='operator'>.[</span><span class='lower'>i</span><span class='keywordsign'>]</span><span class='keywordsign'>)</span> 
+  <span class='keyword'>in</span> <span class='lower'>loop</span> <span class='number'>0</span> <span class='number'>0</span>
 <a href="javascript:octry('let has_an_odd_number_of_1__efficient s =\n  let sl = String.length s in\n  let rec loop c i =\n    if i = l then\n      let res = ref false in\n      for j = 0 to 7 do\n        if (c lsr j) land 1 = 1 then\n          res.contents &#60;- not res.contents;\n      done;\n      res.contents\n    else\n      loop (c lxor int_of_char s.[i]) \n  in loop 0 0\n');">[try]</a></code></pre>
 <p>And... There we go!  :-)</p>
 <p>Note that <code>int_of_char</code> is a zero-cost operation.</p>
-<hr/><p style='font-size:80%;'><em>started on 2013-09-26 20:15:24+00:00, (re)generated on 2013-09-27 00:46:52+01:00
+<hr/><p style='font-size:80%;'><em>started on 2013-09-26 20:15:24+00:00, (re)generated on 2013-09-28 01:16:51+01:00
 </em></p><p>• <a href='/ocaml/'>ocaml</a> • <a href='/exercise/'>exercise</a> </p>          </div>
 
 
