@@ -1,4 +1,4 @@
-<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Mon, 30 Sep 2013 13:13:35 +0100</pubDate><lastBuildDate>Mon, 30 Sep 2013 13:13:35 +0100</lastBuildDate>
+<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Mon, 30 Sep 2013 13:43:34 +0100</pubDate><lastBuildDate>Mon, 30 Sep 2013 13:43:34 +0100</lastBuildDate>
 
 
     <item>
@@ -660,11 +660,16 @@ think with the whole problem in mind.&#60;/p&#62;
       <guid>http://pw374.github.io/posts/2013-09-26-20-15-24-odd-or-even.html</guid>
       <description><![CDATA[
 
-&#60;p&#62;Given a string (of bytes), is the number of bits set to 1 odd or even?&#60;/p&#62;
-&#60;p&#62;The most naive way is to count them all, and then see if the number is 
-even or odd. But it&#38;#39;s probably better not to use an integer to count them
-all, and instead, use a Boolean: each time we see a 1, we can simply flip the
-Boolean value!&#60;/p&#62;
+&#60;p&#62;This is the exercice:&#60;/p&#62;
+&#60;blockquote&#62;&#60;p&#62;
+Given a string (of bytes), is the number of bits set to 1 odd or even?&#60;/p&#62;
+&#60;/blockquote&#62;
+&#60;p&#62;Let&#38;#39;s now find some possible solutions.&#60;/p&#62;
+&#60;p&#62;Well, the  most naive way is  to count them  all, and then see  if the
+number is even or odd. But it&#38;#39;s  probably better not to use an integer
+to count them all  and then see if that counter is  odd or even, since
+we can instead use a Boolean: each time we see a 1, we can simply flip
+the Boolean value!&#60;/p&#62;
 &#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;has_an_odd_number_of_1&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;s&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;res&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;ref&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;false&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;in&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;for&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;i&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;to&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;String&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;length&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;s&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;1&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;do&#60;/span&#62;
@@ -676,19 +681,64 @@ Boolean value!&#60;/p&#62;
   &#60;span class=&#39;keyword&#39;&#62;done&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;;&#60;/span&#62;
   &#60;span class=&#39;lower&#39;&#62;res&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;contents&#60;/span&#62;
 &#60;a href=&#34;javascript:octry(&#39;let has_an_odd_number_of_1 s =\n  let res = ref false in\n  for i = 0 to String.length s - 1 do\n    let x = int_of_char s.[i] in\n    for j = 0 to 7 do\n      if (x lsr j) land 1 = 1 then\n        res.contents &#38;#60;- not res.contents;\n    done\n  done;\n  res.contents\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;But there&#38;#39;s way more efficient than that! Indeed, unless we really don&#38;#39;t have a choice,
-we shouldn&#38;#39;t read bits one by one, because it&#38;#39;s slow.&#60;/p&#62;
+&#60;p&#62;Side note:&#60;/p&#62;
+&#60;blockquote&#62;&#60;p&#62;
+Moreover, we can see that using a  Boolean means it will not limit the
+number of  bits we  may read, whereas  an integer...   well, actually,
+when we reach  the maximum value of integers (of  type int, or Int32.t
+or Int64.t,  which — in  OCaml — are  respectively Pervasives.max_int,
+Int32.max_int  and  Int64.max_int), adding  one  will  make them  even
+negative numbers  (max_int, from Pervasives,  Int32 or Int64,  are all
+odd numbers), so  we should still get the odd/even  outcome right. But
+then, we  would have to be  sure that we have  correctly designed the
+code that tells us if an integer is odd or even. For instance,
+we can write &#60;code&#62;is_odd&#60;/code&#62; these ways:&#60;/p&#62;
+&#60;p&#62;Well,  let&#38;#39;s   start  with   a  very   classic  mathematically-elegant
+implementation of two mutually recursive functions:&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;rec&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;is_odd&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62;
+ &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;false&#60;/span&#62;
+ &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;n&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;is_even&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;n&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;-&#60;/span&#62;&#60;span class=&#39;number&#39;&#62;1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+&#60;span class=&#39;keyword&#39;&#62;and&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;is_even&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62;
+ &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;true&#60;/span&#62;
+ &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;n&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;is_odd&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;n&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;-&#60;/span&#62;&#60;span class=&#39;number&#39;&#62;1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+&#60;a href=&#34;javascript:octry(&#39;let rec is_odd = function\n | 0 -&#38;#62; false\n | n -&#38;#62; is_even (n-1)\nand is_even = function\n | 0 -&#38;#62; true\n | n -&#38;#62; is_odd (n-1)\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Note that it needs a lot of computation when the integer is &#38;quot;big&#38;quot;...&#60;/p&#62;
+&#60;p&#62;And this is probably the shortest version:&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;is_odd&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;n&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;n&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;mod&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;2&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;&#38;#60;&#38;#62;&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62;
+&#60;a href=&#34;javascript:octry(&#39;let is_odd n = n mod 2 &#38;#60;&#38;#62; 0\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Now note that we cannot write this and expect it to work properly in 
+all cases:&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;is_odd&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;n&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;n&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;mod&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;2&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;1&#60;/span&#62;
+&#60;a href=&#34;javascript:octry(&#39;let is_odd n = n mod 2 = 1\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;and that&#38;#39;s because if n is negative and odd, then n mod 2 is -1, not 1.&#60;/p&#62;
+&#60;p&#62;A tricky version that uses properties on integers:&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;is_odd&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;n&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;n&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;&#38;#60;&#38;#62;&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;&#38;#38;&#38;#38;&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;n&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;/&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;2&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;*&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;2&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;&#38;#60;&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;n&#60;/span&#62;
+&#60;a href=&#34;javascript:octry(&#39;let is_odd n = n &#38;#60;&#38;#62; 0 &#38;#38;&#38;#38; ((n / 2) * 2) &#38;#60;&#38;#62; n\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Another tricky version that uses properties on machine integers:&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;is_odd&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;n&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;n&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;land&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;1&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;1&#60;/span&#62;
+&#60;a href=&#34;javascript:octry(&#39;let is_odd n = n land 1 = 1\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Well, there is the same number  of characters as the shortest version,
+and actually  this version is  probably the most efficient  because we
+know that the  &#60;code&#62;land&#60;/code&#62; operation is easy for the  computer, whereas the
+&#60;code&#62;mod&#60;/code&#62; operation implies division, which is not an easy one. Then &#60;code&#62;mod&#60;/code&#62;
+could  be optimised  in  some  cases, such  as  &#60;code&#62;mod  2&#60;/code&#62; because  it&#38;#39;s
+basically  the  same as  &#60;code&#62;land  1&#60;/code&#62;  except that  the  sign  has to  be
+preserved! So, it&#38;#39;s likely to still cost more...&#60;/p&#62;
+&#60;/blockquote&#62;
+&#60;p&#62;But there&#38;#39;s  way more  efficient than that!  Indeed, unless  we really
+don&#38;#39;t have a  choice, we shouldn&#38;#39;t read bits one  by one, because it&#38;#39;s
+slow!&#60;/p&#62;
 &#60;p&#62;So what can we do instead?&#60;/p&#62;
-&#60;p&#62;Well, there&#38;#39;s a very very convenient logical operation on integers.
-It&#38;#39;s called XOR (and the OCaml operator for that is &#60;code&#62;lxor&#60;/code&#62;), and yes
+&#60;p&#62;Well, there&#38;#39;s  a very very  convenient logical operation  on integers.
+It&#38;#39;s called XOR  (and the OCaml operator for that  is &#60;code&#62;lxor&#60;/code&#62;), and yes
 we can use it!&#60;/p&#62;
-&#60;p&#62;You see, 1 XOR 1 = 0; 0 XOR 0 = 0; but 1 XOR 0 or 0 XOR 1 = 1.
-It&#38;#39;s very convenient because it&#38;#39;s basically giving us the answer!
-When we have two 1s, we can eliminate them, that&#38;#39;s what happens with XOR.
-When we have a 1 and a 0, we keep the 1.
-So if we take those bytes byte by byte, and XOR them with each other,
-at the end we will have one remaining byte that will tell us if the
-whole string had an odd number of 1 or not.&#60;/p&#62;
+&#60;p&#62;Note that 1 XOR 1 = 0; 0 XOR 0 =  0; but 1 XOR 0 or 0 XOR 1 = 1.  It&#38;#39;s
+very convenient because it&#38;#39;s basically  giving us the answer!  When we
+have two  1s, we  can eliminate  them, that&#38;#39;s  what happens  with XOR.
+When we have  a 1 and a 0, we  keep the 1.  So if we  take those bytes
+byte by byte,  and XOR them with  each other, at the end  we will have
+one remaining byte  that will tell us  if the whole string  had an odd
+number of 1 or not.&#60;/p&#62;
 &#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;has_an_odd_number_of_1__efficient&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;s&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;String&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;length&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;s&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;in&#60;/span&#62;
   &#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;rec&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;loop&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;c&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;i&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62;
@@ -704,8 +754,9 @@ whole string had an odd number of 1 or not.&#60;/p&#62;
   &#60;span class=&#39;keyword&#39;&#62;in&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;loop&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62;
 &#60;a href=&#34;javascript:octry(&#39;let has_an_odd_number_of_1__efficient s =\n  let l = String.length s in\n  let rec loop c i =\n    if i = l then\n      let res = ref false in\n      for j = 0 to 7 do\n        if (c lsr j) land 1 = 1 then\n          res.contents &#38;#60;- not res.contents;\n      done;\n      res.contents\n    else\n      loop (c lxor int_of_char s.[i]) (succ i)\n  in loop 0 0\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
 &#60;p&#62;And... There we go!  :-)&#60;/p&#62;
-&#60;p&#62;Note that &#60;code&#62;int_of_char&#60;/code&#62; is a zero-cost operation (but &#60;code&#62;char_of_int&#60;/code&#62; is not because it 
-has to check that the value of the given integer is between 0 and 255 inclusive).&#60;/p&#62;
+&#60;p&#62;Note that &#60;code&#62;int_of_char&#60;/code&#62; is a zero-cost operation (but &#60;code&#62;char_of_int&#60;/code&#62; is
+not, because it  has to check that  the value of the  given integer is
+between 0 and 255 inclusive).&#60;/p&#62;
       ]]></description>
     </item>
 
