@@ -21,10 +21,11 @@ This is the exercice:
 
 Let's now find some possible solutions.
 
-Well, the most naive way is to count them all, and then see if the number is 
-even or odd. But it's probably better not to use an integer to count them
-all, and instead, use a Boolean: each time we see a 1, we can simply flip the
-Boolean value!
+Well, the  most naive way is  to count them  all, and then see  if the
+number is even or odd. But it's  probably better not to use an integer
+to count them all  and then see if that counter is  odd or even, since
+we can instead use a Boolean: each time we see a 1, we can simply flip
+the Boolean value!
 
 ```tryocaml
 let has_an_odd_number_of_1 s =
@@ -39,22 +40,86 @@ let has_an_odd_number_of_1 s =
   res.contents
 ```
 
-But there's way more efficient than that! Indeed, unless we really don't have a choice,
-we shouldn't read bits one by one, because it's slow.
+Side note:
+> Moreover, we can see that using a  Boolean means it will not limit the
+> number of  bits we  may read, whereas  an integer...   well, actually,
+> when we reach  the maximum value of integers (of  type int, or Int32.t
+> or Int64.t,  which — in  OCaml — are  respectively Pervasives.max_int,
+> Int32.max_int  and  Int64.max_int), adding  one  will  make them  even
+> negative numbers  (max_int, from Pervasives,  Int32 or Int64,  are all
+> odd numbers), so  we should still get the odd/even  outcome right. But
+> then, we  would have to be  sure that we have  correctly designed the
+> code that tells us if an integer is odd or even. For instance,
+> we can write `is_odd` these ways:
+>
+> Well,  let's   start  with   a  very   classic  mathematically-elegant
+> implementation of two mutually recursive functions:
+>
+> ```tryocaml
+> let rec is_odd = function
+>  | 0 -> false
+>  | n -> is_even (n-1)
+> and is_even = function
+>  | 0 -> true
+>  | n -> is_odd (n-1)
+> ```
+>
+> Note that it needs a lot of computation when the integer is "big"...
+>
+> And this is probably the shortest version:
+>
+> ```tryocaml
+> let is_odd n = n mod 2 <> 0
+> ```
+>
+> Now note that we cannot write this and expect it to work properly in 
+> all cases:
+>
+> ```tryocaml
+> let is_odd n = n mod 2 = 1
+> ```
+>
+> and that's because if n is negative and odd, then n mod 2 is -1, not 1.
+>
+> A tricky version that uses properties on integers:
+>
+> ```tryocaml
+> let is_odd n = n <> 0 && ((n / 2) * 2) <> n
+> ```
+>
+> Another tricky version that uses properties on machine integers:
+>
+> ```tryocaml
+> let is_odd n = n land 1 = 1
+> ```
+>
+> Well, there is the same number  of characters as the shortest version,
+> and actually  this version is  probably the most efficient  because we
+> know that the  `land` operation is easy for the  computer, whereas the
+> `mod` operation implies division, which is not an easy one. Then `mod`
+> could  be optimised  in  some  cases, such  as  `mod  2` because  it's
+> basically  the  same as  `land  1`  except that  the  sign  has to  be
+> preserved! So, it's likely to still cost more...
+
+
+
+But there's  way more  efficient than that!  Indeed, unless  we really
+don't have a  choice, we shouldn't read bits one  by one, because it's
+slow!
 
 So what can we do instead?
 
-Well, there's a very very convenient logical operation on integers.
-It's called XOR (and the OCaml operator for that is `lxor`), and yes
+Well, there's  a very very  convenient logical operation  on integers.
+It's called XOR  (and the OCaml operator for that  is `lxor`), and yes
 we can use it!
 
-You see, 1 XOR 1 = 0; 0 XOR 0 = 0; but 1 XOR 0 or 0 XOR 1 = 1.
-It's very convenient because it's basically giving us the answer!
-When we have two 1s, we can eliminate them, that's what happens with XOR.
-When we have a 1 and a 0, we keep the 1.
-So if we take those bytes byte by byte, and XOR them with each other,
-at the end we will have one remaining byte that will tell us if the
-whole string had an odd number of 1 or not.
+Note that 1 XOR 1 = 0; 0 XOR 0 =  0; but 1 XOR 0 or 0 XOR 1 = 1.  It's
+very convenient because it's basically  giving us the answer!  When we
+have two  1s, we  can eliminate  them, that's  what happens  with XOR.
+When we have  a 1 and a 0, we  keep the 1.  So if we  take those bytes
+byte by byte,  and XOR them with  each other, at the end  we will have
+one remaining byte  that will tell us  if the whole string  had an odd
+number of 1 or not.
 
 
 ```tryocaml
@@ -75,8 +140,9 @@ let has_an_odd_number_of_1__efficient s =
 
 And... There we go!  :-)
 
-Note that `int_of_char` is a zero-cost operation (but `char_of_int` is not because it 
-has to check that the value of the given integer is between 0 and 255 inclusive).
+Note that `int_of_char` is a zero-cost operation (but `char_of_int` is
+not, because it  has to check that  the value of the  given integer is
+between 0 and 255 inclusive).
 
 {< end >}
 
