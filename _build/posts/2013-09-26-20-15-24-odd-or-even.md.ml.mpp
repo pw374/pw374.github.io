@@ -15,9 +15,13 @@ include Meta
 
 {< module Post(Printer:Printer) = struct open Printer >}
 
-Given a string (of bytes), is the number of bits set to 1 odd or even?
+This is the exercice:
 
-The most naive way is to count them all, and then see if the number is 
+> Given a string (of bytes), is the number of bits set to 1 odd or even?
+
+Let's now find some possible solutions.
+
+Well, the most naive way is to count them all, and then see if the number is 
 even or odd. But it's probably better not to use an integer to count them
 all, and instead, use a Boolean: each time we see a 1, we can simply flip the
 Boolean value!
