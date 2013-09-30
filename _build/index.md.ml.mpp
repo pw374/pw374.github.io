@@ -3,6 +3,7 @@
  let title = "Philippe Wang"
  let id = "index.html"
  let xmldate = ""
+ let xmldate_updated = xmldate
  let rssdate = ""
  let date = input_command "date --rfc-3339=seconds|tr ' ' T"
  let tags = [ "root"; ]

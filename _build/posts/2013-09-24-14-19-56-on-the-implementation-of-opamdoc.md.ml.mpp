@@ -3,6 +3,7 @@
  let title = "On the Implementation of OPAMDOC"
  let id = "posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html"
  let xmldate = "2013-09-24T14:21:00+00:00"
+ let xmldate_updated = xmldate
  let rssdate = "Tue, 24 Sep 2013 14:21:00 +0000"
  let date = "2013-09-24 14:21:00+00:00"
  let tags = [ "ocaml"; "opamdoc" ]

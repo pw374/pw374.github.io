@@ -8,6 +8,7 @@ sig
   val title : string
   val date : string
   val xmldate : string
+  val xmldate_updated : string
   val rssdate : string
   val tags : string list
   val disqus : bool

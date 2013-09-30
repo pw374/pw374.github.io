@@ -4,7 +4,7 @@
     <title>{< let _ = print_string title >}</title>
     {< let _ = List.iter (printf "<category term='%s' />") tags >}
     <published>{< let _ = print_string xmldate >}</published>
-    {< let _ = printf "<updated>%s</updated>\n" (String.trim(input_command "date --rfc-3339=seconds|tr ' ' T")) >}
+    <updated>{< let _ = print_string xmldate_updated >}</updated>
     <author>
       <name>Philippe Wang</name>
     {< let _ = printf "<uri>http://pw374.github.io/%s</uri>\n" id >}

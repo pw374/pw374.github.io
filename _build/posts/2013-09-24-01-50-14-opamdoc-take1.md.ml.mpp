@@ -3,6 +3,7 @@
  let title = "OPAM-DOC with multiple OCaml packages"
  let id = "posts/2013-09-24-01-50-14-opamdoc-take1.html"
  let xmldate = "2013-09-24T01:50:14+01:00"
+ let xmldate_updated = xmldate
  let rssdate = "Tue, 24 Sep 2013 01:50:14 +0100"
  let date = "2013-09-24 01:50:14+01:00"
  let tags = [ "ocaml"; "opamdoc"; "opam" ]

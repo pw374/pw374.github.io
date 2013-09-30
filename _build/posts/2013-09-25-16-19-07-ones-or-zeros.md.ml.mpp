@@ -3,6 +3,7 @@
  let title = "(Exercise) Are there more 1s or 0s?"
  let id = "posts/2013-09-25-16-19-07-ones-or-zeros.html"
  let xmldate = "2013-09-25T16:19:07+00:00"
+ let xmldate_updated = xmldate
  let rssdate = "Wed, 25 Sep 2013 16:19:07 +0000"
  let date = "2013-09-25 16:19:07+00:00"
  let tags = [ "ocaml"; "exercise" ]
