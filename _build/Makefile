@@ -1,6 +1,7 @@
 MPPOCAML = mpp -so '((!' -sc '!))' -son '{{!' -scn '!}}' -soc '' -scc '' -its -snl -l ocaml
 
 OMD = omd -r ocaml=./ocamltohtml -r tryocaml=./ocamltotryocaml
+OMD_FOR_FEEDS = omd -r ocaml=./ocamltohtml -r tryocaml=./ocamltohtml
 
 all:
 	make htmlescape ocamltohtml
@@ -155,7 +156,7 @@ _tmp/gen_post_bcontents.ml: Makefile
 _tmp/%.bcontents.md:_tmp/%.md.ml _tmp/common.ml _tmp/gen_post_bcontents.ml Makefile
 	 for i in _tmp/common.ml $< _tmp/gen_post_bcontents.ml ; do echo "# 1 \"$$i\"" ; cat "$$i" ; done | ocaml -stdin > $@
 _tmp/%.bcontents.html:_tmp/%.bcontents.md Makefile
-	${OMD} < $< > $@
+	${OMD_FOR_FEEDS} < $< > $@
 _tmp/%.bcontents.html.ml:_tmp/%.bcontents.html Makefile
 	${MPPOCAML} < $< > $@.tmp
 	(printf "module Contents(Printer:Printer) = struct open Printer\n" ; cat $@.tmp ; echo "end") > $@
