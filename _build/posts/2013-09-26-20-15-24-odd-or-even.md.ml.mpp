@@ -71,7 +71,8 @@ let has_an_odd_number_of_1__efficient s =
 
 And... There we go!  :-)
 
-Note that `int_of_char` is a zero-cost operation.
+Note that `int_of_char` is a zero-cost operation (but `char_of_int` is not because it 
+has to check that the value of the given integer is between 0 and 255 inclusive).
 
 {< end >}
 
