@@ -794,7 +794,8 @@ whole string had an odd number of 1 or not.</p>
   <span class='keyword'>in</span> <span class='lower'>loop</span> <span class='number'>0</span> <span class='number'>0</span>
 <a href="javascript:octry('let has_an_odd_number_of_1__efficient s =\n  let l = String.length s in\n  let rec loop c i =\n    if i = l then\n      let res = ref false in\n      for j = 0 to 7 do\n        if (c lsr j) land 1 = 1 then\n          res.contents &#60;- not res.contents;\n      done;\n      res.contents\n    else\n      loop (c lxor int_of_char s.[i]) (succ i)\n  in loop 0 0\n');">[try]</a></code></pre>
 <p>And... There we go!  :-)</p>
-<p>Note that <code>int_of_char</code> is a zero-cost operation.</p>
+<p>Note that <code>int_of_char</code> is a zero-cost operation (but <code>char_of_int</code> is not because it 
+has to check that the value of the given integer is between 0 and 255 inclusive).</p>
 <hr/><p></p>          </div>
         </div>
       </div>

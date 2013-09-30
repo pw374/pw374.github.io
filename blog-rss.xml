@@ -1,4 +1,4 @@
-<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Sat, 28 Sep 2013 03:31:03 +0100</pubDate><lastBuildDate>Sat, 28 Sep 2013 03:31:03 +0100</lastBuildDate>
+<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Mon, 30 Sep 2013 13:13:35 +0100</pubDate><lastBuildDate>Mon, 30 Sep 2013 13:13:35 +0100</lastBuildDate>
 
 
     <item>
@@ -704,7 +704,8 @@ whole string had an odd number of 1 or not.&#60;/p&#62;
   &#60;span class=&#39;keyword&#39;&#62;in&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;loop&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;0&#60;/span&#62;
 &#60;a href=&#34;javascript:octry(&#39;let has_an_odd_number_of_1__efficient s =\n  let l = String.length s in\n  let rec loop c i =\n    if i = l then\n      let res = ref false in\n      for j = 0 to 7 do\n        if (c lsr j) land 1 = 1 then\n          res.contents &#38;#60;- not res.contents;\n      done;\n      res.contents\n    else\n      loop (c lxor int_of_char s.[i]) (succ i)\n  in loop 0 0\n&#39;);&#34;&#62;[try]&#60;/a&#62;&#60;/code&#62;&#60;/pre&#62;
 &#60;p&#62;And... There we go!  :-)&#60;/p&#62;
-&#60;p&#62;Note that &#60;code&#62;int_of_char&#60;/code&#62; is a zero-cost operation.&#60;/p&#62;
+&#60;p&#62;Note that &#60;code&#62;int_of_char&#60;/code&#62; is a zero-cost operation (but &#60;code&#62;char_of_int&#60;/code&#62; is not because it 
+has to check that the value of the given integer is between 0 and 255 inclusive).&#60;/p&#62;
       ]]></description>
     </item>
 
