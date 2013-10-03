@@ -1,4 +1,6 @@
+
 MPPOCAML = mpp -so '((!' -sc '!))' -son '{{!' -scn '!}}' -soc '' -scc '' -its -snl -l ocaml
+MPPOCAML_BLIND = mpp -sos '' -scs '' -so '' -sc '' -son '' -scn '' -soc '' -scc '' -its -snl -l ocaml
 
 OMD = omd -r ocaml=./ocamltohtml -r tryocaml=./ocamltotryocaml
 OMD_FOR_FEEDS = omd -r ocaml=./ocamltohtml -r tryocaml=./ocamltohtml
@@ -28,9 +30,9 @@ _tmp/index.md:_tmp/common.ml _tmp/index.md.ml _tmp/gen_index_contents.ml
 	make _tmp/blogposts.list.tmp.md
 	for i in $+ ; do echo "# 1 \"$$i\"" ; cat "$$i" ; done | ocaml -stdin > $@
 _tmp/index.contents.html.ml:_tmp/index.md Makefile
-	(printf "module Contents(Printer:Printer) = struct open Printer\n" ; ${OMD} < $< | ${MPPOCAML} ; echo "end") > $@
+	(printf "module Contents(Printer:Printer) = struct open Printer\n" ; ${OMD} < $< | ${MPPOCAML_BLIND} ; echo "end") > $@
 _tmp/index.toc.ml:_tmp/index.toc.html Makefile
-	(printf "module Toc(Printer:Printer) = struct open Printer\n" ; ${MPPOCAML} < $< ; echo "end") > $@
+	(printf "module Toc(Printer:Printer) = struct open Printer\n" ; ${MPPOCAML_BLIND} < $< ; echo "end") > $@
 _tmp/index.toc.html:_tmp/index.toc.md Makefile
 	omd < $< > $@
 _tmp/index.toc.md:../tags/* Makefile
@@ -67,7 +69,7 @@ _tmp/%.contents.html:_tmp/%.contents.md Makefile
 	${OMD} < $< > $@
 
 _tmp/%.contents.html.ml:_tmp/%.contents.html Makefile
-	${MPPOCAML} < $< > $@.tmp
+	${MPPOCAML_BLIND} < $< > $@.tmp
 	(printf "module Contents(Printer:Printer) = struct open Printer\n" ; cat $@.tmp ; echo "let () = tag_post stamp date tags end") > $@
 	rm -f $@.tmp
 
@@ -75,7 +77,7 @@ _tmp/%.toc.html:_tmp/%.contents.md Makefile
 	${OMD} -otoc -ts 2 -td 3 < $< > $@
 
 _tmp/%.toc.html.ml:_tmp/%.toc.html Makefile
-	${MPPOCAML} < $< > $@.tmp
+	${MPPOCAML_BLIND} < $< > $@.tmp
 	(printf "module Toc(Printer:Printer) = struct open Printer\n" ; cat $@.tmp ; echo "end") > $@
 	rm -f $@.tmp
 
@@ -89,9 +91,9 @@ _tmp/gen_blog_contents.ml:Makefile
 _tmp/blog.md:_tmp/blogposts.contents.tmp.md _tmp/common.ml _tmp/blog.md.ml _tmp/gen_blog_contents.ml
 	for i in _tmp/common.ml _tmp/blog.md.ml _tmp/gen_blog_contents.ml ; do echo "# 1 \"$$i\"" ; cat "$$i" ; done | ocaml -stdin > $@
 _tmp/blog.contents.html.ml:_tmp/blog.md Makefile
-	(printf "module Contents(Printer:Printer) = struct open Printer\n" ; ${OMD} < $< | ${MPPOCAML} ; echo "let () = tag_post stamp date tags end") > $@
+	(printf "module Contents(Printer:Printer) = struct open Printer\n" ; ${OMD} < $< | ${MPPOCAML_BLIND} ; echo "let () = tag_post stamp date tags end") > $@
 _tmp/blog.toc.ml:_tmp/blog.toc.html Makefile
-	(printf "module Toc(Printer:Printer) = struct open Printer\n" ; ${MPPOCAML} < $< ; echo "end") > $@
+	(printf "module Toc(Printer:Printer) = struct open Printer\n" ; ${MPPOCAML_BLIND} < $< ; echo "end") > $@
 _tmp/blog.toc.html:_tmp/blog.toc.md Makefile
 	omd < $< > $@
 _tmp/blog.toc.md:_tmp/blogposts.contents.tmp.md Makefile
@@ -158,7 +160,7 @@ _tmp/%.bcontents.md:_tmp/%.md.ml _tmp/common.ml _tmp/gen_post_bcontents.ml Makef
 _tmp/%.bcontents.html:_tmp/%.bcontents.md Makefile
 	${OMD_FOR_FEEDS} < $< > $@
 _tmp/%.bcontents.html.ml:_tmp/%.bcontents.html Makefile
-	${MPPOCAML} < $< > $@.tmp
+	${MPPOCAML_BLIND} < $< > $@.tmp
 	(printf "module Contents(Printer:Printer) = struct open Printer\n" ; cat $@.tmp ; echo "end") > $@
 	rm -f $@.tmp
 
