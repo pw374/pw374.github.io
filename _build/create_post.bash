@@ -13,7 +13,7 @@ cat > $target <<EOF
  let title = ""
  let id = "$(basename $target .md.ml.mpp).html"
  let xmldate = "$(date -u --rfc-3339=seconds|tr ' ' T)"
- let xmldate = xmldate_updated
+ let xmldate_updated = xmldate
  let rssdate = "$(date -u '+%a, %d %b %Y %H:%M:%S %z')"
  let date = "$(date -u --rfc-3339=seconds)"
  let tags = [ ]
