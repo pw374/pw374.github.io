@@ -139,24 +139,25 @@ top result (and here again, I&#39;m kind  of helping it be and stay on the
 top...).</p>
 <p>Actually, Markdown is not that  simple to parse.  Why? Because so many
 things are  just left to the  imagination of the  people who implement
-parsers  for  this  language,   because  programmes  can&#39;t  decide  by
+parsers  for  this  language,   because  programs  can&#39;t  decide  by
 themselves  what&#39;s right  to do.   It&#39;s  really the  author(s) of  the
-programme that  decides what the  programme does. And in  Markdown, so
+program that  decides what the  program does. And in  Markdown, so
 many  things  are ambiguous  and  Gruber&#39;s  document doesn&#39;t  actually
 describe a  grammar at all.  It just tells  you how to write  this and
 that, but if you write it slightly differently, it doesn&#39;t tell you
-what the outcome would be. 
-<em><strong>In other words, there are no errors in Markdown.</strong></em>
+what the outcome would be and by just reading the document, you really
+can&#39;t tell what the output will be.</p>
+<p><em><strong>The one thing to have in mind is that there are no errors in Markdown.</strong></em>
 Every text file is a valid Markdown file, it might just be converted 
 to some HTML you wouldn&#39;t expect. For instance, you may write a link 
 using this  syntax:</p>
 <pre><code>[blah blah blah](the-url-which-can-be-absolute-or-relative)
 </code></pre>
 <p>and it gets converted to</p>
-<pre><code>&lt;a href=&quot;the-url-which-can-be-absolute-or-relative&quot;&gt;blah blah blah&lt;/a&gt;
+<pre><code>&lt;p&gt;&lt;a href=&quot;the-url-which-can-be-absolute-or-relative&quot;&gt;blah blah blah&lt;/a&gt;&lt;/p&gt;
 </code></pre>
 <p>
-But if you forget the closing parenthesis, then it becomes this instead</p>
+But if you forget the closing parenthesis, then it becomes that instead</p>
 <pre><code>&lt;p&gt;[blah blah blah](the-url-which-can-be-absolute-or-relative&lt;/p&gt;
 </code></pre>
 <p>
@@ -309,7 +310,7 @@ OCaml.org to style my new Github-hosted website, so I can play with it
 <p>Most pages will be written in Markdown instead of HTML, so that people
 of the OCaml community may contribute to it in a more convenient way.</p>
 <p>And of course, that means that OMD will be used for OCaml.org.</p>
-<hr/><p style='font-size:80%;'><em>started on 2013-09-05 22:31:26+01:00, (re)generated on 2013-09-30 23:28:11+01:00
+<hr/><p style='font-size:80%;'><em>started on 2013-09-05 22:31:26+01:00, (re)generated on 2013-10-03 01:02:50+01:00
 </em></p><p>• <a href='/ocaml/'>ocaml</a> • <a href='/markdown/'>markdown</a> • <a href='/software development/'>software development</a> </p>          </div>
 
 

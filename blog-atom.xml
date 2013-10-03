@@ -1,4 +1,4 @@
-<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-09-30T23:28:10+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
+<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-10-03T01:02:49+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
 
 
   <entry>
@@ -48,24 +48,25 @@ top result (and here again, I&#38;#39;m kind  of helping it be and stay on the
 top...).&#60;/p&#62;
 &#60;p&#62;Actually, Markdown is not that  simple to parse.  Why? Because so many
 things are  just left to the  imagination of the  people who implement
-parsers  for  this  language,   because  programmes  can&#38;#39;t  decide  by
+parsers  for  this  language,   because  programs  can&#38;#39;t  decide  by
 themselves  what&#38;#39;s right  to do.   It&#38;#39;s  really the  author(s) of  the
-programme that  decides what the  programme does. And in  Markdown, so
+program that  decides what the  program does. And in  Markdown, so
 many  things  are ambiguous  and  Gruber&#38;#39;s  document doesn&#38;#39;t  actually
 describe a  grammar at all.  It just tells  you how to write  this and
 that, but if you write it slightly differently, it doesn&#38;#39;t tell you
-what the outcome would be. 
-&#60;em&#62;&#60;strong&#62;In other words, there are no errors in Markdown.&#60;/strong&#62;&#60;/em&#62;
+what the outcome would be and by just reading the document, you really
+can&#38;#39;t tell what the output will be.&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;&#60;strong&#62;The one thing to have in mind is that there are no errors in Markdown.&#60;/strong&#62;&#60;/em&#62;
 Every text file is a valid Markdown file, it might just be converted 
 to some HTML you wouldn&#38;#39;t expect. For instance, you may write a link 
 using this  syntax:&#60;/p&#62;
 &#60;pre&#62;&#60;code&#62;[blah blah blah](the-url-which-can-be-absolute-or-relative)
 &#60;/code&#62;&#60;/pre&#62;
 &#60;p&#62;and it gets converted to&#60;/p&#62;
-&#60;pre&#62;&#60;code&#62;&#38;lt;a href=&#38;quot;the-url-which-can-be-absolute-or-relative&#38;quot;&#38;gt;blah blah blah&#38;lt;/a&#38;gt;
+&#60;pre&#62;&#60;code&#62;&#38;lt;p&#38;gt;&#38;lt;a href=&#38;quot;the-url-which-can-be-absolute-or-relative&#38;quot;&#38;gt;blah blah blah&#38;lt;/a&#38;gt;&#38;lt;/p&#38;gt;
 &#60;/code&#62;&#60;/pre&#62;
 &#60;p&#62;
-But if you forget the closing parenthesis, then it becomes this instead&#60;/p&#62;
+But if you forget the closing parenthesis, then it becomes that instead&#60;/p&#62;
 &#60;pre&#62;&#60;code&#62;&#38;lt;p&#38;gt;[blah blah blah](the-url-which-can-be-absolute-or-relative&#38;lt;/p&#38;gt;
 &#60;/code&#62;&#60;/pre&#62;
 &#60;p&#62;

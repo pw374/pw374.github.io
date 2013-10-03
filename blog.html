@@ -189,24 +189,25 @@ top result (and here again, I&#39;m kind  of helping it be and stay on the
 top...).</p>
 <p>Actually, Markdown is not that  simple to parse.  Why? Because so many
 things are  just left to the  imagination of the  people who implement
-parsers  for  this  language,   because  programmes  can&#39;t  decide  by
+parsers  for  this  language,   because  programs  can&#39;t  decide  by
 themselves  what&#39;s right  to do.   It&#39;s  really the  author(s) of  the
-programme that  decides what the  programme does. And in  Markdown, so
+program that  decides what the  program does. And in  Markdown, so
 many  things  are ambiguous  and  Gruber&#39;s  document doesn&#39;t  actually
 describe a  grammar at all.  It just tells  you how to write  this and
 that, but if you write it slightly differently, it doesn&#39;t tell you
-what the outcome would be. 
-<em><strong>In other words, there are no errors in Markdown.</strong></em>
+what the outcome would be and by just reading the document, you really
+can&#39;t tell what the output will be.</p>
+<p><em><strong>The one thing to have in mind is that there are no errors in Markdown.</strong></em>
 Every text file is a valid Markdown file, it might just be converted 
 to some HTML you wouldn&#39;t expect. For instance, you may write a link 
 using this  syntax:</p>
 <pre><code>[blah blah blah](the-url-which-can-be-absolute-or-relative)
 </code></pre>
 <p>and it gets converted to</p>
-<pre><code>&lt;a href=&quot;the-url-which-can-be-absolute-or-relative&quot;&gt;blah blah blah&lt;/a&gt;
+<pre><code>&lt;p&gt;&lt;a href=&quot;the-url-which-can-be-absolute-or-relative&quot;&gt;blah blah blah&lt;/a&gt;&lt;/p&gt;
 </code></pre>
 <p>
-But if you forget the closing parenthesis, then it becomes this instead</p>
+But if you forget the closing parenthesis, then it becomes that instead</p>
 <pre><code>&lt;p&gt;[blah blah blah](the-url-which-can-be-absolute-or-relative&lt;/p&gt;
 </code></pre>
 <p>
