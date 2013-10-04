@@ -1,4 +1,4 @@
-<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Thu, 03 Oct 2013 01:02:49 +0100</pubDate><lastBuildDate>Thu, 03 Oct 2013 01:02:49 +0100</lastBuildDate>
+<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Fri, 04 Oct 2013 00:59:24 +0100</pubDate><lastBuildDate>Fri, 04 Oct 2013 00:59:24 +0100</lastBuildDate>
 
 
     <item>
@@ -758,6 +758,243 @@ number of 1 or not.&#60;/p&#62;
 &#60;p&#62;Note that &#60;code&#62;int_of_char&#60;/code&#62; is a zero-cost operation (but &#60;code&#62;char_of_int&#60;/code&#62; is
 not, because it  has to check that  the value of the  given integer is
 between 0 and 255 inclusive).&#60;/p&#62;
+      ]]></description>
+    </item>
+
+
+
+    <item>
+      <title>Using MPP in two differents ways</title>
+      <link>http://pw374.github.io/2013-10-03-20-35-12-using-mpp-two-different-ways.html</link>
+      <category>ocaml</category><category>mpp</category>
+      <pubDate>Thu, 03 Oct 2013 20:35:12 +0000</pubDate>
+      <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
+      <guid>http://pw374.github.io/2013-10-03-20-35-12-using-mpp-two-different-ways.html</guid>
+      <description><![CDATA[
+
+&#60;h3 id=&#34;MPPisnowanOPAMpackage&#34;&#62; MPP is now an OPAM package&#60;/h3&#62;
+&#60;p&#62;First of all, I&#38;#39;ve to say I&#38;#39;ve finally made an OPAM package 
+for MPP! At the time I&#38;#39;m writing these words, it&#38;#39;s still waiting
+for merging. &#60;a href=&#39;/posts/2013-10-03-20-39-07-OPAMaging-MPP.html&#39;&#62;Read more here.&#60;/a&#62;&#60;/p&#62;
+&#60;h3 id=&#34;DescriptionofMPP&#34;&#62; Description of MPP&#60;/h3&#62;
+&#60;p&#62;MPP is a preprocessor that has been designed to allow any (non-insane)
+programming language to  be used as a preprocessor  for any text-based
+file. The particularity is that  the users keep their initial language
+as their  primary language:  the language(s) brought  by MPP  is (are)
+secondary. It  means that ideally, if  you give a random  text file to
+MPP, MPP  will return it  unchanged! And  in practice, you  can always
+parameterize MPP  (on the command line,  or in an MPP  file) such that
+for a given text file, MPP will return it unchanged.&#60;/p&#62;
+&#60;p&#62;Of course, the purpose of MPP is not to replace the &#38;quot;cat&#38;quot; command!
+But having the property that you can guarantee that MPP will behave as
+the &#38;quot;cat&#38;quot; command if you want it to is important, because it means you
+can customise MPP such that MPP can work for any text file.&#60;/p&#62;
+&#60;p&#62;Side note:&#60;/p&#62;
+&#60;blockquote&#62;&#60;p&#62;
+Well,  if you  discover a  language that has  some kind  of infinite
+  semantics, which  are somehow automatically defined  by itself, such
+  that  every  possible  sequence  of  bytes has  a  meaning  in  this
+  language, MPP  might not  work because  you would  have a  hard time
+  finding a token that&#38;#39;s not already taken, since there&#38;#39;re all already
+  taken...  But I don&#38;#39;t think that it&#38;#39;s a realistic scenario, so let&#38;#39;s
+  just forget about it.&#60;/p&#62;
+&#60;/blockquote&#62;
+&#60;h3 id=&#34;PrincipleofMPP&#34;&#62; Principle of MPP&#60;/h3&#62;
+&#60;p&#62;The principle on which MPP is based is pretty simple. The users define
+the tokens they want to use to determine the beginning and the end 
+of MPP blocks. And there are 3 kinds of MPP blocks:&#60;/p&#62;
+&#60;ol&#62;
+ &#60;li&#62;basic MPP block;
+ &#60;/li&#62;
+ &#60;li&#62;basic MPP block with possible nesting;
+ &#60;/li&#62;
+ &#60;li&#62;foreign MPP block.&#60;/li&#62;
+&#60;/ol&#62;
+
+&#60;p&#62;The first and the second are used  for the same things except that the
+second allows nesting. The third kind  is the most interesting one, as
+it&#38;#39;s the one  that allows to embed virtually  any programming language
+as a preprocessor language.&#60;/p&#62;
+&#60;p&#62;Side note:&#60;/p&#62;
+&#60;blockquote&#62;&#60;p&#62;
+Well,  you can&#38;#39;t easily use  pure lambda calculus as  a preprocessor
+  language.   Your programming  language has  to have  some notion  of
+  input/output to  process text. Using  pure lambda calculus  might be
+  very  painful and  it  would start  by making  it  impure enough  to
+  interact with the rest of the world.&#60;/p&#62;
+&#60;/blockquote&#62;
+&#60;h3 id=&#34;Example1thebasics&#34;&#62; Example 1: the basics&#60;/h3&#62;
+&#60;p&#62;So, let&#38;#39;s say  you&#38;#39;re writing a program using the  OCaml language, and
+you want &#60;code&#62;x&#60;/code&#62; to be a random integer.&#60;/p&#62;
+&#60;p&#62;You can write this:&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;x&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Random&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;int&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;max_int&#60;/span&#62;
+&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;and if you want to be sure  that the number is different each time you
+execute  your  program,  you   should  use  &#60;code&#62;Random.self_init&#60;/code&#62;  or  an
+equivalent.&#60;/p&#62;
+&#60;p&#62;Now what if you want a random number to be generated at compile time?
+You can&#38;#39;t do it in pure OCaml. You need to preprocess your file and/or
+to read from another file...&#60;/p&#62;
+&#60;p&#62;With MPP, you can write this:&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;x&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;&#38;#60;&#38;#60;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;cmd&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;echo&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;$&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;RANDOM&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;&#38;#62;&#38;#62;&#60;/span&#62;
+&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;
+if you use mpp with these parameters: &#60;code&#62;-so &#38;#39;&#38;lt;&#38;lt;&#38;#39; -sc &#38;#39;&#38;gt;&#38;gt;&#38;#39;&#60;/code&#62; to set
+opening and closing tokens to &#60;code&#62;&#38;lt;&#38;lt;&#60;/code&#62; and &#60;code&#62;&#38;gt;&#38;gt;&#60;/code&#62;. 
+Default tokens are respectively &#60;code&#62;((&#60;/code&#62; and &#60;code&#62;))&#60;/code&#62; but if you&#38;#39;re writing
+some OCaml code, you shouldn&#38;#39;t use &#60;code&#62;((&#60;/code&#62; and &#60;code&#62;))&#60;/code&#62; because
+there&#38;#39;s quite a chance that they appear as OCaml code in your file.&#60;/p&#62;
+&#60;p&#62;What happens with MPP is that it simply echoes everything that is
+not MPP, and when it&#38;#39;s MPP, it interprets the commands.
+The &#60;code&#62;cmd&#60;/code&#62; builtin is probably the simplest and the most powerful,
+since it calls your shell with what follows &#60;code&#62;cmd&#60;/code&#62;. The first
+line is the command that is called, and what follows is given to
+the command as its standard input.&#60;/p&#62;
+&#60;p&#62;So, basically,&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;x&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;&#38;#60;&#38;#60;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;cmd&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;echo&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;$&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;RANDOM&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;&#38;#62;&#38;#62;&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;mod&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;42&#60;/span&#62;
+&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;
+given to MPP has the same semantics as&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;bash&#39;&#62;echo -n &#38;#39;let x = &#38;#39;
+echo $RANDOM
+echo &#38;#39; mod 42&#38;#39;
+&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Now, instead of using non-nesting tokens, you can use nesting tokens,
+the only difference being that you can nest commands. Wait, what if
+you nest with non-nesting commands? Well, MPP has a very simple syntax.
+If you can&#38;#39;t nest, you really can&#38;#39;t nest.
+So, if you write &#60;code&#62;&#38;lt;&#38;lt; echo &#38;lt;&#38;lt; echo 42 &#38;gt;&#38;gt; &#38;gt;&#38;gt;&#60;/code&#62; it just doesn&#38;#39;t work!
+Moreover, you have a syntax error because the first &#60;code&#62;&#38;gt;&#38;gt;&#60;/code&#62; is seen as the
+closing token for the first &#60;code&#62;&#38;lt;&#38;lt;&#60;/code&#62;, and MPP stops when there&#38;#39;s a syntax
+error. If you want to echo &#60;code&#62;&#38;lt;&#38;lt; echo 42 &#38;gt;&#38;gt;&#60;/code&#62;, it is possible, you just
+have to name your block, as in &#60;code&#62;&#38;lt;&#38;lt;name echo &#38;lt;&#38;lt; echo 42 &#38;gt;&#38;gt; name&#38;gt;&#38;gt;&#60;/code&#62;
+and then it just works!&#60;/p&#62;
+&#60;p&#62;Note that with nesting tokens, you have to name &#60;strong&#62;all&#60;/strong&#62; outer tokens.
+The default tokens are &#60;code&#62;{{&#60;/code&#62; and &#60;code&#62;}}&#60;/code&#62;. So, to nest some commands, you
+can write for instance &#60;code&#62;{{name set x {{ cmd cat foo.txt }} name}}&#60;/code&#62;.
+Note that the the most inner block doesn&#38;#39;t have to be a nesting one,
+as it doens&#38;#39;t nest any. It means you could write
+&#60;code&#62;{{name set x &#38;lt;&#38;lt; cmd cat foo.txt &#38;gt;&#38;gt; name}}&#60;/code&#62; instead.
+And note that only the most inner nesting block can be nameless and that&#38;#39;s 
+&#60;em&#62;in some cases only&#60;/em&#62;.&#60;/p&#62;
+&#60;p&#62;Note: the  technique presented above (in  example 1) has been  used to
+generate the new OCaml website.&#60;/p&#62;
+&#60;h3 id=&#34;Example2usingOCamlasapreprocessorlanguage&#34;&#62; Example 2: using OCaml as a preprocessor language&#60;/h3&#62;
+&#60;p&#62;When MPP is used with the option &#60;code&#62;-l&#60;/code&#62;, it produces a program that prints
+the file, using information provided to MPP about the language specified
+with &#60;code&#62;-l&#60;/code&#62;. For instance, &#60;code&#62;mpp -l ocaml&#60;/code&#62; will produce an OCaml program.&#60;/p&#62;
+&#60;p&#62;If you apply &#60;code&#62;mpp -l ocaml&#60;/code&#62; to a file F that contains no MPP commands,
+then you have an OCaml  program  that, when executed, produces the 
+original file F.&#60;/p&#62;
+&#60;p&#62;When you use &#60;code&#62;-l ocaml&#60;/code&#62;, all &#38;quot;foreign blocks&#38;quot; are considered as 
+OCaml code and it will just &#38;quot;pass through&#38;quot;.
+So, if you write &#60;code&#62;42 {&#38;lt; let x = 23 &#38;gt;} Hello&#60;/code&#62;,
+it will be translated to this program:&#60;/p&#62;
+&#60;pre&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;print_string&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;42 &#38;#34;&#60;/span&#62;
+&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;x&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;23&#60;/span&#62;
+&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;print_string&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34; Hello&#38;#34;&#60;/span&#62;
+&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;It&#38;#39;s not exactly as flexible as &#38;quot;you can write anything at the top-level&#38;quot;.
+Indeed, you may write any valid top-level definition. It could be
+a type definition, a module definition, really anything you want that
+is valid at the top level and that does not require double semi-colons.
+That is, you cannot write &#60;code&#62;{&#38;lt; print_int 42 &#38;gt;}&#60;/code&#62;because it&#38;#39;s not a valid top-level phrase, you should write this instead
+&#60;code&#62;{&#38;lt; let _ = print_int 42 &#38;gt;}&#60;/code&#62;.
+If you really love playing at edges, you could write
+&#60;code&#62;{&#38;lt; ;; print_int 42 ;; &#38;gt;}&#60;/code&#62;and it might work... if there is something preceding. If there isn&#38;#39;t
+(but that&#38;#39;s not trivial to guess because the semantics of MPP might 
+change on this precise point, I don&#38;#39;t know, I can&#38;#39;t promise right now),
+then you could perhaps write &#60;code&#62;{&#38;lt; print_int 42;; &#38;gt;}&#60;/code&#62;.&#60;/p&#62;
+&#60;p&#62;But you can&#38;#39;t convert a block of text into an OCaml function. You can&#38;#39;t
+write something like you would do in PHP, such as:&#60;/p&#62;
+&#60;pre&#62;&#60;code&#62;&#38;lt;ul&#38;gt;
+  {&#38;lt; for i = 1 to 42 do &#38;gt;}
+    &#38;lt;li&#38;gt; {&#38;lt; print_int i &#38;gt;} &#38;lt;/li&#38;gt;
+  {&#38;lt; done &#38;gt;}
+&#38;lt;/ul&#38;gt;
+&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Oh but wait!  You can use functors...&#60;/p&#62;
+&#60;p&#62;So in functor-style, you can write this:&#60;/p&#62;
+&#60;pre&#62;&#60;code&#62;&#38;lt;ul&#38;gt;
+  {&#38;lt; module I (X:sig val i : int end) = struct &#38;gt;}
+    &#38;lt;li&#38;gt; {&#38;lt; let _ = print_int X.i &#38;gt;} &#38;lt;/li&#38;gt;
+  {&#38;lt; end &#38;gt;}
+  {&#38;lt; let _ = for i = 1 to 42 do
+       let module M = I(struct let i = i end) in
+       ()
+     done &#38;gt;}
+&#38;lt;/ul&#38;gt;
+&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;
+Sorry if that hurts  your eyes, but life is not  always easy.  Oh, and
+if you think it&#38;#39;s  overkill, well, of course it is,  that&#38;#39;s a tiny toy
+example! I&#38;#39;m actually using this  functor-style to write this blog. It
+means that  I generate a  template with the functor-style  headers and
+footers and I write inside the functor using Markdown, and when I need
+to write some OCaml code, I use MPP features. And when I need to print
+MPP stuff, I use  the 2 worlds of MPP, but it&#38;#39;s late  and I don&#38;#39;t want
+to go into details just right  now. What&#38;#39;s important is that it&#38;#39;s nice
+and it  works. I&#38;#39;ve  always wanted  to be able  to &#60;em&#62;easily&#60;/em&#62;  embed the
+OCaml language in any text (LaTeX, ML, HTML, Bash, etc.) file, and now
+I can!!  :)&#60;/p&#62;
+      ]]></description>
+    </item>
+
+
+    <item>
+      <title>OPAMaging MPP</title>
+      <link>http://pw374.github.io/2013-10-03-20-39-07-OPAMaging-MPP.html</link>
+      <category>ocaml</category><category>mpp</category><category>opam</category>
+      <pubDate>Thu, 03 Oct 2013 20:39:07 +0000</pubDate>
+      <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
+      <guid>http://pw374.github.io/2013-10-03-20-39-07-OPAMaging-MPP.html</guid>
+      <description><![CDATA[
+
+&#60;p&#62;&#60;em&#62;Please read
+&#60;a href=&#39;posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html&#39;&#62;this&#60;/a&#62; if
+you want to know more about MPP.&#60;/em&#62;&#60;/p&#62;
+&#60;h3 id=&#34;AnnouncementI39veOPAMagedMPP&#34;&#62; Announcement: I&#38;#39;ve OPAMaged MPP! &#60;/h3&#62;
+&#60;p&#62;So, I&#38;#39;ve eventually OPAMaged MPP (i.e., made an OPAM package for MPP)!
+Now MPP officially  has a version number, and at  the time I&#38;#39;m writing
+these lines, the  current version is 0.1.0.&#60;/p&#62;
+&#60;h3 id=&#34;Happythatiteventuallyworked&#34;&#62; Happy that it eventually worked...&#60;/h3&#62;
+&#60;p&#62;Yes, I&#38;#39;m  quite happy that MPP  now has an  OPAM package. To do  so, I
+copied the &#60;code&#62;_oasis&#60;/code&#62; and the &#60;code&#62;Makefile&#60;/code&#62; files from MPP and adapted them
+for MPP.  At  first I wanted to avoid using  oasis because for reasons
+that are still unknown to me,  some people told me (half-joking?) that
+it was better not to depend on  oasis... Well, actually I tried not to
+depend on  oasis!  I  tried but  just couldn&#38;#39;t  build in  a reasonable
+amount  of time  a  Makefile that  met the  requirements  for an  OPAM
+package. Building  MPP is  quite trivial, installing  it in  the right
+place and being able to uninstall it, well, less trivial (perhaps I&#38;#39;ve
+just missed a simple thing in the process).&#60;/p&#62;
+&#60;h3 id=&#34;Asidenote&#34;&#62; A side note&#60;/h3&#62;
+&#60;p&#62;Although the  MPP project  started a  while ago now,  it&#38;#39;s still  at a
+pretty early  stage of development  since I&#38;#39;ve been mostly  working on
+the   tools   that   are   needed  to   build   the   &#60;a href=&#39;http://amirchaudhry.com/ocamlorg-request-for-feedback/&#39;&#62;new   ocaml.org
+website&#60;/a&#62;, such
+as  &#60;a href=&#39;https://github.com/pw374/omd/&#39;&#62;OMD&#60;/a&#62; &#60;a href=&#39;http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html&#39;&#62;(read  about the  experience
+here)&#60;/a&#62;,
+which       I&#38;#39;ve        developed       from        scratch,       and
+&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/&#39;&#62;OPAM-DOC&#60;/a&#62;,  which  &#60;a href=&#39;http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html&#39;&#62;I had  to
+contribute
+to&#60;/a&#62;
+at some  point because  we had to  fix it while  having a  very little
+amount time.&#60;/p&#62;
+&#60;p&#62;Now that  OMD has become  quite stable  (although some bugs  are still
+  found from time to time, which is normal) ../..&#60;/p&#62;
+&#60;blockquote&#62;&#60;p&#62;
+No product of  human intellect comes out right the  first time. We
+  rewrite  sentences, rip  out knitting  stitches, replant  gardens,
+  remodel houses,  and repair  bridges. Why  should software  be any
+  different? – Lauren Ruth Wiener&#60;/p&#62;
+&#60;/blockquote&#62;
+&#60;p&#62;../..  and  since I&#38;#39;m  not the only  contributor on  opam-doc (Vincent
+Botbol is still participating, he  fixed quite a nasty-to-fix bug last
+weekend, and Leo White is still  working on the JavaScript part), it&#38;#39;s
+not  as much  time-taking as  OMD, but  because it&#38;#39;s  not my  code and
+because it&#38;#39;s using some syntax extension (yeah, CamlP4&#38;#39;s in the place,
+yo), patching it is not as simple as it could be...&#60;/p&#62;
       ]]></description>
     </item>
 

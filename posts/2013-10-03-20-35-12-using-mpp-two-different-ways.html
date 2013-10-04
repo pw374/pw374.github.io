@@ -1,0 +1,311 @@
+
+
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Using MPP in two differents ways &ndash; pw374</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Web Fonts -->
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" />
+    <link href="http://fonts.googleapis.com/css?family=Domine:400,700" rel="stylesheet" />
+    <!-- Only part of Bootstrap that we don't load from a CDN is our own customized CSS build. -->
+    <link href="/css/bootstrap.css" rel="stylesheet" media="screen" />
+    <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="/"><img src="https://1.gravatar.com/avatar/bac6aa3e290e47c0aeeb0c6b826d9fa4?d=https%3A%2F%2Fidenticons.github.com%2F81952a25f2c72f330d4eaf04cdbe89e4.png&s=36" alt="[img]"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li ><a href="/">root</a></li>
+<!--
+              <li ><a href="/projects.html">projects</a></li>
+-->
+              <li ><a href="/blog.html">blog</a></li>
+<!--
+              <li class='active'><a href="/tags/ocaml/">#ocaml</a></li>
+-->
+            </ul>
+            <!-- <form class="navbar-search pull-right"> -->
+            <!--   <input class="search-query" type="text" placeholder="Search" /> -->
+            <!-- </form> -->
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="span4">
+          <nav id="nav-secondary">
+            <ul class="nav nav-list">
+              <li class="nav-header"><a href="#">Table of Contents</a></li>
+              <ul>
+ <li><a href='#UsingMPPintwodifferentsways'> <a href='/2013-10-03-20-35-12-using-mpp-two-different-ways.html'>Using MPP in two differents ways</a></a>
+  <ul>
+   <li><a href='#MPPisnowanOPAMpackage'> MPP is now an OPAM package</a>
+   </li>
+   <li><a href='#DescriptionofMPP'> Description of MPP</a>
+   </li>
+   <li><a href='#PrincipleofMPP'> Principle of MPP</a>
+   </li>
+   <li><a href='#Example1thebasics'> Example 1: the basics</a>
+   </li>
+   <li><a href='#Example2usingOCamlasapreprocessorlanguage'> Example 2: using OCaml as a preprocessor language</a>
+   </li>
+  </ul>
+ </li>
+</ul>
+            </ul>
+          </nav>
+        </div>
+        <div id="content-primary" class="span8">
+          <div class="content">
+      <div id='tryocaml' class="content" style='display:none;'>
+        <div class="container">
+          <div class="row">
+            <div id="lesson-message"></div>
+            <div id="languages" style='display:none;'></div>
+            <div id="menu-lessons" style='display:none'>
+              <table class="zebra-striped">
+                <tr><td id="text-x"><code></code></td> <td id=""></td></tr>
+              </table>
+            </div>
+            <div class="span9 ocaml">
+              <div id="toplevel-container">
+                <pre id="output"></pre>
+                <div id="sharp">#</div>
+                <div id="toplevel"></div>
+              </div>
+              <div id="buttons"></div>
+              <div id="graphics-title"></div>
+              <div id="graphics"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+              
+<h2 id="UsingMPPintwodifferentsways"> <a href='/2013-10-03-20-35-12-using-mpp-two-different-ways.html'>Using MPP in two differents ways</a></h2><h3 id="MPPisnowanOPAMpackage"> MPP is now an OPAM package</h3>
+<p>First of all, I&#39;ve to say I&#39;ve finally made an OPAM package 
+for MPP! At the time I&#39;m writing these words, it&#39;s still waiting
+for merging. <a href='/posts/2013-10-03-20-39-07-OPAMaging-MPP.html'>Read more here.</a></p>
+<h3 id="DescriptionofMPP"> Description of MPP</h3>
+<p>MPP is a preprocessor that has been designed to allow any (non-insane)
+programming language to  be used as a preprocessor  for any text-based
+file. The particularity is that  the users keep their initial language
+as their  primary language:  the language(s) brought  by MPP  is (are)
+secondary. It  means that ideally, if  you give a random  text file to
+MPP, MPP  will return it  unchanged! And  in practice, you  can always
+parameterize MPP  (on the command line,  or in an MPP  file) such that
+for a given text file, MPP will return it unchanged.</p>
+<p>Of course, the purpose of MPP is not to replace the &quot;cat&quot; command!
+But having the property that you can guarantee that MPP will behave as
+the &quot;cat&quot; command if you want it to is important, because it means you
+can customise MPP such that MPP can work for any text file.</p>
+<p>Side note:</p>
+<blockquote><p>
+Well,  if you  discover a  language that has  some kind  of infinite
+  semantics, which  are somehow automatically defined  by itself, such
+  that  every  possible  sequence  of  bytes has  a  meaning  in  this
+  language, MPP  might not  work because  you would  have a  hard time
+  finding a token that&#39;s not already taken, since there&#39;re all already
+  taken...  But I don&#39;t think that it&#39;s a realistic scenario, so let&#39;s
+  just forget about it.</p>
+</blockquote>
+<h3 id="PrincipleofMPP"> Principle of MPP</h3>
+<p>The principle on which MPP is based is pretty simple. The users define
+the tokens they want to use to determine the beginning and the end 
+of MPP blocks. And there are 3 kinds of MPP blocks:</p>
+<ol>
+ <li>basic MPP block;
+ </li>
+ <li>basic MPP block with possible nesting;
+ </li>
+ <li>foreign MPP block.</li>
+</ol>
+
+<p>The first and the second are used  for the same things except that the
+second allows nesting. The third kind  is the most interesting one, as
+it&#39;s the one  that allows to embed virtually  any programming language
+as a preprocessor language.</p>
+<p>Side note:</p>
+<blockquote><p>
+Well,  you can&#39;t easily use  pure lambda calculus as  a preprocessor
+  language.   Your programming  language has  to have  some notion  of
+  input/output to  process text. Using  pure lambda calculus  might be
+  very  painful and  it  would start  by making  it  impure enough  to
+  interact with the rest of the world.</p>
+</blockquote>
+<h3 id="Example1thebasics"> Example 1: the basics</h3>
+<p>So, let&#39;s say  you&#39;re writing a program using the  OCaml language, and
+you want <code>x</code> to be a random integer.</p>
+<p>You can write this:</p>
+<pre><code class='ocaml'><span class='keyword'>let</span> <span class='lower'>x</span> <span class='keywordsign'>=</span> <span class='constructor module'>Random</span><span class='keywordsign'>.</span><span class='lower'>int</span> <span class='lower'>max_int</span>
+</code></pre>
+<p>and if you want to be sure  that the number is different each time you
+execute  your  program,  you   should  use  <code>Random.self_init</code>  or  an
+equivalent.</p>
+<p>Now what if you want a random number to be generated at compile time?
+You can&#39;t do it in pure OCaml. You need to preprocess your file and/or
+to read from another file...</p>
+<p>With MPP, you can write this:</p>
+<pre><code class='ocaml'><span class='keyword'>let</span> <span class='lower'>x</span> <span class='keywordsign'>=</span> <span class='keywordsign infix'>&#60;&#60;</span> <span class='lower'>cmd</span> <span class='lower'>echo</span> <span class='keywordsign infix'>$</span><span class='constructor module'>RANDOM</span> <span class='keywordsign infix'>&#62;&#62;</span>
+</code></pre>
+<p>
+if you use mpp with these parameters: <code>-so &#39;&lt;&lt;&#39; -sc &#39;&gt;&gt;&#39;</code> to set
+opening and closing tokens to <code>&lt;&lt;</code> and <code>&gt;&gt;</code>. 
+Default tokens are respectively <code>((</code> and <code>))</code> but if you&#39;re writing
+some OCaml code, you shouldn&#39;t use <code>((</code> and <code>))</code> because
+there&#39;s quite a chance that they appear as OCaml code in your file.</p>
+<p>What happens with MPP is that it simply echoes everything that is
+not MPP, and when it&#39;s MPP, it interprets the commands.
+The <code>cmd</code> builtin is probably the simplest and the most powerful,
+since it calls your shell with what follows <code>cmd</code>. The first
+line is the command that is called, and what follows is given to
+the command as its standard input.</p>
+<p>So, basically,</p>
+<pre><code class='ocaml'><span class='keyword'>let</span> <span class='lower'>x</span> <span class='keywordsign'>=</span> <span class='keywordsign infix'>&#60;&#60;</span> <span class='lower'>cmd</span> <span class='lower'>echo</span> <span class='keywordsign infix'>$</span><span class='constructor module'>RANDOM</span> <span class='keywordsign infix'>&#62;&#62;</span> <span class='keyword'>mod</span> <span class='number'>42</span>
+</code></pre>
+<p>
+given to MPP has the same semantics as</p>
+<pre><code class='bash'>echo -n &#39;let x = &#39;
+echo $RANDOM
+echo &#39; mod 42&#39;
+</code></pre>
+<p>Now, instead of using non-nesting tokens, you can use nesting tokens,
+the only difference being that you can nest commands. Wait, what if
+you nest with non-nesting commands? Well, MPP has a very simple syntax.
+If you can&#39;t nest, you really can&#39;t nest.
+So, if you write <code>&lt;&lt; echo &lt;&lt; echo 42 &gt;&gt; &gt;&gt;</code> it just doesn&#39;t work!
+Moreover, you have a syntax error because the first <code>&gt;&gt;</code> is seen as the
+closing token for the first <code>&lt;&lt;</code>, and MPP stops when there&#39;s a syntax
+error. If you want to echo <code>&lt;&lt; echo 42 &gt;&gt;</code>, it is possible, you just
+have to name your block, as in <code>&lt;&lt;name echo &lt;&lt; echo 42 &gt;&gt; name&gt;&gt;</code>
+and then it just works!</p>
+<p>Note that with nesting tokens, you have to name <strong>all</strong> outer tokens.
+The default tokens are <code>{{</code> and <code>}}</code>. So, to nest some commands, you
+can write for instance <code>{{name set x {{ cmd cat foo.txt }} name}}</code>.
+Note that the the most inner block doesn&#39;t have to be a nesting one,
+as it doens&#39;t nest any. It means you could write
+<code>{{name set x &lt;&lt; cmd cat foo.txt &gt;&gt; name}}</code> instead.
+And note that only the most inner nesting block can be nameless and that&#39;s 
+<em>in some cases only</em>.</p>
+<p>Note: the  technique presented above (in  example 1) has been  used to
+generate the new OCaml website.</p>
+<h3 id="Example2usingOCamlasapreprocessorlanguage"> Example 2: using OCaml as a preprocessor language</h3>
+<p>When MPP is used with the option <code>-l</code>, it produces a program that prints
+the file, using information provided to MPP about the language specified
+with <code>-l</code>. For instance, <code>mpp -l ocaml</code> will produce an OCaml program.</p>
+<p>If you apply <code>mpp -l ocaml</code> to a file F that contains no MPP commands,
+then you have an OCaml  program  that, when executed, produces the 
+original file F.</p>
+<p>When you use <code>-l ocaml</code>, all &quot;foreign blocks&quot; are considered as 
+OCaml code and it will just &quot;pass through&quot;.
+So, if you write <code>42 {&lt; let x = 23 &gt;} Hello</code>,
+it will be translated to this program:</p>
+<pre><code class='ocaml'><span class='keyword'>let</span> <span class='keywordsign'>_</span> <span class='keywordsign'>=</span> <span class='lower'>print_string</span> <span class='string'>&#34;42 &#34;</span>
+<span class='keyword'>let</span> <span class='lower'>x</span> <span class='keywordsign'>=</span> <span class='number'>23</span>
+<span class='keyword'>let</span> <span class='keywordsign'>_</span> <span class='keywordsign'>=</span> <span class='lower'>print_string</span> <span class='string'>&#34; Hello&#34;</span>
+</code></pre>
+<p>It&#39;s not exactly as flexible as &quot;you can write anything at the top-level&quot;.
+Indeed, you may write any valid top-level definition. It could be
+a type definition, a module definition, really anything you want that
+is valid at the top level and that does not require double semi-colons.
+That is, you cannot write <code>{&lt; print_int 42 &gt;}</code>because it&#39;s not a valid top-level phrase, you should write this instead
+<code>{&lt; let _ = print_int 42 &gt;}</code>.
+If you really love playing at edges, you could write
+<code>{&lt; ;; print_int 42 ;; &gt;}</code>and it might work... if there is something preceding. If there isn&#39;t
+(but that&#39;s not trivial to guess because the semantics of MPP might 
+change on this precise point, I don&#39;t know, I can&#39;t promise right now),
+then you could perhaps write <code>{&lt; print_int 42;; &gt;}</code>.</p>
+<p>But you can&#39;t convert a block of text into an OCaml function. You can&#39;t
+write something like you would do in PHP, such as:</p>
+<pre><code>&lt;ul&gt;
+  {&lt; for i = 1 to 42 do &gt;}
+    &lt;li&gt; {&lt; print_int i &gt;} &lt;/li&gt;
+  {&lt; done &gt;}
+&lt;/ul&gt;
+</code></pre>
+<p>Oh but wait!  You can use functors...</p>
+<p>So in functor-style, you can write this:</p>
+<pre><code>&lt;ul&gt;
+  {&lt; module I (X:sig val i : int end) = struct &gt;}
+    &lt;li&gt; {&lt; let _ = print_int X.i &gt;} &lt;/li&gt;
+  {&lt; end &gt;}
+  {&lt; let _ = for i = 1 to 42 do
+       let module M = I(struct let i = i end) in
+       ()
+     done &gt;}
+&lt;/ul&gt;
+</code></pre>
+<p>
+Sorry if that hurts  your eyes, but life is not  always easy.  Oh, and
+if you think it&#39;s  overkill, well, of course it is,  that&#39;s a tiny toy
+example! I&#39;m actually using this  functor-style to write this blog. It
+means that  I generate a  template with the functor-style  headers and
+footers and I write inside the functor using Markdown, and when I need
+to write some OCaml code, I use MPP features. And when I need to print
+MPP stuff, I use  the 2 worlds of MPP, but it&#39;s late  and I don&#39;t want
+to go into details just right  now. What&#39;s important is that it&#39;s nice
+and it  works. I&#39;ve  always wanted  to be able  to <em>easily</em>  embed the
+OCaml language in any text (LaTeX, ML, HTML, Bash, etc.) file, and now
+I can!!  :)</p>
+<hr/><p style='font-size:80%;'><em>started on 2013-10-03 20:35:12+00:00, (re)generated on 2013-10-04 00:59:25+01:00
+</em></p><p>• <a href='/ocaml/'>ocaml</a> • <a href='/mpp/'>mpp</a> </p>          </div>
+
+
+<!-- START: Livefyre Embed -->
+<div id="livefyre-comments"></div>
+<script type="text/javascript" src="http://zor.livefyre.com/wjs/v3.0/javascripts/livefyre.js"></script>
+<script type="text/javascript">
+(function () {
+    var articleId = fyre.conv.load.makeArticleId(null);
+    fyre.conv.load({}, [{
+        el: 'livefyre-comments',
+        network: "livefyre.com",
+        siteId: "343786",
+        articleId: articleId,
+        signed: false,
+        collectionMeta: {
+            articleId: articleId,
+            url: fyre.conv.load.makeCollectionUrl(),
+        }
+    }], function() {});
+}());
+</script>
+<!-- END: Livefyre Embed -->
+
+        </div>
+      </div>
+    </div>
+    <footer id="footer" class="navbar navbar-inverse navbar-fixed-bottom">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <ul class="nav pull-left">
+            <li><a href="/blog-rss.xml">RSS</a></li>
+            <li><a href="/blog-atom.xml">Atom</a></li>
+          </ul>
+          <ul class="nav pull-right">
+            <li><a href="https://github.com/pw374/pw374.github.io">on GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+    <!-- Load javascript from CDN -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      // <!--
+      // -->
+    </script>
+  </body>
+</html>

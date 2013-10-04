@@ -1,0 +1,187 @@
+
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>OPAMaging MPP &ndash; pw374</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Web Fonts -->
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" />
+    <link href="http://fonts.googleapis.com/css?family=Domine:400,700" rel="stylesheet" />
+    <!-- Only part of Bootstrap that we don't load from a CDN is our own customized CSS build. -->
+    <link href="/css/bootstrap.css" rel="stylesheet" media="screen" />
+    <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="/"><img src="https://1.gravatar.com/avatar/bac6aa3e290e47c0aeeb0c6b826d9fa4?d=https%3A%2F%2Fidenticons.github.com%2F81952a25f2c72f330d4eaf04cdbe89e4.png&s=36" alt="[img]"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li ><a href="/">root</a></li>
+<!--
+              <li ><a href="/projects.html">projects</a></li>
+-->
+              <li ><a href="/blog.html">blog</a></li>
+<!--
+              <li class='active'><a href="/tags/ocaml/">#ocaml</a></li>
+-->
+            </ul>
+            <!-- <form class="navbar-search pull-right"> -->
+            <!--   <input class="search-query" type="text" placeholder="Search" /> -->
+            <!-- </form> -->
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="span4">
+          <nav id="nav-secondary">
+            <ul class="nav nav-list">
+              <li class="nav-header"><a href="#">Table of Contents</a></li>
+              <ul>
+ <li><a href='#OPAMagingMPP'> <a href='/2013-10-03-20-39-07-OPAMaging-MPP.html'>OPAMaging MPP</a></a>
+  <ul>
+   <li><a href='#AnnouncementI39veOPAMagedMPP'> Announcement: I&#39;ve OPAMaged MPP! </a>
+   </li>
+   <li><a href='#Happythatiteventuallyworked'> Happy that it eventually worked...</a>
+   </li>
+   <li><a href='#Asidenote'> A side note</a>
+   </li>
+  </ul>
+ </li>
+</ul>
+            </ul>
+          </nav>
+        </div>
+        <div id="content-primary" class="span8">
+          <div class="content">
+      <div id='tryocaml' class="content" style='display:none;'>
+        <div class="container">
+          <div class="row">
+            <div id="lesson-message"></div>
+            <div id="languages" style='display:none;'></div>
+            <div id="menu-lessons" style='display:none'>
+              <table class="zebra-striped">
+                <tr><td id="text-x"><code></code></td> <td id=""></td></tr>
+              </table>
+            </div>
+            <div class="span9 ocaml">
+              <div id="toplevel-container">
+                <pre id="output"></pre>
+                <div id="sharp">#</div>
+                <div id="toplevel"></div>
+              </div>
+              <div id="buttons"></div>
+              <div id="graphics-title"></div>
+              <div id="graphics"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+              <h2 id="OPAMagingMPP"> <a href='/2013-10-03-20-39-07-OPAMaging-MPP.html'>OPAMaging MPP</a></h2><p>
+
+<em>Please read
+<a href='posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html'>this</a> if
+you want to know more about MPP.</em></p>
+<h3 id="AnnouncementI39veOPAMagedMPP"> Announcement: I&#39;ve OPAMaged MPP! </h3>
+<p>So, I&#39;ve eventually OPAMaged MPP (i.e., made an OPAM package for MPP)!
+Now MPP officially  has a version number, and at  the time I&#39;m writing
+these lines, the  current version is 0.1.0.</p>
+<h3 id="Happythatiteventuallyworked"> Happy that it eventually worked...</h3>
+<p>Yes, I&#39;m  quite happy that MPP  now has an  OPAM package. To do  so, I
+copied the <code>_oasis</code> and the <code>Makefile</code> files from MPP and adapted them
+for MPP.  At  first I wanted to avoid using  oasis because for reasons
+that are still unknown to me,  some people told me (half-joking?) that
+it was better not to depend on  oasis... Well, actually I tried not to
+depend on  oasis!  I  tried but  just couldn&#39;t  build in  a reasonable
+amount  of time  a  Makefile that  met the  requirements  for an  OPAM
+package. Building  MPP is  quite trivial, installing  it in  the right
+place and being able to uninstall it, well, less trivial (perhaps I&#39;ve
+just missed a simple thing in the process).</p>
+<h3 id="Asidenote"> A side note</h3>
+<p>Although the  MPP project  started a  while ago now,  it&#39;s still  at a
+pretty early  stage of development  since I&#39;ve been mostly  working on
+the   tools   that   are   needed  to   build   the   <a href='http://amirchaudhry.com/ocamlorg-request-for-feedback/'>new   ocaml.org
+website</a>, such
+as  <a href='https://github.com/pw374/omd/'>OMD</a> <a href='http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html'>(read  about the  experience
+here)</a>,
+which       I&#39;ve        developed       from        scratch,       and
+<a href='https://github.com/ocamllabs/opam-doc/'>OPAM-DOC</a>,  which  <a href='http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html'>I had  to
+contribute
+to</a>
+at some  point because  we had to  fix it while  having a  very little
+amount time.</p>
+<p>Now that  OMD has become  quite stable  (although some bugs  are still
+  found from time to time, which is normal) ../..</p>
+<blockquote><p>
+No product of  human intellect comes out right the  first time. We
+  rewrite  sentences, rip  out knitting  stitches, replant  gardens,
+  remodel houses,  and repair  bridges. Why  should software  be any
+  different? – Lauren Ruth Wiener</p>
+</blockquote>
+<p>../..  and  since I&#39;m  not the only  contributor on  opam-doc (Vincent
+Botbol is still participating, he  fixed quite a nasty-to-fix bug last
+weekend, and Leo White is still  working on the JavaScript part), it&#39;s
+not  as much  time-taking as  OMD, but  because it&#39;s  not my  code and
+because it&#39;s using some syntax extension (yeah, CamlP4&#39;s in the place,
+yo), patching it is not as simple as it could be...</p>
+<hr/><p style='font-size:80%;'><em>started on 2013-10-03 20:39:07+00:00, (re)generated on 2013-10-04 00:59:25+01:00
+</em></p><p>• <a href='/ocaml/'>ocaml</a> • <a href='/mpp/'>mpp</a> • <a href='/opam/'>opam</a> </p>          </div>
+
+
+<!-- START: Livefyre Embed -->
+<div id="livefyre-comments"></div>
+<script type="text/javascript" src="http://zor.livefyre.com/wjs/v3.0/javascripts/livefyre.js"></script>
+<script type="text/javascript">
+(function () {
+    var articleId = fyre.conv.load.makeArticleId(null);
+    fyre.conv.load({}, [{
+        el: 'livefyre-comments',
+        network: "livefyre.com",
+        siteId: "343786",
+        articleId: articleId,
+        signed: false,
+        collectionMeta: {
+            articleId: articleId,
+            url: fyre.conv.load.makeCollectionUrl(),
+        }
+    }], function() {});
+}());
+</script>
+<!-- END: Livefyre Embed -->
+
+        </div>
+      </div>
+    </div>
+    <footer id="footer" class="navbar navbar-inverse navbar-fixed-bottom">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <ul class="nav pull-left">
+            <li><a href="/blog-rss.xml">RSS</a></li>
+            <li><a href="/blog-atom.xml">Atom</a></li>
+          </ul>
+          <ul class="nav pull-right">
+            <li><a href="https://github.com/pw374/pw374.github.io">on GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+    <!-- Load javascript from CDN -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      // <!--
+      // -->
+    </script>
+  </body>
+</html>

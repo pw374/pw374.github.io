@@ -118,6 +118,30 @@
  </li>
  <li><a href='#ExerciseOddoreven'> <a href='/posts/2013-09-26-20-15-24-odd-or-even.html'>(Exercise) Odd or even?</a></a>
  </li>
+ <li><a href='#UsingMPPintwodifferentsways'> <a href='/2013-10-03-20-35-12-using-mpp-two-different-ways.html'>Using MPP in two differents ways</a></a>
+  <ul>
+   <li><a href='#MPPisnowanOPAMpackage'> MPP is now an OPAM package</a>
+   </li>
+   <li><a href='#DescriptionofMPP'> Description of MPP</a>
+   </li>
+   <li><a href='#PrincipleofMPP'> Principle of MPP</a>
+   </li>
+   <li><a href='#Example1thebasics'> Example 1: the basics</a>
+   </li>
+   <li><a href='#Example2usingOCamlasapreprocessorlanguage'> Example 2: using OCaml as a preprocessor language</a>
+   </li>
+  </ul>
+ </li>
+ <li><a href='#OPAMagingMPP'> <a href='/2013-10-03-20-39-07-OPAMaging-MPP.html'>OPAMaging MPP</a></a>
+  <ul>
+   <li><a href='#AnnouncementI39veOPAMagedMPP'> Announcement: I&#39;ve OPAMaged MPP! </a>
+   </li>
+   <li><a href='#Happythatiteventuallyworked'> Happy that it eventually worked...</a>
+   </li>
+   <li><a href='#Asidenote'> A side note</a>
+   </li>
+  </ul>
+ </li>
 </ul>
             </ul>
           </nav>
@@ -848,6 +872,217 @@ number of 1 or not.</p>
 <p>Note that <code>int_of_char</code> is a zero-cost operation (but <code>char_of_int</code> is
 not, because it  has to check that  the value of the  given integer is
 between 0 and 255 inclusive).</p>
+<h2 id="UsingMPPintwodifferentsways"> <a href='/2013-10-03-20-35-12-using-mpp-two-different-ways.html'>Using MPP in two differents ways</a></h2><h3 id="MPPisnowanOPAMpackage"> MPP is now an OPAM package</h3>
+<p>First of all, I&#39;ve to say I&#39;ve finally made an OPAM package 
+for MPP! At the time I&#39;m writing these words, it&#39;s still waiting
+for merging. <a href='/posts/2013-10-03-20-39-07-OPAMaging-MPP.html'>Read more here.</a></p>
+<h3 id="DescriptionofMPP"> Description of MPP</h3>
+<p>MPP is a preprocessor that has been designed to allow any (non-insane)
+programming language to  be used as a preprocessor  for any text-based
+file. The particularity is that  the users keep their initial language
+as their  primary language:  the language(s) brought  by MPP  is (are)
+secondary. It  means that ideally, if  you give a random  text file to
+MPP, MPP  will return it  unchanged! And  in practice, you  can always
+parameterize MPP  (on the command line,  or in an MPP  file) such that
+for a given text file, MPP will return it unchanged.</p>
+<p>Of course, the purpose of MPP is not to replace the &quot;cat&quot; command!
+But having the property that you can guarantee that MPP will behave as
+the &quot;cat&quot; command if you want it to is important, because it means you
+can customise MPP such that MPP can work for any text file.</p>
+<p>Side note:</p>
+<blockquote><p>
+Well,  if you  discover a  language that has  some kind  of infinite
+  semantics, which  are somehow automatically defined  by itself, such
+  that  every  possible  sequence  of  bytes has  a  meaning  in  this
+  language, MPP  might not  work because  you would  have a  hard time
+  finding a token that&#39;s not already taken, since there&#39;re all already
+  taken...  But I don&#39;t think that it&#39;s a realistic scenario, so let&#39;s
+  just forget about it.</p>
+</blockquote>
+<h3 id="PrincipleofMPP"> Principle of MPP</h3>
+<p>The principle on which MPP is based is pretty simple. The users define
+the tokens they want to use to determine the beginning and the end 
+of MPP blocks. And there are 3 kinds of MPP blocks:</p>
+<ol>
+ <li>basic MPP block;
+ </li>
+ <li>basic MPP block with possible nesting;
+ </li>
+ <li>foreign MPP block.</li>
+</ol>
+
+<p>The first and the second are used  for the same things except that the
+second allows nesting. The third kind  is the most interesting one, as
+it&#39;s the one  that allows to embed virtually  any programming language
+as a preprocessor language.</p>
+<p>Side note:</p>
+<blockquote><p>
+Well,  you can&#39;t easily use  pure lambda calculus as  a preprocessor
+  language.   Your programming  language has  to have  some notion  of
+  input/output to  process text. Using  pure lambda calculus  might be
+  very  painful and  it  would start  by making  it  impure enough  to
+  interact with the rest of the world.</p>
+</blockquote>
+<h3 id="Example1thebasics"> Example 1: the basics</h3>
+<p>So, let&#39;s say  you&#39;re writing a program using the  OCaml language, and
+you want <code>x</code> to be a random integer.</p>
+<p>You can write this:</p>
+<pre><code class='ocaml'><span class='keyword'>let</span> <span class='lower'>x</span> <span class='keywordsign'>=</span> <span class='constructor module'>Random</span><span class='keywordsign'>.</span><span class='lower'>int</span> <span class='lower'>max_int</span>
+</code></pre>
+<p>and if you want to be sure  that the number is different each time you
+execute  your  program,  you   should  use  <code>Random.self_init</code>  or  an
+equivalent.</p>
+<p>Now what if you want a random number to be generated at compile time?
+You can&#39;t do it in pure OCaml. You need to preprocess your file and/or
+to read from another file...</p>
+<p>With MPP, you can write this:</p>
+<pre><code class='ocaml'><span class='keyword'>let</span> <span class='lower'>x</span> <span class='keywordsign'>=</span> <span class='keywordsign infix'>&#60;&#60;</span> <span class='lower'>cmd</span> <span class='lower'>echo</span> <span class='keywordsign infix'>$</span><span class='constructor module'>RANDOM</span> <span class='keywordsign infix'>&#62;&#62;</span>
+</code></pre>
+<p>
+if you use mpp with these parameters: <code>-so &#39;&lt;&lt;&#39; -sc &#39;&gt;&gt;&#39;</code> to set
+opening and closing tokens to <code>&lt;&lt;</code> and <code>&gt;&gt;</code>. 
+Default tokens are respectively <code>((</code> and <code>))</code> but if you&#39;re writing
+some OCaml code, you shouldn&#39;t use <code>((</code> and <code>))</code> because
+there&#39;s quite a chance that they appear as OCaml code in your file.</p>
+<p>What happens with MPP is that it simply echoes everything that is
+not MPP, and when it&#39;s MPP, it interprets the commands.
+The <code>cmd</code> builtin is probably the simplest and the most powerful,
+since it calls your shell with what follows <code>cmd</code>. The first
+line is the command that is called, and what follows is given to
+the command as its standard input.</p>
+<p>So, basically,</p>
+<pre><code class='ocaml'><span class='keyword'>let</span> <span class='lower'>x</span> <span class='keywordsign'>=</span> <span class='keywordsign infix'>&#60;&#60;</span> <span class='lower'>cmd</span> <span class='lower'>echo</span> <span class='keywordsign infix'>$</span><span class='constructor module'>RANDOM</span> <span class='keywordsign infix'>&#62;&#62;</span> <span class='keyword'>mod</span> <span class='number'>42</span>
+</code></pre>
+<p>
+given to MPP has the same semantics as</p>
+<pre><code class='bash'>echo -n &#39;let x = &#39;
+echo $RANDOM
+echo &#39; mod 42&#39;
+</code></pre>
+<p>Now, instead of using non-nesting tokens, you can use nesting tokens,
+the only difference being that you can nest commands. Wait, what if
+you nest with non-nesting commands? Well, MPP has a very simple syntax.
+If you can&#39;t nest, you really can&#39;t nest.
+So, if you write <code>&lt;&lt; echo &lt;&lt; echo 42 &gt;&gt; &gt;&gt;</code> it just doesn&#39;t work!
+Moreover, you have a syntax error because the first <code>&gt;&gt;</code> is seen as the
+closing token for the first <code>&lt;&lt;</code>, and MPP stops when there&#39;s a syntax
+error. If you want to echo <code>&lt;&lt; echo 42 &gt;&gt;</code>, it is possible, you just
+have to name your block, as in <code>&lt;&lt;name echo &lt;&lt; echo 42 &gt;&gt; name&gt;&gt;</code>
+and then it just works!</p>
+<p>Note that with nesting tokens, you have to name <strong>all</strong> outer tokens.
+The default tokens are <code>{{</code> and <code>}}</code>. So, to nest some commands, you
+can write for instance <code>{{name set x {{ cmd cat foo.txt }} name}}</code>.
+Note that the the most inner block doesn&#39;t have to be a nesting one,
+as it doens&#39;t nest any. It means you could write
+<code>{{name set x &lt;&lt; cmd cat foo.txt &gt;&gt; name}}</code> instead.
+And note that only the most inner nesting block can be nameless and that&#39;s 
+<em>in some cases only</em>.</p>
+<p>Note: the  technique presented above (in  example 1) has been  used to
+generate the new OCaml website.</p>
+<h3 id="Example2usingOCamlasapreprocessorlanguage"> Example 2: using OCaml as a preprocessor language</h3>
+<p>When MPP is used with the option <code>-l</code>, it produces a program that prints
+the file, using information provided to MPP about the language specified
+with <code>-l</code>. For instance, <code>mpp -l ocaml</code> will produce an OCaml program.</p>
+<p>If you apply <code>mpp -l ocaml</code> to a file F that contains no MPP commands,
+then you have an OCaml  program  that, when executed, produces the 
+original file F.</p>
+<p>When you use <code>-l ocaml</code>, all &quot;foreign blocks&quot; are considered as 
+OCaml code and it will just &quot;pass through&quot;.
+So, if you write <code>42 {&lt; let x = 23 &gt;} Hello</code>,
+it will be translated to this program:</p>
+<pre><code class='ocaml'><span class='keyword'>let</span> <span class='keywordsign'>_</span> <span class='keywordsign'>=</span> <span class='lower'>print_string</span> <span class='string'>&#34;42 &#34;</span>
+<span class='keyword'>let</span> <span class='lower'>x</span> <span class='keywordsign'>=</span> <span class='number'>23</span>
+<span class='keyword'>let</span> <span class='keywordsign'>_</span> <span class='keywordsign'>=</span> <span class='lower'>print_string</span> <span class='string'>&#34; Hello&#34;</span>
+</code></pre>
+<p>It&#39;s not exactly as flexible as &quot;you can write anything at the top-level&quot;.
+Indeed, you may write any valid top-level definition. It could be
+a type definition, a module definition, really anything you want that
+is valid at the top level and that does not require double semi-colons.
+That is, you cannot write <code>{&lt; print_int 42 &gt;}</code>because it&#39;s not a valid top-level phrase, you should write this instead
+<code>{&lt; let _ = print_int 42 &gt;}</code>.
+If you really love playing at edges, you could write
+<code>{&lt; ;; print_int 42 ;; &gt;}</code>and it might work... if there is something preceding. If there isn&#39;t
+(but that&#39;s not trivial to guess because the semantics of MPP might 
+change on this precise point, I don&#39;t know, I can&#39;t promise right now),
+then you could perhaps write <code>{&lt; print_int 42;; &gt;}</code>.</p>
+<p>But you can&#39;t convert a block of text into an OCaml function. You can&#39;t
+write something like you would do in PHP, such as:</p>
+<pre><code>&lt;ul&gt;
+  {&lt; for i = 1 to 42 do &gt;}
+    &lt;li&gt; {&lt; print_int i &gt;} &lt;/li&gt;
+  {&lt; done &gt;}
+&lt;/ul&gt;
+</code></pre>
+<p>Oh but wait!  You can use functors...</p>
+<p>So in functor-style, you can write this:</p>
+<pre><code>&lt;ul&gt;
+  {&lt; module I (X:sig val i : int end) = struct &gt;}
+    &lt;li&gt; {&lt; let _ = print_int X.i &gt;} &lt;/li&gt;
+  {&lt; end &gt;}
+  {&lt; let _ = for i = 1 to 42 do
+       let module M = I(struct let i = i end) in
+       ()
+     done &gt;}
+&lt;/ul&gt;
+</code></pre>
+<p>
+Sorry if that hurts  your eyes, but life is not  always easy.  Oh, and
+if you think it&#39;s  overkill, well, of course it is,  that&#39;s a tiny toy
+example! I&#39;m actually using this  functor-style to write this blog. It
+means that  I generate a  template with the functor-style  headers and
+footers and I write inside the functor using Markdown, and when I need
+to write some OCaml code, I use MPP features. And when I need to print
+MPP stuff, I use  the 2 worlds of MPP, but it&#39;s late  and I don&#39;t want
+to go into details just right  now. What&#39;s important is that it&#39;s nice
+and it  works. I&#39;ve  always wanted  to be able  to <em>easily</em>  embed the
+OCaml language in any text (LaTeX, ML, HTML, Bash, etc.) file, and now
+I can!!  :)</p>
+<h2 id="OPAMagingMPP"> <a href='/2013-10-03-20-39-07-OPAMaging-MPP.html'>OPAMaging MPP</a></h2><p>
+<em>Please read
+<a href='posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html'>this</a> if
+you want to know more about MPP.</em></p>
+<h3 id="AnnouncementI39veOPAMagedMPP"> Announcement: I&#39;ve OPAMaged MPP! </h3>
+<p>So, I&#39;ve eventually OPAMaged MPP (i.e., made an OPAM package for MPP)!
+Now MPP officially  has a version number, and at  the time I&#39;m writing
+these lines, the  current version is 0.1.0.</p>
+<h3 id="Happythatiteventuallyworked"> Happy that it eventually worked...</h3>
+<p>Yes, I&#39;m  quite happy that MPP  now has an  OPAM package. To do  so, I
+copied the <code>_oasis</code> and the <code>Makefile</code> files from MPP and adapted them
+for MPP.  At  first I wanted to avoid using  oasis because for reasons
+that are still unknown to me,  some people told me (half-joking?) that
+it was better not to depend on  oasis... Well, actually I tried not to
+depend on  oasis!  I  tried but  just couldn&#39;t  build in  a reasonable
+amount  of time  a  Makefile that  met the  requirements  for an  OPAM
+package. Building  MPP is  quite trivial, installing  it in  the right
+place and being able to uninstall it, well, less trivial (perhaps I&#39;ve
+just missed a simple thing in the process).</p>
+<h3 id="Asidenote"> A side note</h3>
+<p>Although the  MPP project  started a  while ago now,  it&#39;s still  at a
+pretty early  stage of development  since I&#39;ve been mostly  working on
+the   tools   that   are   needed  to   build   the   <a href='http://amirchaudhry.com/ocamlorg-request-for-feedback/'>new   ocaml.org
+website</a>, such
+as  <a href='https://github.com/pw374/omd/'>OMD</a> <a href='http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html'>(read  about the  experience
+here)</a>,
+which       I&#39;ve        developed       from        scratch,       and
+<a href='https://github.com/ocamllabs/opam-doc/'>OPAM-DOC</a>,  which  <a href='http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html'>I had  to
+contribute
+to</a>
+at some  point because  we had to  fix it while  having a  very little
+amount time.</p>
+<p>Now that  OMD has become  quite stable  (although some bugs  are still
+  found from time to time, which is normal) ../..</p>
+<blockquote><p>
+No product of  human intellect comes out right the  first time. We
+  rewrite  sentences, rip  out knitting  stitches, replant  gardens,
+  remodel houses,  and repair  bridges. Why  should software  be any
+  different? – Lauren Ruth Wiener</p>
+</blockquote>
+<p>../..  and  since I&#39;m  not the only  contributor on  opam-doc (Vincent
+Botbol is still participating, he  fixed quite a nasty-to-fix bug last
+weekend, and Leo White is still  working on the JavaScript part), it&#39;s
+not  as much  time-taking as  OMD, but  because it&#39;s  not my  code and
+because it&#39;s using some syntax extension (yeah, CamlP4&#39;s in the place,
+yo), patching it is not as simple as it could be...</p>
 <hr/><p></p>          </div>
         </div>
       </div>
