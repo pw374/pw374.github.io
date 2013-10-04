@@ -44,7 +44,7 @@ _tmp/index.md.ml:index.md.ml.mpp Makefile
 _tmp/blogposts.list.tmp.md:posts/*.md.ml.mpp _tmp/common.ml
 	make $$(ls -1 posts/*.md.ml.mpp|sed -e 's/.md.ml.mpp$$/.md.ml/g' -e 's/^posts/_tmp/g')
 	(cat _tmp/common.ml ;\
-	for i in $$(ls -1 posts/*.md.ml.mpp|sed -e 's/.md.ml.mpp$$/.md.ml/g' -e 's/^posts/_tmp/g') ; do \
+	for i in $$(ls -1r posts/*.md.ml.mpp|sed -e 's/.md.ml.mpp$$/.md.ml/g' -e 's/^posts/_tmp/g') ; do \
 		echo "# 1 \"$$i\"" ; \
 		cat $$i ; \
 		echo "# 1 \"$$i - print\"" ; \
