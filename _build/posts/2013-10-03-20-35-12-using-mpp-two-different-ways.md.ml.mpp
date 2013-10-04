@@ -1,0 +1,223 @@
+%% Copyright (C) 2013  Philippe Wang
+{< module Meta : Meta = struct
+ let title = "Using MPP in two differents ways"
+ let id = "2013-10-03-20-35-12-using-mpp-two-different-ways.html"
+ let xmldate = "2013-10-03T20:35:12+00:00"
+ let xmldate_updated = xmldate
+ let rssdate = "Thu, 03 Oct 2013 20:35:12 +0000"
+ let date = "2013-10-03 20:35:12+00:00"
+ let tags = [ "ocaml"; "mpp" ]
+ let disqus = true
+ let stamp = true
+ let tryocaml = false
+end
+include Meta
+>}
+
+{< module Post(Printer:Printer) = struct open Printer >}
+
+### MPP is now an OPAM package
+
+First of all, I've to say I've finally made an OPAM package 
+for MPP! At the time I'm writing these words, it's still waiting
+for merging. [Read more here.](/posts/2013-10-03-20-39-07-OPAMaging-MPP.html)
+
+### Description of MPP
+
+MPP is a preprocessor that has been designed to allow any (non-insane)
+programming language to  be used as a preprocessor  for any text-based
+file. The particularity is that  the users keep their initial language
+as their  primary language:  the language(s) brought  by MPP  is (are)
+secondary. It  means that ideally, if  you give a random  text file to
+MPP, MPP  will return it  unchanged! And  in practice, you  can always
+parameterize MPP  (on the command line,  or in an MPP  file) such that
+for a given text file, MPP will return it unchanged.
+
+Of course, the purpose of MPP is not to replace the "cat" command!
+But having the property that you can guarantee that MPP will behave as
+the "cat" command if you want it to is important, because it means you
+can customise MPP such that MPP can work for any text file.
+
+Side note:
+
+> Well,  if you  discover a  language that has  some kind  of infinite
+  semantics, which  are somehow automatically defined  by itself, such
+  that  every  possible  sequence  of  bytes has  a  meaning  in  this
+  language, MPP  might not  work because  you would  have a  hard time
+  finding a token that's not already taken, since there're all already
+  taken...  But I don't think that it's a realistic scenario, so let's
+  just forget about it.
+
+
+### Principle of MPP
+
+The principle on which MPP is based is pretty simple. The users define
+the tokens they want to use to determine the beginning and the end 
+of MPP blocks. And there are 3 kinds of MPP blocks:
+
+1. basic MPP block;
+2. basic MPP block with possible nesting;
+3. foreign MPP block.
+
+The first and the second are used  for the same things except that the
+second allows nesting. The third kind  is the most interesting one, as
+it's the one  that allows to embed virtually  any programming language
+as a preprocessor language.
+
+Side note:
+
+> Well,  you can't easily use  pure lambda calculus as  a preprocessor
+  language.   Your programming  language has  to have  some notion  of
+  input/output to  process text. Using  pure lambda calculus  might be
+  very  painful and  it  would start  by making  it  impure enough  to
+  interact with the rest of the world.
+
+
+### Example 1: the basics
+
+So, let's say  you're writing a program using the  OCaml language, and
+you want `x` to be a random integer.
+
+You can write this:
+
+```ocaml
+let x = Random.int max_int
+```
+
+and if you want to be sure  that the number is different each time you
+execute  your  program,  you   should  use  `Random.self_init`  or  an
+equivalent.
+
+Now what if you want a random number to be generated at compile time?
+You can't do it in pure OCaml. You need to preprocess your file and/or
+to read from another file...
+
+With MPP, you can write this:
+
+```ocaml
+let x = << cmd echo $RANDOM >>
+```
+if you use mpp with these parameters: `-so '<<' -sc '>>'` to set
+opening and closing tokens to `<<` and `>>`. 
+Default tokens are respectively `((` and `))` but if you're writing
+some OCaml code, you shouldn't use `((` and `))` because
+there's quite a chance that they appear as OCaml code in your file.
+
+What happens with MPP is that it simply echoes everything that is
+not MPP, and when it's MPP, it interprets the commands.
+The `cmd` builtin is probably the simplest and the most powerful,
+since it calls your shell with what follows `cmd`. The first
+line is the command that is called, and what follows is given to
+the command as its standard input.
+
+So, basically, 
+```ocaml
+let x = << cmd echo $RANDOM >> mod 42
+```
+given to MPP has the same semantics as
+```bash
+echo -n 'let x = '
+echo $RANDOM
+echo ' mod 42'
+```
+
+Now, instead of using non-nesting tokens, you can use nesting tokens,
+the only difference being that you can nest commands. Wait, what if
+you nest with non-nesting commands? Well, MPP has a very simple syntax.
+If you can't nest, you really can't nest.
+So, if you write ``<< echo << echo 42 >> >>`` it just doesn't work!
+Moreover, you have a syntax error because the first `>>` is seen as the
+closing token for the first `<<`, and MPP stops when there's a syntax
+error. If you want to echo `<< echo 42 >>`, it is possible, you just
+have to name your block, as in ``<<name echo << echo 42 >> name>>``
+and then it just works!
+
+Note that with nesting tokens, you have to name **all** outer tokens.
+The default tokens are `{{` and `}}`. So, to nest some commands, you
+can write for instance ``{{name set x {{ cmd cat foo.txt }} name}}``.
+Note that the the most inner block doesn't have to be a nesting one,
+as it doens't nest any. It means you could write
+``{{name set x << cmd cat foo.txt >> name}}`` instead.
+And note that only the most inner nesting block can be nameless and that's 
+*in some cases only*.
+
+Note: the  technique presented above (in  example 1) has been  used to
+generate the new OCaml website.
+
+### Example 2: using OCaml as a preprocessor language
+
+When MPP is used with the option `-l`, it produces a program that prints
+the file, using information provided to MPP about the language specified
+with `-l`. For instance, `mpp -l ocaml` will produce an OCaml program.
+
+If you apply `mpp -l ocaml` to a file F that contains no MPP commands,
+then you have an OCaml  program  that, when executed, produces the 
+original file F.
+
+When you use `-l ocaml`, all "foreign blocks" are considered as 
+OCaml code and it will just "pass through".
+So, if you write {<x let _ = print_string "`42 {< let x = 23 >} Hello`" x>},
+it will be translated to this program:
+```ocaml
+let _ = print_string "42 "
+let x = 23
+let _ = print_string " Hello"
+```
+
+It's not exactly as flexible as "you can write anything at the top-level".
+Indeed, you may write any valid top-level definition. It could be
+a type definition, a module definition, really anything you want that
+is valid at the top level and that does not require double semi-colons.
+That is, you cannot write {<x let _ = print_string "`{< print_int 42 >}`" x>}
+because it's not a valid top-level phrase, you should write this instead
+{<x let _ = print_string "`{< let _ = print_int 42 >}`" x>}.
+If you really love playing at edges, you could write
+{<x let _ = print_string "`{< ;; print_int 42 ;; >}`" x>}
+and it might work... if there is something preceding. If there isn't
+(but that's not trivial to guess because the semantics of MPP might 
+change on this precise point, I don't know, I can't promise right now),
+then you could perhaps write {<x let _ = print_string "`{< print_int 42;; >}`" x>}.
+
+But you can't convert a block of text into an OCaml function. You can't
+write something like you would do in PHP, such as:
+((! cmd mpp -l ocaml -sos '' -scs ''
+```
+<ul>
+  {< for i = 1 to 42 do >}
+    <li> {< print_int i >} </li>
+  {< done >}
+</ul>
+```
+!))
+Oh but wait!  You can use functors...
+
+So in functor-style, you can write this:
+((! cmd mpp -l ocaml -sos '' -scs ''
+```
+<ul>
+  {< module I (X:sig val i : int end) = struct >}
+    <li> {< let _ = print_int X.i >} </li>
+  {< end >}
+  {< let _ = for i = 1 to 42 do
+       let module M = I(struct let i = i end) in
+       ()
+     done >}
+</ul>
+```
+!))
+
+Sorry if that hurts  your eyes, but life is not  always easy.  Oh, and
+if you think it's  overkill, well, of course it is,  that's a tiny toy
+example! I'm actually using this  functor-style to write this blog. It
+means that  I generate a  template with the functor-style  headers and
+footers and I write inside the functor using Markdown, and when I need
+to write some OCaml code, I use MPP features. And when I need to print
+MPP stuff, I use  the 2 worlds of MPP, but it's late  and I don't want
+to go into details just right  now. What's important is that it's nice
+and it  works. I've  always wanted  to be able  to *easily*  embed the
+OCaml language in any text (LaTeX, ML, HTML, Bash, etc.) file, and now
+I can!!  :)
+
+
+{< end >}
+
