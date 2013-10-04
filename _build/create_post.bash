@@ -23,7 +23,6 @@ cat > $target <<EOF
 end
 include Meta
 >}
-
 {< module Post(Printer:Printer) = struct open Printer >}
 
 Lorem  ipsum dolor  sit  amet, consectetur  adipisicing  elit, sed  do

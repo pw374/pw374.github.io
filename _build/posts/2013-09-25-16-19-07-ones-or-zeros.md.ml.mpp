@@ -13,7 +13,6 @@
 end
 include Meta
 >}
-
 {< module Post(Printer:Printer) = struct open Printer >}
 
 The challenge is this:
