@@ -16,7 +16,7 @@ include Meta
 {< module Post(Printer:Printer) = struct open Printer >}
 
 *Please read
-[this](posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html) if
+[this](/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html) if
 you want to know more about MPP.*
 
 ### Announcement: I've OPAMaged MPP! 
@@ -46,11 +46,11 @@ pretty early  stage of development  since I've been mostly  working on
 the   tools   that   are   needed  to   build   the   [new   ocaml.org
 website](http://amirchaudhry.com/ocamlorg-request-for-feedback/), such
 as  [OMD](https://github.com/pw374/omd/) [(read  about the  experience
-here)](http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html),
+here)](/posts/2013-09-05-22-31-26-about-omd.html),
 which       I've        developed       from        scratch,       and
 [OPAM-DOC](https://github.com/ocamllabs/opam-doc/),  which  [I had  to
 contribute
-to](http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html)
+to](/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html)
 at some  point because  we had to  fix it while  having a  very little
 amount time.
 
