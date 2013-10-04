@@ -1,5 +1,4 @@
-<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Fri, 04 Oct 2013 01:05:40 +0100</pubDate><lastBuildDate>Fri, 04 Oct 2013 01:05:40 +0100</lastBuildDate>
-
+<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Fri, 04 Oct 2013 01:25:28 +0100</pubDate><lastBuildDate>Fri, 04 Oct 2013 01:25:28 +0100</lastBuildDate>
 
     <item>
       <title>OMD: a Markdown parser in OCaml</title>
@@ -221,7 +220,6 @@ of the OCaml community may contribute to it in a more convenient way.&#60;/p&#62
     </item>
 
 
-
     <item>
       <title>OPAM-DOC with multiple OCaml packages</title>
       <link>http://pw374.github.io/posts/2013-09-24-01-50-14-opamdoc-take1.html</link>
@@ -391,7 +389,6 @@ done
     </item>
 
 
-
     <item>
       <title>On the Implementation of OPAMDOC</title>
       <link>http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html</link>
@@ -514,7 +511,6 @@ and that saves so much time!&#60;/p&#62;
 &#60;p&#62;To be followed...&#60;/p&#62;
       ]]></description>
     </item>
-
 
 
     <item>
@@ -651,7 +647,6 @@ think with the whole problem in mind.&#60;/p&#62;
     </item>
 
 
-
     <item>
       <title>(Exercise) Odd or even?</title>
       <link>http://pw374.github.io/posts/2013-09-26-20-15-24-odd-or-even.html</link>
@@ -760,7 +755,6 @@ not, because it  has to check that  the value of the  given integer is
 between 0 and 255 inclusive).&#60;/p&#62;
       ]]></description>
     </item>
-
 
 
     <item>
@@ -940,7 +934,6 @@ I can!!  :)&#60;/p&#62;
       ]]></description>
     </item>
 
-
     <item>
       <title>OPAMaging MPP</title>
       <link>http://pw374.github.io/posts/2013-10-03-20-39-07-OPAMaging-MPP.html</link>
@@ -949,9 +942,9 @@ I can!!  :)&#60;/p&#62;
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
       <guid>http://pw374.github.io/posts/2013-10-03-20-39-07-OPAMaging-MPP.html</guid>
       <description><![CDATA[
-
-&#60;p&#62;&#60;em&#62;Please read
-&#60;a href=&#39;posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html&#39;&#62;this&#60;/a&#62; if
+&#60;p&#62;
+&#60;em&#62;Please read
+&#60;a href=&#39;/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html&#39;&#62;this&#60;/a&#62; if
 you want to know more about MPP.&#60;/em&#62;&#60;/p&#62;
 &#60;h3 id=&#34;AnnouncementI39veOPAMagedMPP&#34;&#62; Announcement: I&#38;#39;ve OPAMaged MPP! &#60;/h3&#62;
 &#60;p&#62;So, I&#38;#39;ve eventually OPAMaged MPP (i.e., made an OPAM package for MPP)!
@@ -973,10 +966,10 @@ just missed a simple thing in the process).&#60;/p&#62;
 pretty early  stage of development  since I&#38;#39;ve been mostly  working on
 the   tools   that   are   needed  to   build   the   &#60;a href=&#39;http://amirchaudhry.com/ocamlorg-request-for-feedback/&#39;&#62;new   ocaml.org
 website&#60;/a&#62;, such
-as  &#60;a href=&#39;https://github.com/pw374/omd/&#39;&#62;OMD&#60;/a&#62; &#60;a href=&#39;http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html&#39;&#62;(read  about the  experience
+as  &#60;a href=&#39;https://github.com/pw374/omd/&#39;&#62;OMD&#60;/a&#62; &#60;a href=&#39;/posts/2013-09-05-22-31-26-about-omd.html&#39;&#62;(read  about the  experience
 here)&#60;/a&#62;,
 which       I&#38;#39;ve        developed       from        scratch,       and
-&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/&#39;&#62;OPAM-DOC&#60;/a&#62;,  which  &#60;a href=&#39;http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html&#39;&#62;I had  to
+&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/&#39;&#62;OPAM-DOC&#60;/a&#62;,  which  &#60;a href=&#39;/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html&#39;&#62;I had  to
 contribute
 to&#60;/a&#62;
 at some  point because  we had to  fix it while  having a  very little

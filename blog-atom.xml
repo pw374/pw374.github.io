@@ -1,5 +1,4 @@
-<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-10-04T01:05:39+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
-
+<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-10-04T01:25:27+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
 
   <entry>
     <id>http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html</id>
@@ -222,7 +221,6 @@ of the OCaml community may contribute to it in a more convenient way.&#60;/p&#62
     </content>
   </entry>
 
-
   <entry>
     <id>http://pw374.github.io/posts/2013-09-24-01-50-14-opamdoc-take1.html</id>
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-24-01-50-14-opamdoc-take1.html"/>
@@ -393,7 +391,6 @@ done
     </content>
   </entry>
 
-
   <entry>
     <id>http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html</id>
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html"/>
@@ -518,7 +515,6 @@ and that saves so much time!&#60;/p&#62;
 &#60;p&#62;To be followed...&#60;/p&#62;
     </content>
   </entry>
-
 
   <entry>
     <id>http://pw374.github.io/posts/2013-09-25-16-19-07-ones-or-zeros.html</id>
@@ -655,7 +651,6 @@ think with the whole problem in mind.&#60;/p&#62;
     </content>
   </entry>
 
-
   <entry>
     <id>http://pw374.github.io/posts/2013-09-26-20-15-24-odd-or-even.html</id>
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-26-20-15-24-odd-or-even.html"/>
@@ -766,7 +761,6 @@ not, because it  has to check that  the value of the  given integer is
 between 0 and 255 inclusive).&#60;/p&#62;
     </content>
   </entry>
-
 
   <entry>
     <id>http://pw374.github.io/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html</id>
@@ -946,7 +940,6 @@ OCaml language in any text (LaTeX, ML, HTML, Bash, etc.) file, and now
 I can!!  :)&#60;/p&#62;
     </content>
   </entry>
-
   <entry>
     <id>http://pw374.github.io/posts/2013-10-03-20-39-07-OPAMaging-MPP.html</id>
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-10-03-20-39-07-OPAMaging-MPP.html"/>
@@ -957,9 +950,9 @@ I can!!  :)&#60;/p&#62;
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-10-03-20-39-07-OPAMaging-MPP.html</uri>
     </author>
-    <content type="html">
-&#60;p&#62;&#60;em&#62;Please read
-&#60;a href=&#39;posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html&#39;&#62;this&#60;/a&#62; if
+    <content type="html">&#60;p&#62;
+&#60;em&#62;Please read
+&#60;a href=&#39;/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html&#39;&#62;this&#60;/a&#62; if
 you want to know more about MPP.&#60;/em&#62;&#60;/p&#62;
 &#60;h3 id=&#34;AnnouncementI39veOPAMagedMPP&#34;&#62; Announcement: I&#38;#39;ve OPAMaged MPP! &#60;/h3&#62;
 &#60;p&#62;So, I&#38;#39;ve eventually OPAMaged MPP (i.e., made an OPAM package for MPP)!
@@ -981,10 +974,10 @@ just missed a simple thing in the process).&#60;/p&#62;
 pretty early  stage of development  since I&#38;#39;ve been mostly  working on
 the   tools   that   are   needed  to   build   the   &#60;a href=&#39;http://amirchaudhry.com/ocamlorg-request-for-feedback/&#39;&#62;new   ocaml.org
 website&#60;/a&#62;, such
-as  &#60;a href=&#39;https://github.com/pw374/omd/&#39;&#62;OMD&#60;/a&#62; &#60;a href=&#39;http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html&#39;&#62;(read  about the  experience
+as  &#60;a href=&#39;https://github.com/pw374/omd/&#39;&#62;OMD&#60;/a&#62; &#60;a href=&#39;/posts/2013-09-05-22-31-26-about-omd.html&#39;&#62;(read  about the  experience
 here)&#60;/a&#62;,
 which       I&#38;#39;ve        developed       from        scratch,       and
-&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/&#39;&#62;OPAM-DOC&#60;/a&#62;,  which  &#60;a href=&#39;http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html&#39;&#62;I had  to
+&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/&#39;&#62;OPAM-DOC&#60;/a&#62;,  which  &#60;a href=&#39;/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html&#39;&#62;I had  to
 contribute
 to&#60;/a&#62;
 at some  point because  we had to  fix it while  having a  very little
