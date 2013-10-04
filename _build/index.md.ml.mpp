@@ -17,8 +17,8 @@ include Meta
 {< module Post(Printer:Printer) = struct open Printer >}
 # {< let _ = !!title >}
 
-I'm a postdoc in Cambridge, UK.
-
+I'm a post-doc researcher at the [University of Cambridge](http://www.cam.ac.uk)
+[Computer Laboratory](http://www.cl.cam.ac.uk).
 I'm a member of the [OCaml Labs group](http://www.ocaml.io/).
 
 This  is  my [new  blog](http://pw374.github.io),  which is mainly  about
