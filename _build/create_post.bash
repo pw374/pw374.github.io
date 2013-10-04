@@ -11,7 +11,7 @@ cat > $target <<EOF
 %% Copyright (C) 2013  Philippe Wang
 {< module Meta : Meta = struct
  let title = ""
- let id = "$(basename $target .md.ml.mpp).html"
+ let id = "posts/$(basename $target .md.ml.mpp).html"
  let xmldate = "$(date -u --rfc-3339=seconds|tr ' ' T)"
  let xmldate_updated = xmldate
  let rssdate = "$(date -u '+%a, %d %b %Y %H:%M:%S %z')"
