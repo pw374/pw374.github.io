@@ -65,10 +65,10 @@ let tag_post stamp date tags =
   printf "<p style='font-size:80%%;'><em>started on %s, (re)generated on %s</em></p>" 
     date
     (input_command "date --rfc-3339=seconds");
-  print_string "<p>";
+  print_string "<p>tags: ";
   List.iter
     (fun tag ->
-      printf "• <a href='/%s/'>%s</a> " tag tag
+      printf "• <a href='/tags/%s/'>%s</a> " tag tag
     )
     tags;
   print_string "</p>"
