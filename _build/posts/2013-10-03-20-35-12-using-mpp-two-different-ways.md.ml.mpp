@@ -113,7 +113,7 @@ So, basically,
 ```ocaml
 let x = << cmd echo $RANDOM >> mod 42
 ```
-given to MPP has the same semantics as
+given to MPP has the same semantics as this Bash script
 ```bash
 echo -n 'let x = '
 echo $RANDOM
