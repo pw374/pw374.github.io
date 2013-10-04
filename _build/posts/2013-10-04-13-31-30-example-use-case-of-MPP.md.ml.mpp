@@ -43,5 +43,4 @@ As you may see, if you grow the type `t` by adding more cases, you don't have to
 manually update the function `to_string`.
 
 
-{< end >}
-
+{< end >}%% don't write anything after this line

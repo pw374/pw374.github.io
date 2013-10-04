@@ -35,8 +35,7 @@ culpa qui officia deserunt mollit anim id est laborum.
 
 
 
-{< end >}
-
+{< end >}%% don't write anything after this line
 EOF
 
 echo "# File $target has been created. Some commands you might want to run:"

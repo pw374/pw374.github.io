@@ -12,8 +12,7 @@
  let tryocaml = false
 end
 include Meta
->}
-{< module Post(Printer:Printer) = struct open Printer >}
+module Post(Printer:Printer) = struct open Printer >}
 
 ### MPP is now an OPAM package
 
@@ -218,5 +217,4 @@ OCaml language in any text (LaTeX, ML, HTML, Bash, etc.) file, and now
 I can!!  :)
 
 
-{< end >}
-
+{< end >}%% don't write anything after this line

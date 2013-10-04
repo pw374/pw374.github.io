@@ -12,8 +12,7 @@
  let tryocaml = false
 end
 include Meta
->}
-{< module Post(Printer:Printer) = struct open Printer >}
+module Post(Printer:Printer) = struct open Printer >}
 
 [Early this year, Leo White started the implementation of
 opamdoc](https://github.com/ocamllabs/opam-doc/commits/master).
@@ -147,5 +146,4 @@ and that saves so much time!
 
 To be followed...
 
-{< end >}
-
+{< end >}%% don't write anything after this line

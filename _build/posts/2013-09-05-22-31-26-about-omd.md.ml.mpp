@@ -12,8 +12,7 @@
  let tryocaml = false
 end
 include Meta
->}
-{< module Post(Printer:Printer) = struct >}
+module Post(Printer:Printer) = struct >}
 
 
 ### Motivations
@@ -274,5 +273,4 @@ of the OCaml community may contribute to it in a more convenient way.
 And of course, that means that OMD will be used for OCaml.org.
 
 
-{< end >}
-
+{< end >}%% don't write anything after this line

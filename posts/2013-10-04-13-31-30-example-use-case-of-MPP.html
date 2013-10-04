@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -63,7 +62,7 @@
             <ul class="nav nav-list">
               <li class="nav-header"><a href="#">Table of Contents</a></li>
               <ul>
- <li><a href='#ExampleAusecaseofMPPinanOCamlprogram'> <a href='/2013-10-04-13-31-30-example-use-case-of-MPP.html'>(Example) A use case of MPP in an OCaml program</a></a>
+ <li><a href='#ExampleAusecaseofMPPinanOCamlprogram'> <a href='/posts/2013-10-04-13-31-30-example-use-case-of-MPP.html'>(Example) A use case of MPP in an OCaml program</a></a>
  </li>
 </ul>
             </ul>
@@ -94,8 +93,7 @@
           </div>
         </div>
       </div>
-              <h2 id="ExampleAusecaseofMPPinanOCamlprogram"> <a href='/2013-10-04-13-31-30-example-use-case-of-MPP.html'>(Example) A use case of MPP in an OCaml program</a></h2><p>
-
+              <h2 id="ExampleAusecaseofMPPinanOCamlprogram"> <a href='/posts/2013-10-04-13-31-30-example-use-case-of-MPP.html'>(Example) A use case of MPP in an OCaml program</a></h2><p>
 Let&#39;s say you have a big variant type such as this one:</p>
 <pre><code class='tryocaml'><span class='keyword'>type</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>B</span> <span class='keywordsign'>|</span> <span class='constructor module'>C</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>|</span> <span class='constructor module'>F</span> <span class='keywordsign'>|</span> <span class='constructor module'>G</span>
 <a href="javascript:octry('type t = A | B | C | D | E | F | G\n');">[try]</a></code></pre>
@@ -119,7 +117,7 @@ With MPP, you can write this:</p>
 <a href="javascript:octry('type t = | A | B | C | D | E | F | G \nlet to_string = function\n| A -&#62; &#34;A&#34;\n| B -&#62; &#34;B&#34;\n| C -&#62; &#34;C&#34;\n| D -&#62; &#34;D&#34;\n| E -&#62; &#34;E&#34;\n| F -&#62; &#34;F&#34;\n| G -&#62; &#34;G&#34;\n');">[try]</a></code></pre>
 <p>As you may see, if you grow the type <code>t</code> by adding more cases, you don&#39;t have to 
 manually update the function <code>to_string</code>.</p>
-<hr/><p style='font-size:80%;'><em>started on 2013-10-04 13:31:30+00:00, (re)generated on 2013-10-04 15:03:46+01:00
+<hr/><p style='font-size:80%;'><em>started on 2013-10-04 13:31:30+00:00, (re)generated on 2013-10-04 15:31:55+01:00
 </em></p><p>• <a href='/ocaml/'>ocaml</a> • <a href='/mpp/'>mpp</a> </p>          </div>
 
 

@@ -1,5 +1,4 @@
-<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-10-04T15:03:46+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
-
+<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-10-04T15:31:54+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
   <entry>
     <id>http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html</id>
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html"/>
@@ -220,7 +219,6 @@ of the OCaml community may contribute to it in a more convenient way.&#60;/p&#62
 &#60;p&#62;And of course, that means that OMD will be used for OCaml.org.&#60;/p&#62;
     </content>
   </entry>
-
   <entry>
     <id>http://pw374.github.io/posts/2013-09-24-01-50-14-opamdoc-take1.html</id>
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-24-01-50-14-opamdoc-take1.html"/>
@@ -231,8 +229,7 @@ of the OCaml community may contribute to it in a more convenient way.&#60;/p&#62
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-24-01-50-14-opamdoc-take1.html</uri>
     </author>
-    <content type="html">
-&#60;h3 id=&#34;OPAMDOC&#34;&#62; &#60;a href=&#39;https://github.com/ocamllabs/opam-doc/&#39;&#62;OPAM-DOC&#60;/a&#62;&#60;/h3&#62;
+    <content type="html">&#60;h3 id=&#34;OPAMDOC&#34;&#62; &#60;a href=&#39;https://github.com/ocamllabs/opam-doc/&#39;&#62;OPAM-DOC&#60;/a&#62;&#60;/h3&#62;
 &#60;p&#62;The tool &#60;code&#62;ocamldoc&#60;/code&#62; shipped with the standard distribution of the
 OCaml compiler suffers from some limitations because it doesn&#38;#39;t have
 access to all the information it needs. Notably, if you want to build
@@ -390,7 +387,6 @@ done
 &#60;p&#62;Enjoy.&#60;/p&#62;
     </content>
   </entry>
-
   <entry>
     <id>http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html</id>
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html"/>
@@ -401,8 +397,8 @@ done
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html</uri>
     </author>
-    <content type="html">
-&#60;p&#62;&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/commits/master&#39;&#62;Early this year, Leo White started the implementation of
+    <content type="html">&#60;p&#62;
+&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/commits/master&#39;&#62;Early this year, Leo White started the implementation of
 opamdoc&#60;/a&#62;.
 Then &#60;a href=&#39;https://github.com/vincent-botbol&#39;&#62;Vincent Botbol&#60;/a&#62; worked on it
 from late May to mid August during his stay in Cambridge.&#60;/p&#62;
@@ -515,7 +511,6 @@ and that saves so much time!&#60;/p&#62;
 &#60;p&#62;To be followed...&#60;/p&#62;
     </content>
   </entry>
-
   <entry>
     <id>http://pw374.github.io/posts/2013-09-25-16-19-07-ones-or-zeros.html</id>
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-25-16-19-07-ones-or-zeros.html"/>
@@ -526,8 +521,8 @@ and that saves so much time!&#60;/p&#62;
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-25-16-19-07-ones-or-zeros.html</uri>
     </author>
-    <content type="html">
-&#60;p&#62;The challenge is this:&#60;/p&#62;
+    <content type="html">&#60;p&#62;
+The challenge is this:&#60;/p&#62;
 &#60;blockquote&#62;&#60;p&#62;
 Provide a program that will determine,  given a set of 1s and 0s, if
 there are more 0s or more 1s.&#60;/p&#62;
@@ -650,7 +645,6 @@ again, you may  not end up using  a string, in which case  you have to
 think with the whole problem in mind.&#60;/p&#62;
     </content>
   </entry>
-
   <entry>
     <id>http://pw374.github.io/posts/2013-09-26-20-15-24-odd-or-even.html</id>
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-26-20-15-24-odd-or-even.html"/>
@@ -661,8 +655,8 @@ think with the whole problem in mind.&#60;/p&#62;
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-09-26-20-15-24-odd-or-even.html</uri>
     </author>
-    <content type="html">
-&#60;p&#62;This is the exercice:&#60;/p&#62;
+    <content type="html">&#60;p&#62;
+This is the exercice:&#60;/p&#62;
 &#60;blockquote&#62;&#60;p&#62;
 Given a string (of bytes), is the number of bits set to 1 odd or even?&#60;/p&#62;
 &#60;/blockquote&#62;
@@ -761,7 +755,6 @@ not, because it  has to check that  the value of the  given integer is
 between 0 and 255 inclusive).&#60;/p&#62;
     </content>
   </entry>
-
   <entry>
     <id>http://pw374.github.io/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html</id>
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html"/>
@@ -772,8 +765,7 @@ between 0 and 255 inclusive).&#60;/p&#62;
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html</uri>
     </author>
-    <content type="html">
-&#60;h3 id=&#34;MPPisnowanOPAMpackage&#34;&#62; MPP is now an OPAM package&#60;/h3&#62;
+    <content type="html">&#60;h3 id=&#34;MPPisnowanOPAMpackage&#34;&#62; MPP is now an OPAM package&#60;/h3&#62;
 &#60;p&#62;First of all, I&#38;#39;ve to say I&#38;#39;ve finally made an OPAM package 
 for MPP! At the time I&#38;#39;m writing these words, it&#38;#39;s still waiting
 for merging. &#60;a href=&#39;/posts/2013-10-03-20-39-07-OPAMaging-MPP.html&#39;&#62;Read more here.&#60;/a&#62;&#60;/p&#62;
@@ -998,19 +990,18 @@ because it&#38;#39;s using some syntax extension (yeah, CamlP4&#38;#39;s in the 
 yo), patching it is not as simple as it could be...&#60;/p&#62;
     </content>
   </entry>
-
   <entry>
-    <id>http://pw374.github.io/2013-10-04-13-31-30-example-use-case-of-MPP.html</id>
-    <link type="text/html" rel="alternate" href="http://pw374.github.io/2013-10-04-13-31-30-example-use-case-of-MPP.html"/>
+    <id>http://pw374.github.io/posts/2013-10-04-13-31-30-example-use-case-of-MPP.html</id>
+    <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-10-04-13-31-30-example-use-case-of-MPP.html"/>
     <title>(Example) A use case of MPP in an OCaml program</title>
     <category term='ocaml' /><category term='mpp' />    <published>2013-10-04T13:31:30+00:00</published>
     <updated>2013-10-04T13:31:30+00:00</updated>
     <author>
       <name>Philippe Wang</name>
-    <uri>http://pw374.github.io/2013-10-04-13-31-30-example-use-case-of-MPP.html</uri>
+    <uri>http://pw374.github.io/posts/2013-10-04-13-31-30-example-use-case-of-MPP.html</uri>
     </author>
-    <content type="html">
-&#60;p&#62;Let&#38;#39;s say you have a big variant type such as this one:&#60;/p&#62;
+    <content type="html">&#60;p&#62;
+Let&#38;#39;s say you have a big variant type such as this one:&#60;/p&#62;
 &#60;pre&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;type&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;F&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;G&#60;/span&#62;
 &#60;/code&#62;&#60;/pre&#62;
 &#60;p&#62;

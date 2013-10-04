@@ -12,8 +12,7 @@
  let tryocaml = true
 end
 include Meta
->}
-{< module Post(Printer:Printer) = struct open Printer >}
+module Post(Printer:Printer) = struct open Printer >}
 
 The challenge is this:
 
@@ -157,5 +156,4 @@ you  use nasty  tricks to  read larger  integers from  a  string. Then
 again, you may  not end up using  a string, in which case  you have to
 think with the whole problem in mind.
 
-{< end >}
-
+{< end >}%% don't write anything after this line

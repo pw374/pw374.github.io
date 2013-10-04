@@ -12,8 +12,7 @@
  let tryocaml = true
 end
 include Meta
->}
-{< module Post(Printer:Printer) = struct open Printer >}
+module Post(Printer:Printer) = struct open Printer >}
 
 This is the exercice:
 
@@ -144,5 +143,4 @@ Note that `int_of_char` is a zero-cost operation (but `char_of_int` is
 not, because it  has to check that  the value of the  given integer is
 between 0 and 255 inclusive).
 
-{< end >}
-
+{< end >}%% don't write anything after this line

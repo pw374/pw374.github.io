@@ -12,8 +12,7 @@
  let tryocaml = false
 end
 include Meta
->}
-{< module Post(Printer:Printer) = struct open Printer >}
+module Post(Printer:Printer) = struct open Printer >}
 
 *Please read
 [this](/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html) if
@@ -69,5 +68,4 @@ not  as much  time-taking as  OMD, but  because it's  not my  code and
 because it's using some syntax extension (yeah, CamlP4's in the place,
 yo), patching it is not as simple as it could be...
 
-
-{< end >}
+{< end >}%% don't write anything after this line

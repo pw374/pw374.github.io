@@ -12,8 +12,7 @@
  let tryocaml = false
 end
 include Meta
->}
-{< module Post(Printer:Printer) = struct open Printer >}
+module Post(Printer:Printer) = struct open Printer >}
 
 ### [OPAM-DOC](https://github.com/ocamllabs/opam-doc/)
 
@@ -192,5 +191,4 @@ done
 
 Enjoy.
 
-{< end >}
-
+{< end >}%% don't write anything after this line
