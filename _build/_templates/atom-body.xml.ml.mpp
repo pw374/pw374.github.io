@@ -1,6 +1,6 @@
   <entry>
     {< let _ = printf "<id>http://pw374.github.io/%s</id>\n" id >}
-    <link type="text/html" rel="alternate" href="http://pw374.github.io/{< let _ = !! id >}"/>
+    <link type="text/html" rel="alternate" href="http://pw374.github.io/{< let _ = print_string id >}"/>
     <title>{< let _ = print_string title >}</title>
     {< let _ = List.iter (printf "<category term='%s' />") tags >}
     <published>{< let _ = print_string xmldate >}</published>

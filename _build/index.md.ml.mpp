@@ -15,7 +15,7 @@ include Meta
 >}
 
 {< module Post(Printer:Printer) = struct open Printer >}
-# {< let _ = !!title >}
+# {< let _ = print_string title >}
 
 I'm a post-doc researcher at the [University of Cambridge](http://www.cam.ac.uk)
 [Computer Laboratory](http://www.cl.cam.ac.uk).

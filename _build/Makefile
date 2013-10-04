@@ -40,7 +40,7 @@ _tmp/index.toc.md:../tags/* Makefile
 	echo >> $@
 	(cd ../tags && for i in * ; do echo " * [$$i](/tags/$$(sed 's/ /%20/g' <<<$$i)/)" ; done) >> $@
 _tmp/index.md.ml:index.md.ml.mpp Makefile
-	${MPPOCAML} < $< > $@
+	${MPPOCAML} $< -o $@
 _tmp/blogposts.list.tmp.md:posts/*.md.ml.mpp _tmp/common.ml
 	make $$(ls -1 posts/*.md.ml.mpp|sed -e 's/.md.ml.mpp$$/.md.ml/g' -e 's/^posts/_tmp/g')
 	(cat _tmp/common.ml ;\
@@ -58,7 +58,7 @@ _tmp/blogposts.list.tmp.md:posts/*.md.ml.mpp _tmp/common.ml
 ../posts/%.html:_tmp/common.ml _tmp/%.md.ml _tmp/%.contents.html.ml _tmp/%.toc.html.ml  _tmp/main.ml
 	for i in $+ ; do echo "# 1 \"$$i\"" ; cat "$$i" ; done | ocaml -stdin > $@
 _tmp/%.md.ml:posts/%.md.ml.mpp Makefile
-	${MPPOCAML} < $< > $@
+	${MPPOCAML} $< -o $@
 _tmp/gen_post_contents.ml: Makefile
 	echo 'let () = printf "## [%s](/%s)" title id ; let module M = Post(Printer) in ()' > $@
 

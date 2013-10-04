@@ -1,7 +1,5 @@
 open Printf
 
-let (!!) s = Printf.printf "%s" s
-
 module type Meta =
 sig 
   val id : string
@@ -27,9 +25,9 @@ let htmlescape s =
   done;
   Buffer.contents b
 
-module type Printer = sig val print_string : string -> unit val to_string : string -> string end
-module Printer : Printer = struct include Pervasives let to_string x = x end
-module Eprinter : Printer = struct let print_string s = print_string (htmlescape s) let to_string = htmlescape end
+module type Printer = sig val (!!) : string -> unit val print_string : string -> unit val to_string : string -> string end
+module Printer : Printer = struct include Pervasives let to_string x = x let (!!) = print_string end
+module Eprinter : Printer = struct let print_string s = print_string (htmlescape s) let (!!) = print_string let to_string = htmlescape end
 
 let input f =
   let ic = open_in f in
@@ -41,7 +39,7 @@ let input f =
   with End_of_file ->
     (Buffer.contents b)
 
-let cat f = !! (input f)
+let cat f = print_string (input f)
 
 let command e =
   flush stdout;
@@ -62,15 +60,15 @@ let html = false
 
 
 let tag_post stamp date tags = 
-  !! "<hr/>";
+  print_string "<hr/>";
   if stamp then
   printf "<p style='font-size:80%%;'><em>started on %s, (re)generated on %s</em></p>" 
     date
     (input_command "date --rfc-3339=seconds");
-  !! "<p>";
+  print_string "<p>";
   List.iter
     (fun tag ->
       printf "• <a href='/%s/'>%s</a> " tag tag
     )
     tags;
-  !! "</p>"
+  print_string "</p>"
