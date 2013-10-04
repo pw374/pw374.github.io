@@ -1,0 +1,47 @@
+%% Copyright (C) 2013  Philippe Wang
+{< module Meta : Meta = struct
+ let title = "(Example) A use case of MPP in an OCaml program"
+ let id = "2013-10-04-13-31-30-example-use-case-of-MPP.html"
+ let xmldate = "2013-10-04T13:31:30+00:00"
+ let xmldate_updated = xmldate
+ let rssdate = "Fri, 04 Oct 2013 13:31:30 +0000"
+ let date = "2013-10-04 13:31:30+00:00"
+ let tags = [ "ocaml"; "mpp"; ]
+ let disqus = true
+ let stamp = true
+ let tryocaml = true
+end
+include Meta
+module Post(Printer:Printer) = struct open Printer >}
+
+Let's say you have a big variant type such as this one:
+```tryocaml
+type t = A | B | C | D | E | F | G
+```
+and you want to implement a `t -> string` function.
+With MPP, you can write this:
+
+```ocaml((! cmd mpp -l ocaml -sos '' -scs ''
+{< let l = ["A"; "B"; "C"; "D"; "E"; "F"; "G";] >}
+type t = {< let _ = List.iter (Printf.printf "| %s ") l >}
+let to_string = function
+{< let _ = List.iter (fun e -> Printf.printf "| %s -> %S" e e) l >}
+!))
+```
+
+and then you have that:
+```tryocaml((! cmd mpp -l ocaml -snl -sos '{<' -scs '>}' | ocaml -stdin | mpp -l ocaml -sos '' -scs ''
+{< let l = ["A"; "B"; "C"; "D"; "E"; "F"; "G";] >}
+type t = {< let _ = List.iter (Printf.printf "| %s ") l >}
+
+let to_string = function
+{< let _ = List.iter (fun e -> Printf.printf "| %s -> %S\n" e e) l >}
+!))
+```
+
+As you may see, if you grow the type `t` by adding more cases, you don't have to 
+manually update the function `to_string`.
+
+
+{< end >}
+
