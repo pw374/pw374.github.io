@@ -1,4 +1,4 @@
-<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Fri, 04 Oct 2013 01:25:28 +0100</pubDate><lastBuildDate>Fri, 04 Oct 2013 01:25:28 +0100</lastBuildDate>
+<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Fri, 04 Oct 2013 01:26:45 +0100</pubDate><lastBuildDate>Fri, 04 Oct 2013 01:26:45 +0100</lastBuildDate>
 
     <item>
       <title>OMD: a Markdown parser in OCaml</title>
@@ -848,7 +848,7 @@ the command as its standard input.&#60;/p&#62;
 &#60;pre&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;x&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;&#38;#60;&#38;#60;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;cmd&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;echo&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;$&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;RANDOM&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;&#38;#62;&#38;#62;&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;mod&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;42&#60;/span&#62;
 &#60;/code&#62;&#60;/pre&#62;
 &#60;p&#62;
-given to MPP has the same semantics as&#60;/p&#62;
+given to MPP has the same semantics as this Bash script&#60;/p&#62;
 &#60;pre&#62;&#60;code class=&#39;bash&#39;&#62;echo -n &#38;#39;let x = &#38;#39;
 echo $RANDOM
 echo &#38;#39; mod 42&#38;#39;
