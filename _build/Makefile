@@ -7,10 +7,10 @@ OMD_FOR_FEEDS = omd -r ocaml=./ocamltohtml -r tryocaml=./ocamltohtml
 
 all:
 	make htmlescape ocamltohtml
-	make ../index.html ../blog.html ../blog-atom.xml ../blog-rss.xml ../try-ocaml.js 
 	make -j 4 $$(for i in posts/*.md.ml.mpp ; do \
 	  echo ../posts/$$(basename $$i .md.ml.mpp).html ; \
 	done)
+	make -j 4 ../index.html ../blog.html ../blog-atom.xml ../blog-rss.xml ../try-ocaml.js
 	git add ../posts/*.html ../tags/*/*.html
 
 ocamltohtml:lexer.ml ocamltohtml.ml
@@ -38,7 +38,7 @@ _tmp/index.toc.html:_tmp/index.toc.md Makefile
 _tmp/index.toc.md:../tags/* Makefile
 	echo '(The links below may not work yet.)' > $@
 	echo >> $@
-	(cd ../tags && for i in * ; do echo " * [$$i](/tags/$$(sed 's/ /%20/g' <<<$$i)/)" ; done) >> $@
+	(cd ../tags && for i in * ; do echo " * [$$i](/tags/$$(sed 's/ /%20/g' <<<$$i)/)" ; if [[ -f "$$i/index.html" ]] ; then true ; else echo '(this page will be available in the future, sorry for the inconvenience)' > "$$i/index.html" ;  fi ; done) >> $@
 _tmp/index.md.ml:index.md.ml.mpp Makefile
 	${MPPOCAML} $< -o $@
 _tmp/blogposts.list.tmp.md:posts/*.md.ml.mpp _tmp/common.ml
