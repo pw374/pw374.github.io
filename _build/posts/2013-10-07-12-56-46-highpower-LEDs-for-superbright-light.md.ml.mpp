@@ -234,7 +234,7 @@ conductivity, reflects light not too badly and is not too expensive.
 {< 
 let _ = 
   let l = [ "4-COB-LEDs-off", ""; "4-COB-LEDs-off-unplugged", ""; "4-COB-LEDs-off2", ""; ] in
-  List.iter (fun (e, d) -> printf "[![%s-640.jpg](/img/%s-640.jpg)](/img/%s.jpg)\n" e e e) l
+  List.iter (fun (e, d) -> printf "[![%s-640.jpg](/img/%s-640.jpg)](/img/%s.jpg)\n\n" e e e) l
 >}
 
 {< end >}%% don't write anything after this line
