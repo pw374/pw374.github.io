@@ -8,7 +8,7 @@ else
 fi
 
 cat > $target <<EOF
-%% Copyright (C) 2013  Philippe Wang
+%% Copyright (C) 2013  Philippe Wang -*- coding: utf-8 -*-
 {< module Meta : Meta = struct
  let title = ""
  let id = "posts/$(basename $target .md.ml.mpp).html"
