@@ -177,20 +177,6 @@ the density  of LEDs... It was not  a good idea, as  the rulers become
 hot quite rapidly: within a few  minutes, they reach close to 50°C. So
 with 4 LEDs per ruler, active fan cooling may dissipate the heat.
 
-#### Why bright light is important...
-
-I feel  that it's important to  me to face (very)  bright light during
-the day, and  it's best if it comes directly  from the sun. Apparently
-(although I'm not  a hundred percent sure) it's  actually important to
-be exposed to (very) bright light at least 30 minutes a day.
-
-So, instead of using a very expensive 
-[S.A.D.  light](https://www.google.com/search?SAD+light) 
-to prevent potential
-[seasonal affective disorder](http://en.wikipedia.org/wiki/Seasonal_affective_disorder),
-well, I'm using very bright state-of-the-art LEDs to light up my home. :-)
-
-
 #### Sticking COB LEDs
 
 To    stick   LEDs,    I   used    some   [akasa    thermal   adhesive
@@ -205,6 +191,21 @@ a tremendous amount of time.
 
 
 ### Overall
+
+#### Why bright light is important...
+
+I feel  that it's important to  me to face (very)  bright light during
+the day, and  it's best if it comes directly  from the sun. Apparently
+(although I'm not  a hundred percent sure) it's  actually important to
+be exposed to (very) bright light at least 30 minutes a day.
+
+So, instead of using a very expensive 
+[S.A.D.  light](https://www.google.com/search?SAD+light) 
+to prevent potential
+[seasonal affective disorder](http://en.wikipedia.org/wiki/Seasonal_affective_disorder),
+well, I'm using very bright state-of-the-art LEDs to light up my home. :-)
+
+#### Conclusion
 
 LEDs are awesome because they need very little space compared to other
 light-emitting devices.
@@ -225,7 +226,7 @@ afford Makespace membership, so I kind of have all I need to handcraft
 at home.
 
 
-### Pictures
+##### Pictures
 
 4 COB LEDs on 3 aluminium  rulers, in parallel.  The 3 aluminum rulers
 are  stuck  together using  aluminium  tape,  which  has good  thermal
