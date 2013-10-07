@@ -1,4 +1,4 @@
-<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-10-07T23:31:11+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
+<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2013-10-07T23:33:44+01:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
   <entry>
     <id>http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html</id>
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html"/>
@@ -1167,9 +1167,9 @@ at home.&#60;/p&#62;
 &#60;p&#62;4 COB LEDs on 3 aluminium  rulers, in parallel.  The 3 aluminum rulers
 are  stuck  together using  aluminium  tape,  which  has good  thermal
 conductivity, reflects light not too badly and is not too expensive.&#60;/p&#62;
-&#60;p&#62;&#60;a href=&#39;/img/4-COB-LEDs-off.jpg&#39;&#62;&#60;img src=&#39;/img/4-COB-LEDs-off-640.jpg&#39; alt=&#39;4-COB-LEDs-off-640.jpg&#39; /&#62;&#60;/a&#62;
-&#60;a href=&#39;/img/4-COB-LEDs-off-unplugged.jpg&#39;&#62;&#60;img src=&#39;/img/4-COB-LEDs-off-unplugged-640.jpg&#39; alt=&#39;4-COB-LEDs-off-unplugged-640.jpg&#39; /&#62;&#60;/a&#62;
-&#60;a href=&#39;/img/4-COB-LEDs-off2.jpg&#39;&#62;&#60;img src=&#39;/img/4-COB-LEDs-off2-640.jpg&#39; alt=&#39;4-COB-LEDs-off2-640.jpg&#39; /&#62;&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#39;/img/4-COB-LEDs-off.jpg&#39;&#62;&#60;img src=&#39;/img/4-COB-LEDs-off-640.jpg&#39; alt=&#39;4-COB-LEDs-off-640.jpg&#39; /&#62;&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#39;/img/4-COB-LEDs-off-unplugged.jpg&#39;&#62;&#60;img src=&#39;/img/4-COB-LEDs-off-unplugged-640.jpg&#39; alt=&#39;4-COB-LEDs-off-unplugged-640.jpg&#39; /&#62;&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#39;/img/4-COB-LEDs-off2.jpg&#39;&#62;&#60;img src=&#39;/img/4-COB-LEDs-off2-640.jpg&#39; alt=&#39;4-COB-LEDs-off2-640.jpg&#39; /&#62;&#60;/a&#62;&#60;/p&#62;
     </content>
   </entry>
 </feed>
