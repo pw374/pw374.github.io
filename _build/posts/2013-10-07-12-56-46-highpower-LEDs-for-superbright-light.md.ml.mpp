@@ -160,8 +160,8 @@ powered by those 36W PSUs that provide power instantaneously.
 
 The other drawback is that it's made to work with (existing) laptops
 and they provide one connector per model (i.e., shape of the head and
-voltage), so you can't use any connector and then asume you'll be able
-to select the voltage: here, each head has a given associated voltage.
+voltage), so you can't use any connector and still assume you'll be able
+to select the voltage: here, the head determines the voltage you'll get.
 
 #### Heat!
 
