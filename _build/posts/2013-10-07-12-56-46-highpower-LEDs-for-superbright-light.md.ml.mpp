@@ -149,7 +149,8 @@ the 36W PSU I've been using so far, if we compare the price-over-power
 ratio.  Well,  the voltage  they deliver seems  okay: according  to my
 cheap multimeter,  so it's not really the  most reliable measurement,
 they deliver 19.2V when using a  19V head. The main drawback of this adaptor
-is that  it takes  time to "boot"!   It's not  really a problem  for a
+is that  it takes  time to "boot"! (Yes, it means it will *not* deliver power 
+during those 5 seconds.)   It's not  really a problem  for a
 laptop, but for a lighting system,  having to wait 5 full seconds 
 just seems  like forever. So it means that  if I want instantaneous
 light-on feature, I need a switch  between the PSU and the LED instead
