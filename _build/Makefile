@@ -115,12 +115,12 @@ _tmp/blogposts.contents.tmp.md:posts/*.md.ml.mpp _tmp/gen_post_contents.ml _tmp/
 # BLOG > RSS AND ATOM FEEDS
 ################################################################################
 ../blog-rss.xml:_tmp/blog-rss-contents.xml
-	echo "<?xml version='1.0'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>$$(date '+%a, %d %b %Y %H:%M:%S %z')</pubDate><lastBuildDate>$$(date '+%a, %d %b %Y %H:%M:%S %z')</lastBuildDate>" > $@
+	echo "<?xml version='1.0' encoding='UTF-8'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>$$(date '+%a, %d %b %Y %H:%M:%S %z')</pubDate><lastBuildDate>$$(date '+%a, %d %b %Y %H:%M:%S %z')</lastBuildDate>" > $@
 	cat $< >> $@
 	echo "</channel></rss>" >> $@
 
 ../blog-atom.xml:_tmp/blog-atom-contents.xml
-	echo "<?xml version='1.0'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>$$(date --rfc-3339=seconds|tr ' ' T)</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>" > $@
+	echo "<?xml version='1.0' encoding='UTF-8'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>$$(date --rfc-3339=seconds|tr ' ' T)</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>" > $@
 	cat $< >> $@
 	echo "</feed>" >> $@
 
