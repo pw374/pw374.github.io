@@ -239,4 +239,11 @@ let _ =
   List.iter (fun (e, d) -> printf "[![%s-640.jpg](/img/%s-640.jpg)](/img/%s.jpg)\n\n" e e e) l
 >}
 
+###### If you do want LEDs but don't want to solder anything
+
+Well, you may find a lot of websites on
+[Google](https://www.google.com/search?q=COB+LED) selling LEDs, you may also try
+[this one](http://kosilum.com/), which belongs to a friend of mine.
+
+
 {< end >}%% don't write anything after this line
