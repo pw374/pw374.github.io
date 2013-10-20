@@ -1,0 +1,7 @@
+# -*- mode: Makefile -*-
+
+include Makefile.common
+
+ocaml.org/%.html:site/%.html Makefile main_tpl.mpp core_tpl.mpp navbar_tpl.mpp htmlescape ocamlapplet.bash ocamltohtml html-pages/try-ocaml.js ocaml.org
+	${MPP} "$<" -o "$@"
+

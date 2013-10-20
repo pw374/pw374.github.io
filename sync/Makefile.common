@@ -1,0 +1,96 @@
+# -*- mode:Makefile -*-
+
+MPP_OPTIONS = -so '((!' -sc '!))' -son '{{!' -scn '!}}' -soc '' -scc '' -sec '' -sos '{{<' -scs '>}}' -its 
+MPP = mpp ${MPP_OPTIONS}
+
+all:ocaml.org/static site/pkg site/pkg/docs
+	bash gen.bash site
+
+ocaml.org/try-ocaml.js:try-ocaml.js
+	cp try-ocaml.js ocaml.org/
+
+ocaml.org/%.html:site/%.md Makefile main_tpl.mpp core_tpl.mpp navbar_tpl.mpp htmlescape ocamlapplet.bash ocamltohtml ocaml.org/try-ocaml.js 
+	if grep -q '*Table of contents*' "$<" ; then omd -otoc -ts 2 "$<" > "$@.toc" ; fi
+	sed -e 's|\*Table of contents\*||g' "$<" | omd -r ocaml=./ocamltohtml -r tryocaml=./ocamlapplet.bash > "$@.tmp"
+	if [ -f "$@.toc" ] ; then \
+	${MPP} -set "filename=$<" -set "page=$@.tmp" -set "toc=$@.toc" < main_tpl.mpp > "$@" ; \
+	rm -f "$@.toc" ; \
+	else \
+	${MPP} -set "filename=$<" -set "page=$@.tmp" < main_tpl.mpp > "$@" ; \
+	fi
+	rm -f "$@.tmp"
+
+ocaml.org/img:skin/img
+	rm -fr "$@"
+	mkdir -p ocaml.org
+	cp -a "$<" "$@"
+
+ocaml.org/static:skin/static skin/static/css skin/static/img
+	rm -fr "$@"
+	mkdir -p $@
+	cp -a "$<"/* "$@"/
+
+ocaml.org/static/css:skin/static/css
+	rm -fr ocaml.org/static
+	make ocaml.org/static
+ocaml.org/static/img:skin/static/img
+	rm -fr ocaml.org/static
+	make ocaml.org/static
+
+clean:
+	rm -fr ocaml.org *~
+
+htmlescape:htmlescape.ml
+	ocamlopt $< -o $@
+
+ocamltohtml:lexer.ml ocamltohtml.ml
+	ocamlopt $+ -o $@
+
+pkg:Makefile
+	rm -fr site/pkg/
+	mkdir -p site/pkg/docs/
+	rsync -r pkg-pages/* site/pkg/
+
+	mv site/pkg/index.{html,md}
+
+	for l in site/pkg/*/*/*.html ; do \
+	  (printf '<!-- {{! set title %s !}} -->\n' "$$(basename $$(dirname $$l))" ; cat "$$l") \
+		> "$$(dirname $$l)/$$(basename $$l html)"md ;\
+	  rm -f "$$l" ;\
+	done
+
+	printf '<!-- {{! set title Packages !}} -->\n# Packages\n' > site/pkg/index.html
+	cat site/pkg/index.md >> site/pkg/index.html
+	mv site/pkg/index.html site/pkg/index.md
+	rsync -r opamhtml/* site/pkg/docs/
+	rm -f site/pkg/docs/index.html
+
+	find site/pkg/* -iname '*.md'|while read l ; do \
+		if [[ -d site/pkg/docs/"$$(basename $$(dirname $$(dirname "$$l")))" ]] ; then \
+			frag -tr '.*</tbody>' < "$$l" > "$$l".p1 ;\
+			frag -fr '.*</tbody>' < "$$l" > "$$l".p3 ;\
+			printf '<tr><th>Documentation</th><td><a href="/pkg/docs/?package=%s">click here</a></td></tr>\n          </tbody>\n' \
+					"$$(basename $$(dirname $$(dirname "$$l")))" > "$$l".p2 ;\
+			cat "$$l".p1 "$$l".p2 "$$l".p3 > "$$l" ;\
+		fi; \
+	done
+
+	echo '<!-- Unfortunately, this file is generated, so do not edit manually. {{! set title Packages Documentation !}} -->' > site/pkg/docs/index.md
+	echo '<div id="opamdoc-contents" class="span8 offset2"><h1>List of Packages</h1><table class="indextable">' >> site/pkg/docs/index.md
+	frag -fr '.*<table.*' -tr '.*</table>.*' < opamhtml/index.html | sort >> site/pkg/docs/index.md
+	echo '</table></div>' >> site/pkg/docs/index.md
+	echo '<script type="text/javascript" src="opam_doc_loader.js"></script>' >> site/pkg/docs/index.md
+	echo '<script type="text/javascript">opamdoc_contents = document.getElementById("opamdoc-contents");</script>' >> site/pkg/docs/index.md
+
+
+.PHONY: opamdoc pkg clean
+
+
+ocaml.org/learn/index.html:front_code_snippet_tpl.html
+ocaml.org/index.html:front_code_snippet_tpl.html front_news_tpl.mpp
+ocaml.org/community/index.html:front_news_tpl.mpp
+front_code_snippet_tpl.html:front_code_snippet_tpl.md
+	omd -r ocaml=./ocamltohtml -r tryocaml=./ocamlapplet.bash $< > $@
+
+ocaml.org:
+	mkdir "$@"
