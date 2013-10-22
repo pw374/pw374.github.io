@@ -199,7 +199,7 @@ git commit -a -m '(redesign) fix the rest, if any.'
 cp ~/OCL/pw374.github.io/sync/Makefile.{common,from_{md,html}} src/
 cp ~/OCL/pw374.github.io/sync/gen.bash src/
 git add src/Makefile.{common,from_{md,html}} src/gen.bash
-git commit src/Makefile.{common,from_{md,html}} -m '(redesign) Makefiles + gen.bash' 
+git commit src/Makefile.{common,from_{md,html}} src/gen.bash -m '(redesign) Makefiles + gen.bash' 
 
 
 
