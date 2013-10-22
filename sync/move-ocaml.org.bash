@@ -9,12 +9,12 @@ cp -a ocaml.org-before-branch ocaml.org || exit
 ls ocaml.org sandbox-ocaml.org || exit
 cd ocaml.org/ || exit
 git checkout redesign
-cp -a ../sandbox-ocaml.org/md-pages/ src/site
-find src/site -type f -delete
+mkdir -p src/{site,tpl}
 
 \cp -a ../sandbox-ocaml.org/md-pages/* src/site/
-# git commit -a -m '(redesign) actual html->md conversion'
+find src/site -type f -delete
 
+echo '(redesign) html->md' > /tmp/msg
 x=0
 for i in \
  src/html/index.html                                                src/site/index.md \
@@ -31,7 +31,7 @@ for i in \
  src/html/releases/4.00.1.html                                      src/site/releases/4.00.1.md \
  src/html/releases/index.html                                       src/site/releases/index.md \
  src/html/releases/svn.html                                         src/site/releases/svn.md \
- src/html/videos.html                                               src/site//docs/videos.md \
+ src/html/videos.html                                               src/site/docs/videos.md \
  src/html/books.html                                                src/site/learn/books.md \
  src/html/caml-light/faq.html                                       src/site/releases/caml-light/faq.md \
  src/html/caml-light/index.html                                     src/site/releases/caml-light/index.md \
@@ -121,21 +121,38 @@ if (( x % 2 == 0 ))
 then
 old=$i
 else
-mkdir -p "$(sed -e 's|src/html|src/old-html|' <<<"$(dirname "$old")")"
-a="$(sed -e 's|src/html|src/old-html|' <<<"$old")"
-git mv "$old" "$a"
-git add "$i"
-if [[ "$(basename "$i" md)" == "$(basename "$old" html)" ]]
-then
-    echo -e "(redesign) mv $(basename $old html){html,md}\nDetails:\n - $i replaces $old,\n - $old archived as $a" > /tmp/msg
-else
-    echo -e "(redesign) mv $(basename $old) $(basename $i)\nDetails:\n - $i replaces $old,\n - $old archived as $a" > /tmp/msg
-fi
-EDITOR='cp /tmp/msg' git commit "$old" "$a" "$i"
+# echo git mv "$old" "$i"
+git mv "$old" "$i" || exit 1
+echo -e "$old -> $i" >> /tmp/msg
 fi
 (( x++ ))
 done
+EDITOR='cp /tmp/msg' git commit -a
 rm -f /tmp/msg
+
+\cp -a ../sandbox-ocaml.org/md-pages/* src/site/
+
+find src/site src/tpl -type f -name '*.html' -or -name '*.md' -exec \
+sed -i.old \
+ -e 's|main_tpl\.mpp|tpl/main.mpp|g' \
+ -e 's|navbar_tpl\.mpp|tpl/navbar.mpp|g' \
+ -e 's|core_tpl\.mpp|tpl/core.mpp|g' \
+ -e 's|front_package_tpl\.mpp|tpl/front_package.mpp|g' \
+ -e 's|front_news_tpl\.mpp|tpl/front_news.mpp|g' \
+ -e 's|/static/|/|g' \
+{} \;
+find src/site -name '*.old' -delete
+
+cp ~/OCL/sandbox-ocaml.org/main_tpl.mpp src/tpl/main.mpp
+cp ~/OCL/sandbox-ocaml.org/navbar_tpl.mpp src/tpl/navbar.mpp
+cp ~/OCL/sandbox-ocaml.org/core_tpl.mpp src/tpl/core.mpp
+cp ~/OCL/sandbox-ocaml.org/front_package_tpl.mpp src/tpl/front_package.mpp
+cp ~/OCL/sandbox-ocaml.org/front_news_tpl.mpp src/tpl/front_news.mpp
+cp ~/OCL/sandbox-ocaml.org/front_code_snippet_tpl.md src/tpl/front_code_snippet.md
+git commit -a -m '(redesign) git-add template files'
+
+# cp ~/OCL/sandbox-ocaml.org/tryocaml.js src/tryocaml.js
+
 
 # git commit -a -m '(redesign) git-mv for html files'
 
@@ -145,7 +162,7 @@ rm -f /tmp/msg
 
 git commit src/site/docs/consortium-license.fr.md src/site/releases/caml-light/releases/index.md src/site/releases/index.md -m '(redesign) fix symb links' 
 
-
+rm -f src/site/packages/core-list.html.mpp
 git add src/site
 git commit -a -m '(redesign) add missing pieces'
 
@@ -163,6 +180,10 @@ mkdir -p src/site/js/
 git mv src/html/js/getElementsByClassName-1.0.1.js  src/site/js/
 git commit -a -m '(redesign) git-mv for non-html files'
 
+cp -a ~/OCL/sandbox-ocaml.org/skin/static/{css,img} src/site/
+git add src/site/{css,img}
+git commit -a -m '(redesign) git-add non-html files'
+
 git rm -r src/html/ext/
 git rm -r src/html/css
 git rm src/html/ocaml_license.inc
@@ -176,8 +197,12 @@ git commit -a -m '(redesign) fix the rest, if any.'
 
 
 cp ~/OCL/pw374.github.io/sync/Makefile.{common,from_{md,html}} src/
-git add src/Makefile.{common,from_{md,html}}
+cp ~/OCL/pw374.github.io/sync/gen.bash src/
+git add src/Makefile.{common,from_{md,html}} src/gen.bash
 git commit src/Makefile.{common,from_{md,html}} -m '(redesign) Makefiles + gen.bash' 
+
+
+
 
 
 exit 0
