@@ -14,6 +14,8 @@ mkdir -p src/{site,tpl}
 \cp -a ../sandbox-ocaml.org/md-pages/* src/site/
 find src/site -type f -delete
 
+mv src/site/{releases,}/caml-light/ 
+
 echo '(redesign) html->md: name change' > /tmp/msg
 x=0
 for i in \
@@ -33,11 +35,11 @@ for i in \
  src/html/releases/svn.html                                         src/site/releases/svn.md \
  src/html/videos.html                                               src/site/docs/videos.md \
  src/html/books.html                                                src/site/learn/books.md \
- src/html/caml-light/faq.html                                       src/site/releases/caml-light/faq.md \
- src/html/caml-light/index.html                                     src/site/releases/caml-light/index.md \
- src/html/caml-light/license.html                                   src/site/releases/caml-light/license.md \
- src/html/caml-light/releases/0.75.html                             src/site/releases/caml-light/releases/0.75.md \
- src/html/caml-light/releases/index.html                            src/site/releases/caml-light/releases/index.md \
+ src/html/caml-light/faq.html                                       src/site/caml-light/faq.md \
+ src/html/caml-light/index.html                                     src/site/caml-light/index.md \
+ src/html/caml-light/license.html                                   src/site/caml-light/license.md \
+ src/html/caml-light/releases/0.75.html                             src/site/caml-light/releases/0.75.md \
+ src/html/caml-light/releases/index.html                            src/site/caml-light/releases/index.md \
  src/html/cheat_sheets.html                                         src/site/docs/cheat_sheets.md \
  src/html/companies.html                                            src/site/learn/companies.md \
  src/html/consortium/license.fr.html                                src/site/docs/consortium-license.fr.md \
@@ -164,6 +166,7 @@ git commit -a -m '(redesign) git-add template files'
 git commit src/site/docs/consortium-license.fr.md src/site/releases/caml-light/releases/index.md src/site/releases/index.md -m '(redesign) fix symb links' 
 
 rm -f src/site/packages/core-list.html.mpp
+find src -name '.*' -delete
 git add src/site
 git commit -a -m '(redesign) add missing pieces'
 
@@ -173,7 +176,7 @@ mkdir -p src/site/meetings/ocaml/2013/slides/
 git mv src/html/meetings/ocaml/2013/slides/* src/site/meetings/ocaml/2013/slides/
 git mv src/{html,site}/robots.txt
 mkdir -p src/site/tutorials/camlp4_3.10/
-git mv src/html/tutorials/camlp4_3.10/*.ml src/site/tutorials/camlp4_3.10/
+git mv src/html/tutorials/camlp4_3.10/*.ml src/site/learn/tutorials/camlp4_3.10/
 mkdir -p src/site/img/
 git mv src/html/img/* src/site/img/
 git mv src/{html,site}/CNAME
@@ -182,6 +185,7 @@ git mv src/html/js/getElementsByClassName-1.0.1.js  src/site/js/
 git commit -a -m '(redesign) git-mv for non-html files'
 
 cp -a ~/OCL/sandbox-ocaml.org/skin/static/{css,img} src/site/
+find src -name '.*' -delete
 git add src/site/{css,img}
 git commit -a -m '(redesign) git-add non-html files'
 
