@@ -134,16 +134,21 @@ rm -f /tmp/msg
 
 \cp -a ../sandbox-ocaml.org/md-pages/* src/site/
 
+function fixtpl () {
 find src/site src/tpl -type f -name '*.html' -or -name '*.md' -exec \
 sed -i.old \
  -e 's|main_tpl\.mpp|tpl/main.mpp|g' \
+ -e 's|tryocaml\.html|tpl/tryocaml.html|g' \
  -e 's|navbar_tpl\.mpp|tpl/navbar.mpp|g' \
  -e 's|core_tpl\.mpp|tpl/core.mpp|g' \
  -e 's|front_package_tpl\.mpp|tpl/front_package.mpp|g' \
  -e 's|front_news_tpl\.mpp|tpl/front_news.mpp|g' \
  -e 's|/static/|/|g' \
 {} \;
-find src/site -name '*.old' -delete
+find src/site src/tpl -name '*.old' -delete
+}
+
+fixtpl
 git commit -a -m '(redesign) html->md: actual conversion'
 
 cp ~/OCL/sandbox-ocaml.org/main_tpl.mpp src/tpl/main.mpp
@@ -152,6 +157,7 @@ cp ~/OCL/sandbox-ocaml.org/core_tpl.mpp src/tpl/core.mpp
 cp ~/OCL/sandbox-ocaml.org/front_package_tpl.mpp src/tpl/front_package.mpp
 cp ~/OCL/sandbox-ocaml.org/front_news_tpl.mpp src/tpl/front_news.mpp
 cp ~/OCL/sandbox-ocaml.org/front_code_snippet_tpl.md src/tpl/front_code_snippet.md
+fixtpl
 git commit -a -m '(redesign) git-add template files'
 
 # cp ~/OCL/sandbox-ocaml.org/tryocaml.js src/tryocaml.js
@@ -185,7 +191,7 @@ git mv src/html/js/getElementsByClassName-1.0.1.js  src/site/js/
 git commit -a -m '(redesign) git-mv for non-html files'
 
 cp -a ~/OCL/sandbox-ocaml.org/skin/static/{css,img} src/site/
-cp ~/OCL/sandbox-ocaml.org/ocamlapplet.bash src/
+cp ~/OCL/sandbox-ocaml.org/{ocamlapplet.bash,ocamltohtml.ml,lexer.ml} src/
 find src -name '.*' -delete
 git add src/site/{css,img}
 git commit -a -m '(redesign) git-add non-html files'
