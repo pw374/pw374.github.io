@@ -135,7 +135,7 @@ rm -f /tmp/msg
 \cp -a ../sandbox-ocaml.org/md-pages/* src/site/
 
 function fixtpl () {
-find src/site src/tpl -type f -name '*.html' -or -name '*.md' -exec \
+find src/site src/tpl -type f -exec \
 sed -i.old \
  -e 's|main_tpl\.mpp|tpl/main.mpp|g' \
  -e 's|tryocaml\.html|tpl/tryocaml.html|g' \
@@ -158,12 +158,10 @@ cp ~/OCL/sandbox-ocaml.org/front_package_tpl.mpp src/tpl/front_package.mpp
 cp ~/OCL/sandbox-ocaml.org/front_news_tpl.mpp src/tpl/front_news.mpp
 cp ~/OCL/sandbox-ocaml.org/front_code_snippet_tpl.md src/tpl/front_code_snippet.md
 fixtpl
-git commit -a -m '(redesign) git-add template files'
+git commit -a -m '(redesign) Add template files'
 
 # cp ~/OCL/sandbox-ocaml.org/tryocaml.js src/tryocaml.js
 
-
-# git commit -a -m '(redesign) git-mv for html files'
 
 (cd src/site/docs/ && ln -sf consortium-license.md consortium-license.fr.md)
 (cd src/site/releases/caml-light/releases/ && ln -sf 0.75.md index.md)
@@ -174,7 +172,7 @@ git commit src/site/docs/consortium-license.fr.md src/site/releases/caml-light/r
 rm -f src/site/packages/core-list.html.mpp
 find src -name '.*' -delete
 git add src/site
-git commit -a -m '(redesign) add missing pieces'
+git commit -a -m '(redesign) Add missing pieces'
 
 mkdir -p src/site/meetings/ocaml/2013/proposals/
 git mv src/html/meetings/ocaml/2013/proposals/* src/site/meetings/ocaml/2013/proposals/
@@ -188,25 +186,25 @@ git mv src/html/img/* src/site/img/
 git mv src/{html,site}/CNAME
 mkdir -p src/site/js/
 git mv src/html/js/getElementsByClassName-1.0.1.js  src/site/js/
-git commit -a -m '(redesign) git-mv for non-html files'
+git commit -a -m '(redesign) Move non-HTML files from src/html to src/site'
 
 cp -a ~/OCL/sandbox-ocaml.org/skin/static/{css,img} src/site/
 cp ~/OCL/sandbox-ocaml.org/{ocamlapplet.bash,ocamltohtml.ml,lexer.ml} src/
 find src -name '.*' -delete
 git add src/site/{css,img}
-git commit -a -m '(redesign) git-add non-html files'
+git commit -a -m '(redesign) Add non-html files'
 
 find src/html/ext src/html/css
 git rm -r src/html/ext/jquery-1.8.0.min.js src/html/ext/bootstrap-v2.0.4 src/html/ext/bootstrap
 git rm -r src/html/css/ocaml.css
 git rm src/html/ocaml_license.inc
 git rm src/html/consortium/index.html
-git commit -a -m '(redesign) git-rm non relevant files'
+git commit -a -m '(redesign) Remove non relevant files'
 
 find src/html -type d -delete
 rmdir src/html
 
-git commit -a -m '(redesign) fix the rest, if any.'
+git commit -a -m '(redesign) Fix the rest, if any.'
 
 cp ~/OCL/pw374.github.io/sync/Makefile.{common,from_{md,html}} src/
 cp ~/OCL/pw374.github.io/sync/gen.bash src/
