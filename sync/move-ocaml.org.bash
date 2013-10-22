@@ -13,6 +13,7 @@ mkdir -p src/{site,tpl}
 
 \cp -a ../sandbox-ocaml.org/md-pages/* src/site/
 find src/site -type f -delete
+find src -name '.*' -delete
 
 echo '(redesign) html->md: name change' > /tmp/msg
 x=0
@@ -131,6 +132,7 @@ EDITOR='cp /tmp/msg' git commit -a
 rm -f /tmp/msg
 
 \cp -a ../sandbox-ocaml.org/md-pages/* src/site/
+find src -name '.*' -delete
 
 find src/site src/tpl -type f -name '*.html' -or -name '*.md' -exec \
 sed -i.old \
