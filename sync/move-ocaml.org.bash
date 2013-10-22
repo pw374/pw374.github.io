@@ -204,7 +204,7 @@ git commit src/Makefile.{common,from_{md,html}} src/gen.bash -m '(redesign) Make
 
 
 
-
+git status
 
 exit 0
 
