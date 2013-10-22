@@ -3,39 +3,17 @@
 MPP_OPTIONS = -so '((!' -sc '!))' -son '{{!' -scn '!}}' -soc '' -scc '' -sec '' -sos '{{<' -scs '>}}' -its 
 MPP = mpp ${MPP_OPTIONS}
 
-all:ocaml.org/static site/pkg site/pkg/docs
+all:ocaml.org
 	bash gen.bash site
 
-ocaml.org/try-ocaml.js:try-ocaml.js
-	cp try-ocaml.js ocaml.org/
+ocaml.org:
+	find site -type d | while read l; do mkdir -p "$$(sed -e 's|site/|ocaml.org/|g' <<<$$l)" ; done
 
-ocaml.org/%.html:site/%.md Makefile main_tpl.mpp core_tpl.mpp navbar_tpl.mpp htmlescape ocamlapplet.bash ocamltohtml ocaml.org/try-ocaml.js 
-	if grep -q '*Table of contents*' "$<" ; then omd -otoc -ts 2 "$<" > "$@.toc" ; fi
-	sed -e 's|\*Table of contents\*||g' "$<" | omd -r ocaml=./ocamltohtml -r tryocaml=./ocamlapplet.bash > "$@.tmp"
-	if [ -f "$@.toc" ] ; then \
-	${MPP} -set "filename=$<" -set "page=$@.tmp" -set "toc=$@.toc" < main_tpl.mpp > "$@" ; \
-	rm -f "$@.toc" ; \
-	else \
-	${MPP} -set "filename=$<" -set "page=$@.tmp" < main_tpl.mpp > "$@" ; \
-	fi
-	rm -f "$@.tmp"
+# ocaml.org/try-ocaml.js:try-ocaml.js
+# 	cp try-ocaml.js ocaml.org/
 
-ocaml.org/img:skin/img
-	rm -fr "$@"
-	mkdir -p ocaml.org
-	cp -a "$<" "$@"
-
-ocaml.org/static:skin/static skin/static/css skin/static/img
-	rm -fr "$@"
-	mkdir -p $@
-	cp -a "$<"/* "$@"/
-
-ocaml.org/static/css:skin/static/css
-	rm -fr ocaml.org/static
-	make ocaml.org/static
-ocaml.org/static/img:skin/static/img
-	rm -fr ocaml.org/static
-	make ocaml.org/static
+tpl/front_code_snippet.html:tpl/front_code_snippet.md
+	omd $< -o $@
 
 clean:
 	rm -fr ocaml.org *~
@@ -85,12 +63,12 @@ pkg:Makefile
 
 .PHONY: opamdoc pkg clean
 
-
-ocaml.org/learn/index.html:front_code_snippet_tpl.html
-ocaml.org/index.html:front_code_snippet_tpl.html front_news_tpl.mpp
-ocaml.org/community/index.html:front_news_tpl.mpp
-front_code_snippet_tpl.html:front_code_snippet_tpl.md
+ocaml.org/learn/index.html:tpl/front_code_snippet.html
+ocaml.org/index.html:tpl/front_code_snippet.html tpl/front_news.mpp
+ocaml.org/community/index.html:tpl/front_news.mpp
+tpl/front_code_snippet_tpl.html:tpl/front_code_snippet.md
 	omd -r ocaml=./ocamltohtml -r tryocaml=./ocamlapplet.bash $< > $@
 
-ocaml.org:
-	mkdir "$@"
+
+
+

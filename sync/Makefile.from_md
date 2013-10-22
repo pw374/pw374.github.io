@@ -2,14 +2,14 @@
 
 include Makefile.common
 
-ocaml.org/%.html:site/%.md Makefile core_tpl.mpp navbar_tpl.mpp htmlescape ocamlapplet.bash ocamltohtml html-pages/try-ocaml.js ocaml.org
+ocaml.org/%.html:site/%.md ocaml.org
 	if grep -q '*Table of contents*' "$<" ; then omd -otoc -ts 2 "$<" > "$@.toc" ; fi
 	sed -e 's|\*Table of contents\*||g' "$<" | omd -r ocaml=./ocamltohtml -r tryocaml=./ocamlapplet.bash > "$@.tmp"
 	if [ -f "$@.toc" ] ; then \
-	${MPP} -set "filename=$<" -set "page=$@.tmp" -set "toc=$@.toc" < main_tpl.mpp > "$@" ; \
+	${MPP} -set "filename=$<" -set "page=$@.tmp" -set "toc=$@.toc" < tpl/main.mpp > "$@" ; \
 	rm -f "$@.toc" ; \
 	else \
-	${MPP} -set "filename=$<" -set "page=$@.tmp" < main_tpl.mpp > "$@" ; \
+	${MPP} -set "filename=$<" -set "page=$@.tmp" < tpl/main.mpp > "$@" ; \
 	fi
 	rm -f "$@.tmp"
 
