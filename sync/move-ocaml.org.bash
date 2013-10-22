@@ -138,11 +138,12 @@ function fixtpl () {
 find src/site src/tpl -type f -exec \
 sed -i.old \
  -e 's|main_tpl\.mpp|tpl/main.mpp|g' \
- -e 's|tryocaml\.html|tpl/tryocaml.html|g' \
+ -e 's| tryocaml\.html| tpl/tryocaml.html|g' \
  -e 's|navbar_tpl\.mpp|tpl/navbar.mpp|g' \
  -e 's|core_tpl\.mpp|tpl/core.mpp|g' \
  -e 's|front_package_tpl\.mpp|tpl/front_package.mpp|g' \
  -e 's|front_news_tpl\.mpp|tpl/front_news.mpp|g' \
+ -e 's|front_code_snippet_tpl\.html|tpl/front_code_snippet.html|g' \
  -e 's|/static/|/|g' \
 {} \;
 find src/site src/tpl -name '*.old' -delete
@@ -208,11 +209,38 @@ rmdir src/html
 git commit -a -m '(redesign) Fix the rest, if any.'
 
 cp ~/OCL/pw374.github.io/sync/Makefile.{common,from_{md,html}} src/
+echo 'include Makefile.common' > src/Makefile
 cp ~/OCL/pw374.github.io/sync/gen.bash src/
-git add src/Makefile.{common,from_{md,html}} src/gen.bash
-git commit src/Makefile.{common,from_{md,html}} src/gen.bash -m '(redesign) Makefiles + gen.bash' 
+git add src/Makefile src/Makefile.{common,from_{md,html}} src/gen.bash
+git commit src/Makefile src/Makefile.{common,from_{md,html}} src/gen.bash -m '(redesign) Makefiles + gen.bash' 
 
+cat > src/README-redesign.md <<EOF
+# Dependencies
+  * rsync
+  * mpp (available as an opam package)
+  * frag (available as an opam package)
+  * omd (available as an opam package)
+  * gnu make
+  * bash
+  * ocamlopt
 
+# How to build the web site
+Once you have the dependencies, the following command should build a directory called `src/ocaml.org`, which would contain the generated website.
+    cd src && make
+
+If the command fails, check your dependencies. And of course, if you have contributed, check your contributions.
+Otherwise, please file a bug report.
+
+# How to contribute
+Files that should end up on the web site are in `src/site`, they include markdown files, pictures, JS files, CSS, etc.
+Files that are used to build the web site, which are more "software" than contents are in `src/` (e.g., Makefiles) 
+and `src/tpl` (i.e., template files).
+
+When using a template in a file in `src/site`, one should always refer to it as `tpl/template-file-name` 
+as the building script runs from `src`. Also, having `tpl/` in the filename means you don't need to have any `tpl` prefix or suffix in your template filename.
+EOF
+git add src/README-redesign.md
+git commit -m 'README for the redesigned ocaml.org'
 
 git status
 
