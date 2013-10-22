@@ -147,7 +147,7 @@ find src/site -name '*.old' -delete
 git commit -a -m '(redesign) html->md: actual conversion'
 
 cp ~/OCL/sandbox-ocaml.org/main_tpl.mpp src/tpl/main.mpp
-cp ~/OCL/sandbox-ocaml.org/navbar_tpl.mpp src/tpl/navbar.mpp
+sed -e 's|="/pkg/"|="http://opam.ocaml.org/"|g' ~/OCL/sandbox-ocaml.org/navbar_tpl.mpp > src/tpl/navbar.mpp
 cp ~/OCL/sandbox-ocaml.org/core_tpl.mpp src/tpl/core.mpp
 cp ~/OCL/sandbox-ocaml.org/front_package_tpl.mpp src/tpl/front_package.mpp
 cp ~/OCL/sandbox-ocaml.org/front_news_tpl.mpp src/tpl/front_news.mpp
@@ -185,12 +185,14 @@ git mv src/html/js/getElementsByClassName-1.0.1.js  src/site/js/
 git commit -a -m '(redesign) git-mv for non-html files'
 
 cp -a ~/OCL/sandbox-ocaml.org/skin/static/{css,img} src/site/
+cp ~/OCL/sandbox-ocaml.org/ocamlapplet.bash src/
 find src -name '.*' -delete
 git add src/site/{css,img}
 git commit -a -m '(redesign) git-add non-html files'
 
-git rm -r src/html/ext/
-git rm -r src/html/css
+find src/html/ext src/html/css
+git rm -r src/html/ext/jquery-1.8.0.min.js src/html/ext/bootstrap-v2.0.4 src/html/ext/bootstrap
+git rm -r src/html/css/ocaml.css
 git rm src/html/ocaml_license.inc
 git rm src/html/consortium/index.html
 git commit -a -m '(redesign) git-rm non relevant files'
@@ -199,7 +201,6 @@ find src/html -type d -delete
 rmdir src/html
 
 git commit -a -m '(redesign) fix the rest, if any.'
-
 
 cp ~/OCL/pw374.github.io/sync/Makefile.{common,from_{md,html}} src/
 cp ~/OCL/pw374.github.io/sync/gen.bash src/
