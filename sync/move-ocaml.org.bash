@@ -14,7 +14,7 @@ mkdir -p src/{site,tpl}
 \cp -a ../sandbox-ocaml.org/md-pages/* src/site/
 find src/site -type f -delete
 
-echo '(redesign) html->md > name change' > /tmp/msg
+echo '(redesign) html->md: name change' > /tmp/msg
 x=0
 for i in \
  src/html/index.html                                                src/site/index.md \
@@ -142,7 +142,7 @@ sed -i.old \
  -e 's|/static/|/|g' \
 {} \;
 find src/site -name '*.old' -delete
-git commit -a -m '(redesign) html->md > actual conversion'
+git commit -a -m '(redesign) html->md: actual conversion'
 
 cp ~/OCL/sandbox-ocaml.org/main_tpl.mpp src/tpl/main.mpp
 cp ~/OCL/sandbox-ocaml.org/navbar_tpl.mpp src/tpl/navbar.mpp
