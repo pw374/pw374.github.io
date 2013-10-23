@@ -8,7 +8,7 @@ rm -fr ocaml.org
 cp -a ocaml.org-before-branch ocaml.org || exit
 ls ocaml.org sandbox-ocaml.org || exit
 cd ocaml.org/ || exit
-git checkout redesign
+git checkout -b redesign || exit
 mkdir -p src/{site,tpl}
 
 \cp -a ../sandbox-ocaml.org/md-pages/* src/site/
