@@ -3,7 +3,7 @@
 MPP_OPTIONS = -so '((!' -sc '!))' -son '{{!' -scn '!}}' -soc '' -scc '' -sec '' -sos '{{<' -scs '>}}' -its 
 MPP = mpp ${MPP_OPTIONS}
 
-all:ocaml.org
+all:ocaml.org ocamltohtml
 	bash gen.bash site
 
 ocaml.org:
@@ -11,6 +11,10 @@ ocaml.org:
 
 # ocaml.org/try-ocaml.js:try-ocaml.js
 # 	cp try-ocaml.js ocaml.org/
+
+ocamltohtml:lexer.ml ocamltohtml.ml
+	ocamlopt -o $@ lexer.ml ocamltohtml.ml
+	rm -f ocamltohtml.cm[ix] lexer.cm[ix]
 
 tpl/front_code_snippet.html:tpl/front_code_snippet.md
 	omd $< -o $@
@@ -20,9 +24,6 @@ clean:
 
 htmlescape:htmlescape.ml
 	ocamlopt $< -o $@
-
-ocamltohtml:lexer.ml ocamltohtml.ml
-	ocamlopt $+ -o $@
 
 pkg:Makefile
 	rm -fr site/pkg/

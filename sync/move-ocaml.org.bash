@@ -15,6 +15,8 @@ mkdir -p src/{site,tpl}
 find src/site -type f -delete
 find src -name '.*' -delete
 
+mv src/site/{releases,}/caml-light/ 
+
 echo '(redesign) html->md: name change' > /tmp/msg
 x=0
 for i in \
@@ -34,11 +36,11 @@ for i in \
  src/html/releases/svn.html                                         src/site/releases/svn.md \
  src/html/videos.html                                               src/site/docs/videos.md \
  src/html/books.html                                                src/site/learn/books.md \
- src/html/caml-light/faq.html                                       src/site/releases/caml-light/faq.md \
- src/html/caml-light/index.html                                     src/site/releases/caml-light/index.md \
- src/html/caml-light/license.html                                   src/site/releases/caml-light/license.md \
- src/html/caml-light/releases/0.75.html                             src/site/releases/caml-light/releases/0.75.md \
- src/html/caml-light/releases/index.html                            src/site/releases/caml-light/releases/index.md \
+ src/html/caml-light/faq.html                                       src/site/caml-light/faq.md \
+ src/html/caml-light/index.html                                     src/site/caml-light/index.md \
+ src/html/caml-light/license.html                                   src/site/caml-light/license.md \
+ src/html/caml-light/releases/0.75.html                             src/site/caml-light/releases/0.75.md \
+ src/html/caml-light/releases/index.html                            src/site/caml-light/releases/index.md \
  src/html/cheat_sheets.html                                         src/site/docs/cheat_sheets.md \
  src/html/companies.html                                            src/site/learn/companies.md \
  src/html/consortium/license.fr.html                                src/site/docs/consortium-license.fr.md \
@@ -134,30 +136,36 @@ rm -f /tmp/msg
 \cp -a ../sandbox-ocaml.org/md-pages/* src/site/
 find src -name '.*' -delete
 
-find src/site src/tpl -type f -name '*.html' -or -name '*.md' -exec \
+function fixtpl () {
+find src/site src/tpl -type f -exec \
 sed -i.old \
  -e 's|main_tpl\.mpp|tpl/main.mpp|g' \
+ -e 's| tryocaml\.html| tpl/tryocaml.html|g' \
  -e 's|navbar_tpl\.mpp|tpl/navbar.mpp|g' \
  -e 's|core_tpl\.mpp|tpl/core.mpp|g' \
  -e 's|front_package_tpl\.mpp|tpl/front_package.mpp|g' \
  -e 's|front_news_tpl\.mpp|tpl/front_news.mpp|g' \
+ -e 's|front_code_snippet_tpl\.html|tpl/front_code_snippet.html|g' \
  -e 's|/static/|/|g' \
 {} \;
-find src/site -name '*.old' -delete
+find src/site src/tpl -name '*.old' -delete
+}
+
+fixtpl
 git commit -a -m '(redesign) html->md: actual conversion'
 
 cp ~/OCL/sandbox-ocaml.org/main_tpl.mpp src/tpl/main.mpp
-cp ~/OCL/sandbox-ocaml.org/navbar_tpl.mpp src/tpl/navbar.mpp
+cp ~/OCL/sandbox-ocaml.org/tryocaml.html src/tpl/tryocaml.html
+sed -e 's|="/pkg/"|="http://opam.ocaml.org/"|g' ~/OCL/sandbox-ocaml.org/navbar_tpl.mpp > src/tpl/navbar.mpp
 cp ~/OCL/sandbox-ocaml.org/core_tpl.mpp src/tpl/core.mpp
 cp ~/OCL/sandbox-ocaml.org/front_package_tpl.mpp src/tpl/front_package.mpp
 cp ~/OCL/sandbox-ocaml.org/front_news_tpl.mpp src/tpl/front_news.mpp
 cp ~/OCL/sandbox-ocaml.org/front_code_snippet_tpl.md src/tpl/front_code_snippet.md
-git commit -a -m '(redesign) git-add template files'
+fixtpl
+git commit -a -m '(redesign) Add template files'
 
 # cp ~/OCL/sandbox-ocaml.org/tryocaml.js src/tryocaml.js
 
-
-# git commit -a -m '(redesign) git-mv for html files'
 
 (cd src/site/docs/ && ln -sf consortium-license.md consortium-license.fr.md)
 (cd src/site/releases/caml-light/releases/ && ln -sf 0.75.md index.md)
@@ -166,8 +174,9 @@ git commit -a -m '(redesign) git-add template files'
 git commit src/site/docs/consortium-license.fr.md src/site/releases/caml-light/releases/index.md src/site/releases/index.md -m '(redesign) fix symb links' 
 
 rm -f src/site/packages/core-list.html.mpp
+find src -name '.*' -delete
 git add src/site
-git commit -a -m '(redesign) add missing pieces'
+git commit -a -m '(redesign) Add missing pieces'
 
 mkdir -p src/site/meetings/ocaml/2013/proposals/
 git mv src/html/meetings/ocaml/2013/proposals/* src/site/meetings/ocaml/2013/proposals/
@@ -175,36 +184,65 @@ mkdir -p src/site/meetings/ocaml/2013/slides/
 git mv src/html/meetings/ocaml/2013/slides/* src/site/meetings/ocaml/2013/slides/
 git mv src/{html,site}/robots.txt
 mkdir -p src/site/tutorials/camlp4_3.10/
-git mv src/html/tutorials/camlp4_3.10/*.ml src/site/tutorials/camlp4_3.10/
+git mv src/html/tutorials/camlp4_3.10/*.ml src/site/learn/tutorials/camlp4_3.10/
 mkdir -p src/site/img/
 git mv src/html/img/* src/site/img/
 git mv src/{html,site}/CNAME
 mkdir -p src/site/js/
 git mv src/html/js/getElementsByClassName-1.0.1.js  src/site/js/
-git commit -a -m '(redesign) git-mv for non-html files'
+git commit -a -m '(redesign) Move non-HTML files from src/html to src/site'
 
 cp -a ~/OCL/sandbox-ocaml.org/skin/static/{css,img} src/site/
+cp ~/OCL/sandbox-ocaml.org/{ocamlapplet.bash,ocamltohtml.ml,lexer.ml} src/
+find src -name '.*' -delete
 git add src/site/{css,img}
-git commit -a -m '(redesign) git-add non-html files'
+git commit -a -m '(redesign) Add non-html files'
 
-git rm -r src/html/ext/
-git rm -r src/html/css
+find src/html/ext src/html/css
+git rm -r src/html/ext/jquery-1.8.0.min.js src/html/ext/bootstrap-v2.0.4 src/html/ext/bootstrap
+git rm -r src/html/css/ocaml.css
 git rm src/html/ocaml_license.inc
 git rm src/html/consortium/index.html
-git commit -a -m '(redesign) git-rm non relevant files'
+git commit -a -m '(redesign) Remove non relevant files'
 
 find src/html -type d -delete
 rmdir src/html
 
-git commit -a -m '(redesign) fix the rest, if any.'
-
+git commit -a -m '(redesign) Fix the rest, if any.'
 
 cp ~/OCL/pw374.github.io/sync/Makefile.{common,from_{md,html}} src/
+echo 'include Makefile.common' > src/Makefile
 cp ~/OCL/pw374.github.io/sync/gen.bash src/
-git add src/Makefile.{common,from_{md,html}} src/gen.bash
-git commit src/Makefile.{common,from_{md,html}} src/gen.bash -m '(redesign) Makefiles + gen.bash' 
+git add src/Makefile src/Makefile.{common,from_{md,html}} src/gen.bash
+git commit src/Makefile src/Makefile.{common,from_{md,html}} src/gen.bash -m '(redesign) Makefiles + gen.bash' 
 
+cat > src/README-redesign.md <<EOF
+# Dependencies
+  * rsync
+  * mpp (available as an opam package)
+  * frag (available as an opam package)
+  * omd (available as an opam package)
+  * gnu make
+  * bash
+  * ocamlopt
 
+# How to build the web site
+Once you have the dependencies, the following command should build a directory called `src/ocaml.org`, which would contain the generated website.
+    cd src && make
+
+If the command fails, check your dependencies. And of course, if you have contributed, check your contributions.
+Otherwise, please file a bug report.
+
+# How to contribute
+Files that should end up on the web site are in `src/site`, they include markdown files, pictures, JS files, CSS, etc.
+Files that are used to build the web site, which are more "software" than contents are in `src/` (e.g., Makefiles) 
+and `src/tpl` (i.e., template files).
+
+When using a template in a file in `src/site`, one should always refer to it as `tpl/template-file-name` 
+as the building script runs from `src`. Also, having `tpl/` in the filename means you don't need to have any `tpl` prefix or suffix in your template filename.
+EOF
+git add src/README-redesign.md
+git commit -m 'README for the redesigned ocaml.org'
 
 git status
 
