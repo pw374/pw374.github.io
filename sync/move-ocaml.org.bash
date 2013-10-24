@@ -8,12 +8,11 @@ rm -fr ocaml.org
 cp -a ocaml.org-before-branch ocaml.org || exit
 ls ocaml.org sandbox-ocaml.org || exit
 cd ocaml.org/ || exit
-git checkout redesign
+git checkout -b redesign || exit
 mkdir -p src/{site,tpl}
 
 \cp -a ../sandbox-ocaml.org/md-pages/* src/site/
 find src/site -type f -delete
-find src -name '.*' -delete
 
 mv src/site/{releases,}/caml-light/ 
 
@@ -134,7 +133,6 @@ EDITOR='cp /tmp/msg' git commit -a
 rm -f /tmp/msg
 
 \cp -a ../sandbox-ocaml.org/md-pages/* src/site/
-find src -name '.*' -delete
 
 function fixtpl () {
 find src/site src/tpl -type f -exec \
@@ -146,6 +144,7 @@ sed -i.old \
  -e 's|front_package_tpl\.mpp|tpl/front_package.mpp|g' \
  -e 's|front_news_tpl\.mpp|tpl/front_news.mpp|g' \
  -e 's|front_code_snippet_tpl\.html|tpl/front_code_snippet.html|g' \
+ -e 's|last_ml_topics_tpl\.mpp|tpl/last_ml_topics.mpp|g' \
  -e 's|/static/|/|g' \
 {} \;
 find src/site src/tpl -name '*.old' -delete
@@ -154,6 +153,7 @@ find src/site src/tpl -name '*.old' -delete
 fixtpl
 git commit -a -m '(redesign) html->md: actual conversion'
 
+cp ~/OCL/sandbox-ocaml.org/last_ml_topics_tpl.mpp src/tpl/last_ml_topics.mpp|g
 cp ~/OCL/sandbox-ocaml.org/main_tpl.mpp src/tpl/main.mpp
 cp ~/OCL/sandbox-ocaml.org/tryocaml.html src/tpl/tryocaml.html
 sed -e 's|="/pkg/"|="http://opam.ocaml.org/"|g' ~/OCL/sandbox-ocaml.org/navbar_tpl.mpp > src/tpl/navbar.mpp
@@ -162,6 +162,7 @@ cp ~/OCL/sandbox-ocaml.org/front_package_tpl.mpp src/tpl/front_package.mpp
 cp ~/OCL/sandbox-ocaml.org/front_news_tpl.mpp src/tpl/front_news.mpp
 cp ~/OCL/sandbox-ocaml.org/front_code_snippet_tpl.md src/tpl/front_code_snippet.md
 fixtpl
+git add tpl
 git commit -a -m '(redesign) Add template files'
 
 # cp ~/OCL/sandbox-ocaml.org/tryocaml.js src/tryocaml.js
@@ -195,7 +196,7 @@ git commit -a -m '(redesign) Move non-HTML files from src/html to src/site'
 cp -a ~/OCL/sandbox-ocaml.org/skin/static/{css,img} src/site/
 cp ~/OCL/sandbox-ocaml.org/{ocamlapplet.bash,ocamltohtml.ml,lexer.ml} src/
 find src -name '.*' -delete
-git add src/site/{css,img}
+git add src/site/{css,img} src/{ocamlapplet.bash,ocamltohtml.ml,lexer.ml} src/tpl
 git commit -a -m '(redesign) Add non-html files'
 
 find src/html/ext src/html/css
@@ -216,7 +217,7 @@ cp ~/OCL/pw374.github.io/sync/gen.bash src/
 git add src/Makefile src/Makefile.{common,from_{md,html}} src/gen.bash
 git commit src/Makefile src/Makefile.{common,from_{md,html}} src/gen.bash -m '(redesign) Makefiles + gen.bash' 
 
-cat > src/README-redesign.md <<EOF
+cat > src/README-redesign.md <<\EOF
 # Dependencies
   * rsync
   * mpp (available as an opam package)
@@ -247,4 +248,4 @@ git commit -m 'README for the redesigned ocaml.org'
 git status
 
 exit 0
-
+ 
