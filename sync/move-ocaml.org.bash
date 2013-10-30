@@ -222,6 +222,7 @@ cat > src/README-redesign.md <<\EOF
   * gnu make
   * bash
   * ocamlopt
+  * rss2html.ml needs packages (bigarray,unix,str,netsys,xmlm,netclient,rss) to compile
 
 # How to build the web site
 Once you have the dependencies, the following command should build a directory called `src/ocaml.org`, which would contain the generated website.
