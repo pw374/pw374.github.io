@@ -144,6 +144,7 @@ sed -i.old \
  -e 's|front_package_tpl\.mpp|tpl/front_package.mpp|g' \
  -e 's|front_news_tpl\.mpp|tpl/front_news.mpp|g' \
  -e 's|front_code_snippet_tpl\.html|tpl/front_code_snippet.html|g' \
+ -e 's|last_ml_topics_tpl\.mpp|tpl/last_ml_topics.mpp|g' \
  -e 's|/static/|/|g' \
 {} \;
 find src/site src/tpl -name '*.old' -delete
@@ -152,6 +153,7 @@ find src/site src/tpl -name '*.old' -delete
 fixtpl
 git commit -a -m '(redesign) html->md: actual conversion'
 
+cp ~/OCL/sandbox-ocaml.org/last_ml_topics_tpl.mpp src/tpl/last_ml_topics.mpp|g
 cp ~/OCL/sandbox-ocaml.org/main_tpl.mpp src/tpl/main.mpp
 cp ~/OCL/sandbox-ocaml.org/tryocaml.html src/tpl/tryocaml.html
 sed -e 's|="/pkg/"|="http://opam.ocaml.org/"|g' ~/OCL/sandbox-ocaml.org/navbar_tpl.mpp > src/tpl/navbar.mpp
@@ -160,6 +162,7 @@ cp ~/OCL/sandbox-ocaml.org/front_package_tpl.mpp src/tpl/front_package.mpp
 cp ~/OCL/sandbox-ocaml.org/front_news_tpl.mpp src/tpl/front_news.mpp
 cp ~/OCL/sandbox-ocaml.org/front_code_snippet_tpl.md src/tpl/front_code_snippet.md
 fixtpl
+git add tpl
 git commit -a -m '(redesign) Add template files'
 
 # cp ~/OCL/sandbox-ocaml.org/tryocaml.js src/tryocaml.js
@@ -245,4 +248,4 @@ git commit -m 'README for the redesigned ocaml.org'
 git status
 
 exit 0
-
+ 
