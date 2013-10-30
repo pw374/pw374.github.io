@@ -191,9 +191,9 @@ git mv src/html/js/getElementsByClassName-1.0.1.js  src/site/js/
 git commit -a -m '(redesign) Move non-HTML files from src/html to src/site'
 
 cp -a ~/OCL/sandbox-ocaml.org/skin/static/{css,img} src/site/
-cp ~/OCL/sandbox-ocaml.org/{ocamlapplet.bash,ocamltohtml.ml,lexer.ml} src/
+cp ~/OCL/sandbox-ocaml.org/{rss2html.ml,ocamlapplet.bash,ocamltohtml.ml,lexer.ml} src/
 find src -name '.*' -delete
-git add src/site/{css,img}
+git add src/site/{css,img} src/{rss2html.ml,ocamlapplet.bash,ocamltohtml.ml,lexer.ml} src/tpl
 git commit -a -m '(redesign) Add non-html files'
 
 find src/html/ext src/html/css
@@ -209,12 +209,11 @@ rmdir src/html
 git commit -a -m '(redesign) Fix the rest, if any.'
 
 cp ~/OCL/pw374.github.io/sync/Makefile.{common,from_{md,html}} src/
-echo 'include Makefile.common' > src/Makefile
 cp ~/OCL/pw374.github.io/sync/gen.bash src/
 git add src/Makefile src/Makefile.{common,from_{md,html}} src/gen.bash
 git commit src/Makefile src/Makefile.{common,from_{md,html}} src/gen.bash -m '(redesign) Makefiles + gen.bash' 
 
-cat > src/README-redesign.md <<EOF
+cat > src/README-redesign.md <<\EOF
 # Dependencies
   * rsync
   * mpp (available as an opam package)
