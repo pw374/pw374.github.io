@@ -40,7 +40,5 @@ do
 done
 
 mkdir -p html-pages/pkg/docs
-if false 
-then rsync opamhtml/doc_loader.js html-pages/pkg/docs/opam_doc_loader.js
-fi
+rsync opamhtml/doc_loader.js html-pages/pkg/docs/opam_doc_loader.js
 
