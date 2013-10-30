@@ -153,7 +153,7 @@ find src/site src/tpl -name '*.old' -delete
 fixtpl
 git commit -a -m '(redesign) html->md: actual conversion'
 
-cp ~/OCL/sandbox-ocaml.org/last_ml_topics_tpl.mpp src/tpl/last_ml_topics.mpp|g
+cp ~/OCL/sandbox-ocaml.org/last_ml_topics_tpl.mpp src/tpl/last_ml_topics.mpp
 cp ~/OCL/sandbox-ocaml.org/main_tpl.mpp src/tpl/main.mpp
 cp ~/OCL/sandbox-ocaml.org/tryocaml.html src/tpl/tryocaml.html
 sed -e 's|="/pkg/"|="http://opam.ocaml.org/"|g' ~/OCL/sandbox-ocaml.org/navbar_tpl.mpp > src/tpl/navbar.mpp
