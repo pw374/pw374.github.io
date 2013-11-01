@@ -39,6 +39,6 @@ do
 #    mpp -so '((!' -sc '!))' -son '{{!' -scn '!}}' -soc '' -scc '' -sec '' -its < "$i" > "$target"
 done
 
-mkdir -p html-pages/pkg/docs
-rsync opamhtml/doc_loader.js html-pages/pkg/docs/opam_doc_loader.js
+# mkdir -p html-pages/pkg/docs
+# rsync opamhtml/doc_loader.js html-pages/pkg/docs/opam_doc_loader.js
 

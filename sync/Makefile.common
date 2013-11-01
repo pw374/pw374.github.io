@@ -3,7 +3,8 @@
 MPP_OPTIONS = -so '((!' -sc '!))' -son '{{!' -scn '!}}' -soc '' -scc '' -sec '' -sos '{{<' -scs '>}}' -its 
 MPP = mpp ${MPP_OPTIONS}
 
-all:ocaml.org ocamltohtml
+all:ocamltohtml
+	make ocaml.org
 	bash gen.bash site
 	make syncotherfiles
 
@@ -59,7 +60,7 @@ pkg:Makefile
 	echo '<div id="opamdoc-contents" class="span8 offset2"><h1>List of Packages</h1><table class="indextable">' >> site/pkg/docs/index.md
 	frag -fr '.*<table.*' -tr '.*</table>.*' < opamhtml/index.html | sort >> site/pkg/docs/index.md
 	echo '</table></div>' >> site/pkg/docs/index.md
-	echo '<script type="text/javascript" src="opam_doc_loader.js"></script>' >> site/pkg/docs/index.md
+#	echo '<script type="text/javascript" src="opam_doc_loader.js"></script>' >> site/pkg/docs/index.md
 	echo '<script type="text/javascript">opamdoc_contents = document.getElementById("opamdoc-contents");</script>' >> site/pkg/docs/index.md
 
 
