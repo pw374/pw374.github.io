@@ -220,13 +220,13 @@ git commit src/Makefile src/Makefile.{common,from_{md,html}} src/gen.bash -m '(r
 cat > src/README-redesign.md <<\EOF
 # Dependencies
   * rsync
-  * mpp (available as an opam package)
+  * mpp >= 0.1.1 (available as an opam package)
   * frag (available as an opam package)
-  * omd (available as an opam package)
+  * omd >= 0.6.1 (available as an opam package)
   * gnu make
   * bash
   * ocamlopt
-  * rss2html.ml needs packages {bigarray,unix,str,netsys,xmlm,netclient,rss} to compile
+  * rss2html.ml needs packages {bigarray,unix,str,netsys,xmlm,netclient,rss} to compile (packages available in opam)
 
 # How to build the web site
 Once you have the dependencies, the following command should build a directory called `src/ocaml.org`, which would contain the generated website.

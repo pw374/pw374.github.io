@@ -8,8 +8,8 @@ all:ocamltohtml
 	bash gen.bash site
 	make syncotherfiles
 
-rss2html:
-	ocamlfind ocamlopt -package unix,equeue,bigarray,xmlm,netstring,netclient,rss bigarray.cmxa unix.cmxa str.cmxa netsys_oothr.cmxa netsys.cmxa netstring.cmxa equeue.cmxa netclient.cmxa xmlm.cmxa rss.cmxa
+rss2html:rss2html.ml
+	ocamlfind ocamlopt -package unix,equeue,bigarray,xmlm,netstring,netclient,rss bigarray.cmxa unix.cmxa str.cmxa netsys_oothr.cmxa netsys.cmxa netstring.cmxa equeue.cmxa netclient.cmxa xmlm.cmxa rss.cmxa "$<" -o "$@"
 
 ocaml.org:
 	find site -type d | while read l; do mkdir -p "$$(sed -e 's|site/|ocaml.org/|g' <<<"$$l")" ; done
@@ -22,7 +22,7 @@ tpl/front_code_snippet.html:tpl/front_code_snippet.md
 	omd $< -o $@
 
 clean:
-	rm -fr ocaml.org *~
+	rm -fr ocaml.org *~ *.cmo *.cmi *.cma
 
 htmlescape:htmlescape.ml
 	ocamlopt $< -o $@
