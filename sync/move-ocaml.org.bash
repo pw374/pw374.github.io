@@ -154,7 +154,7 @@ fixtpl
 git commit -a -m '(redesign) html->md: actual conversion'
 
 cp ~/OCL/sandbox-ocaml.org/last_ml_topics_tpl.mpp src/tpl/last_ml_topics.mpp
-cp ~/OCL/sandbox-ocaml.org/main_tpl.mpp src/tpl/main.mpp
+sed -e 's|/ocamllabs/sandbox-ocaml.org/tree/master|/ocaml/ocaml.org/tree/redesign/site/|g' -e 's|/ocamllabs/sandbox-ocaml.org/|/ocaml/ocaml.org/|g' ~/OCL/sandbox-ocaml.org/main_tpl.mpp > src/tpl/main.mpp
 cp ~/OCL/sandbox-ocaml.org/tryocaml.html src/tpl/tryocaml.html
 sed -e 's|="/pkg/"|="http://opam.ocaml.org/"|g' ~/OCL/sandbox-ocaml.org/navbar_tpl.mpp > src/tpl/navbar.mpp
 cp ~/OCL/sandbox-ocaml.org/core_tpl.mpp src/tpl/core.mpp
