@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # exit 1
@@ -66,7 +65,4 @@ mv opam-update-list.tmp opam-update-list
     done
     
 done > $HOME/stdout.log 2> $HOME/stderr.log
-
-
-
 
