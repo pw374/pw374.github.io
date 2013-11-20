@@ -1,4 +1,7 @@
+
 #!/bin/bash
+
+# exit 1
 
 if [[ -f /tmp/build_ocaml.org ]] && [[ "$(ps auwx|grep -v grep|grep $(cat /tmp/build_ocaml.org)|wc -l)" != "0" ]]
 then
@@ -37,8 +40,7 @@ mv opam-update-list.tmp opam-update-list
     fi
     cd ~/ocaml.org/ || exit 1
     git pull
-    make && rsync -r ocaml.org/* /var/www/
-    # rm -f /tmp/code* # fix (until omd 0.6.2 gets into opam)
+    make production && rsync -r ocaml.org/* /var/www/ocaml.org/
     (( i ++ ))
     for s in stdout stderr
     do
@@ -64,4 +66,7 @@ mv opam-update-list.tmp opam-update-list
     done
     
 done > $HOME/stdout.log 2> $HOME/stderr.log
+
+
+
 
