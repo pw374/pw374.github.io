@@ -17,6 +17,48 @@ type line = {
   value_end: int * int;
 }
 
+
+(* http://tools.ietf.org/html/rfc5545#section-3.3.11 (TEXT) *)
+let text_of_raw : ([> `Raw of (int*int) * string ] as 'a) -> ([> `Text of (int*int) * string list ] as 'a) = function
+  | `Raw((ln, cn) as location, s) ->
+      let sl = String.length s in
+      let open Buffer in
+      let b = create sl in
+      let rec loop accu i =
+        if i = sl then contents b :: accu else
+          match s.[i] with
+          | _ when false -> assert false
+              
+          (* Escaped char *)
+          | '\\' ->
+              if i+1 = sl then
+                syntax_error "raw data end with an unescaped backslash" ln cn
+              else
+                begin match s.[i+1] with
+                  | 'N' | 'n' -> add_char b '\n'
+                  | '\\' -> add_char b '\\'
+                  | ';' -> add_char b ';'
+                  | ',' -> add_char b ','
+                  | c -> syntax_error (sprintf "backslash-escaping %c" c) ln cn
+                end;
+              loop accu (i+1)
+
+          (* For multiple text values *)
+          | ',' ->
+              let bc = contents b in
+              clear b;
+              loop (bc :: accu) (i+1)
+
+          | ';' -> syntax_error "character ; is not allowed" ln cn
+
+          (* The risk here is to allow some control characters that
+             shouldn't be allowed. I'm taking a risk by assuming that
+             feeds read by this program do comply with RFC 5545. *)
+          | c -> add_char b c; loop accu (i+1)
+      in
+      `Text(location, List.rev (loop [] 0))
+  | x -> x
+
 let lex_ical s =
   let name = Buffer.create 42
   and value = Buffer.create 42 
@@ -34,39 +76,39 @@ let lex_ical s =
       ::lines
     else
       match s.[i] with
-      | '\n' ->
-        begin
-          syntax_assert (not nl) "unexpected double newline" lc cc;
-          if i >= sl-1 then
-            { name=Buffer.contents name;
-              value=Buffer.contents value;
-              name_start = !name_start;
-              value_start = !value_start;
-              value_end = lc, cc;}
-            ::lines
-          else if s.[i+1] <> ' ' then
-            let nv = {
-              name=Buffer.contents name;
-              value=Buffer.contents value;
-              name_start = !name_start;
-              value_start = !value_start;
-              value_end = lc, cc;
-            }
-            in
-            Buffer.clear name; Buffer.clear value;
-            name_start := (lc+1,0);
-            loop
-              (nv::lines)
-              (i+1) false true (lc+1) 0
-          else
+        | '\n' ->
             begin
-              syntax_assert colon "unexpected end of line" lc cc;
-              loop
-                lines
-                (i+2) colon false (lc+1) 0
+              syntax_assert (not nl) "unexpected double newline" lc cc;
+              if i >= sl-1 then
+                { name=Buffer.contents name;
+                  value=Buffer.contents value;
+                  name_start = !name_start;
+                  value_start = !value_start;
+                  value_end = lc, cc;}
+                ::lines
+              else if s.[i+1] <> ' ' then
+                let nv = {
+                  name=Buffer.contents name;
+                  value=Buffer.contents value;
+                  name_start = !name_start;
+                  value_start = !value_start;
+                  value_end = lc, cc;
+                }
+                in
+                  Buffer.clear name; Buffer.clear value;
+                  name_start := (lc+1,0);
+                  loop
+                    (nv::lines)
+                    (i+1) false true (lc+1) 0
+              else
+                begin
+                  syntax_assert colon "unexpected end of line" lc cc;
+                  loop
+                    lines
+                    (i+2) colon false (lc+1) 0
+                end
             end
-        end
-      | '\r' -> (* just ignore \r for now *)
+        | '\r' -> (* just ignore \r for now *)
         loop lines (i+1) colon nl lc cc
       | ' ' as c ->
         syntax_assert colon "unexpected space before colon" lc cc;
@@ -106,9 +148,9 @@ let parse_ical l =
         | Some e -> syntax_error (sprintf "unclosed block %s" e) (-1) (-1);
         | None -> res, []
       end
-    | {name="BEGIN"; value=e}::tl ->
+    | {name="BEGIN"; value=e} as v::tl ->
       let block, tl = loop [] (Some e) tl in
-      loop ((`Block(e, block))::res) ob tl
+      loop ((`Block(v.name_start, e, block))::res) ob tl
     | {name="END"; value=e} as v::tl ->
       begin match ob with
         | Some x when x = e ->
@@ -120,9 +162,15 @@ let parse_ical l =
           syntax_error (sprintf "unexpected end of block %s" e)
             (fst v.name_start) (snd v.name_start)
       end
-    | {name; value}::tl ->
-      loop ((`Assoc(name, `Raw value))::res) ob tl
-  in loop [] None l
+    | {name; value} as v::tl ->
+      loop ((`Assoc(v.name_start, name, `Raw(v.value_start)))::res) ob tl
+  in
+  match loop [] None l with
+  | res, [] ->
+      res
+  | _, v::_ ->
+      syntax_error (sprintf "unexpected data")
+        (fst v.name_start) (snd v.name_start)
 
 let x =
   lex_ical "BEGIN:VCALENDAR
@@ -173,3 +221,9 @@ END:VCALENDAR
 let y = parse_ical x;;
 let () = () ;;
 
+let rec tree_map f = function
+  | `Block(loc, s, v)::tl -> `Block(loc, s, tree_map f v)::tree_map f tl
+  | `Assoc(loc, s, r)::tl -> `Assoc(loc, s, f r)::tree_map f tl
+  | [] -> []
+
+let _ = tree_map (Obj.magic text_of_raw) y;;
