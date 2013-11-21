@@ -19,7 +19,9 @@ do
     cp .package-list{,-old}; 
     cp .package-list{-tmp,};
     rm .package-list-{old,tmp}
+    date
     echo "Sleeping now for 3600 seconds..."
     sleep 3600;
+    date
     echo "Done sleeping."
 done
