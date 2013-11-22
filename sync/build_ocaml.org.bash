@@ -36,6 +36,7 @@ mv opam-update-list.tmp opam-update-list
     then
 	i=1
 	rm -fr ~/ocaml.org/ocaml.org/
+        cd ~/ocaml.org && make clean
     fi
     cd ~/ocaml.org/ || exit 1
     git pull
