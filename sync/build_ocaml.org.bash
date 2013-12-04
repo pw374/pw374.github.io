@@ -21,6 +21,13 @@ FLAG=$HOME/flag/force-build.flag
 while true
 do
 
+## wait if opam is running
+while [[ -f "$HOME/.opam/system/lock" ]]
+do
+    sleep 1
+    echo "$(date) I'm waiting for opam to stop running..."
+done
+
 # begin opam package list matter
 ### .package-list-old is always up to date if it does exist, hence this trick:
 cp ~/opam-repository/packages/.package-list-old opam-update-list || cp ~/opam-repository/packages/.package-list opam-update-list
