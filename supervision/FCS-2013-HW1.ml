@@ -134,6 +134,12 @@ val e = Real.compare (x, y);; (* this returns EQUAL *)
    they aren't used by SML. If you're learning Java, you'll see
    that Java integers cannot represent very large integers
    and that at some point, the sum of two positive integers might be negative...
+   
+   Actually, the fact that we have large integers is not an SML feature,
+   it's specific to the PolyML implementation of SML. There exist other
+   implementations of SML that provide machine (32-bit or 64-bit) integers
+   and possibly other types of integers as well (then the programmer may
+   choose which ones they want to use).
 *)
 
 (* Anyways, as some of you noted, there are more efficient ways to
