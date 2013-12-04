@@ -156,7 +156,7 @@ val pi100000 = approxPi 100000;;
 (* val pi100000 = 3.141632545: real *)
 (* 4 correct digits! *)
 val pi500000 = approxPi 500000;;
-
+(* 4 or 5 correct digits? *)
 
 
 (* A few additional remarks:
