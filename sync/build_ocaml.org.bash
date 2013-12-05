@@ -21,6 +21,15 @@ FLAG=$HOME/flag/force-build.flag
 while true
 do
 
+## wait if opam is running
+while [[ -f "$HOME/.opam/system/lock" ]]
+do
+    sleep 1
+    echo "$(date) I'm waiting for opam to stop running..."
+done
+
+>&2 date
+
 # begin opam package list matter
 ### .package-list-old is always up to date if it does exist, hence this trick:
 cp ~/opam-repository/packages/.package-list-old opam-update-list || cp ~/opam-repository/packages/.package-list opam-update-list
@@ -51,12 +60,20 @@ mv opam-update-list.tmp opam-update-list
 	fi
     done
     date
-    echo "Next build in 200 seconds, or maybe less."
+    echo "Next build about 200 seconds."
+    echo "If you want the script to exit properly, run this:"
+    echo "touch $HOME/flag/stop.flag"
     echo "If you're in a hurry, run this:"
     echo "touch ${FLAG}"
     for ((x=0;x<100;x++))
     do
 	sleep 2
+	if [[ -f $HOME/flag/stop.flag ]]
+	then
+	    rm -f $HOME/flag/stop.flag
+	    echo "Exit."
+	    exit
+	fi
 	if [[ -f "${FLAG}" ]]
 	then
 	    rm -f "${FLAG}"
@@ -66,4 +83,7 @@ mv opam-update-list.tmp opam-update-list
     done
     
 done > $HOME/stdout.log 2> $HOME/stderr.log
+
+
+
 
