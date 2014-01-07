@@ -104,32 +104,34 @@ be able to return something else, we have to parameterise the default
 behaviour.
 
 So, let's add a parameter to the function `visit` and see what it looks like.
+Well,  let's call it `glue` since it's a function that glues 2 things together
+(if you find a better name, please let me know).
 
 ```ocaml
-let rec visit f default = function
+let rec visit f glue = function
   | [] -> []
   | (A | E _ | D _) as e :: tl ->
     begin match f e with
-      | Some(l) -> default l (visit f default tl)
-      | None -> default [] (e :: visit f default tl)
+      | Some(l) -> glue l (visit f glue tl)
+      | None -> glue [] (e :: visit f glue tl)
     end
   | B(t) as e :: tl ->
     begin match f e with
-      | Some(l) -> default l (visit f default tl)
-      | None -> default [] (B(visit f default t) :: visit f default tl)
+      | Some(l) -> glue l (visit f glue tl)
+      | None -> glue [] (B(visit f glue t) :: visit f glue tl)
     end
   | C(s, t1, t2) as e :: tl ->
     begin match f e with
-      | Some(l) -> default l (visit f default tl)
+      | Some(l) -> glue l (visit f glue tl)
       | None ->
-        default []
-          (C(s, visit f default t1, visit f default t2) :: visit f default tl)
+        glue []
+          (C(s, visit f glue t1, visit f glue t2) :: visit f glue tl)
     end
 (* val visit : (e -> 'a list option) -> ('a list -> t -> t) -> t -> t *)
 ```
 
 We're almost there. There's still that `'a list`, which is less generic
-than `'a`. Well, `default` needs to have 2 parameters because it has to
+than `'a`. Well, `glue` needs to have 2 parameters because it has to
 be able to treat both branches of the pattern-matching filter, so we could 
 make the first parameter optional. We could use optional arguments, and
 we can see that `f` already returns an option, 
@@ -137,14 +139,14 @@ can we just take advantage of that? Well, if we replace for instance
 ```ocaml
   | (A | E _ | D _) as e :: tl ->
     begin match f e with
-      | Some(l) -> default l (visit f default tl)
-      | None -> default [] (e :: visit f default tl)
+      | Some(l) -> glue l (visit f glue tl)
+      | None -> glue [] (e :: visit f glue tl)
     end
 ```
 by
 ```ocaml
   | (A | E _ | D _) as e :: tl ->
-      default (f e) (visit f default tl)
+      glue (f e) (visit f glue tl)
 ```
 it does work for this branch but it doesn't for the others because
 one purpose of the visitor is to deeply traverse the
@@ -153,33 +155,31 @@ So we're back to optional arguments...
 
 And so we could have that:
 ```ocaml
-let rec visit f ?(default=(fun ?l r -> match l with None -> r | Some l -> l @ r)) = function
+let rec visit f ?(glue=(fun ?l r -> match l with None -> r | Some l -> l @ r)) = function
   | [] -> []
   | (A | E _ | D _) as e :: tl ->
     begin match f e with
-      | Some(l) -> default ~l (visit f ~default tl)
-      | None -> default (e :: visit f ~default tl)
+      | Some(l) -> glue ~l (visit f ~glue tl)
+      | None -> glue (e :: visit f ~glue tl)
     end
   | B(t) as e :: tl ->
     begin match f e with
-      | Some(l) -> default ~l (visit f ~default tl)
-      | None -> default (B(visit f ~default t) :: visit f ~default tl)
+      | Some(l) -> glue ~l (visit f ~glue tl)
+      | None -> glue (B(visit f ~glue t) :: visit f ~glue tl)
     end
   | C(s, t1, t2) as e :: tl ->
     begin match f e with
-      | Some(l) -> default ~l (visit f ~default tl)
+      | Some(l) -> glue ~l (visit f ~glue tl)
       | None ->
-        default 
-          (C(s, visit f ~default t1, visit f ~default t2) :: visit f ~default tl)
+        glue 
+          (C(s, visit f ~glue t1, visit f ~glue t2) :: visit f ~glue tl)
     end
 ;;
-(* val visit : (e -> t option) -> ?default:(?l:t -> t -> t) -> t -> t *)
+(* val visit : (e -> t option) -> ?glue:(?l:t -> t -> t) -> t -> t *)
 ```
 
 Then the problem is that it's not polymorphic any more, while we want it to be polymorphic!
-So let's drop the default value for the parameter `default`, and let's rename it since 
-the name `default` is not relevant any more. Let's call it `glue` since it's a function
-that glues 2 things together (if you find a better name, please let me know).
+So let's drop the default value for the parameter `glue`.
 
 ```ocaml
 let rec visit f (glue:(?l:'a -> t -> t)) = function
