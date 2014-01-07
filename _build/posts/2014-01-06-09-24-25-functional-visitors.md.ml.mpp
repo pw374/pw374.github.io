@@ -18,7 +18,7 @@ module Post(Printer:Printer) = struct open Printer >}
 Let's consider this data type:
 ```ocaml
 type e = | A | B of t | C of string * t * t | D of string | E of int
-and  t = e list
+and  t = e list;;
 ```
 
 If we want to write an abstraction to apply a function to this 
@@ -187,7 +187,7 @@ let rec visit f (glue:(?l:'a -> t -> t)) = function
   | (A | E _ | D _) as e :: tl ->
     begin match f e with
       | Some(l) -> glue ~l (visit f glue tl)
-      | None -> glue (e :: visit f glue tl)
+      | None -> glue (e :: (visit f glue tl)
     end
   | B(t) as e :: tl ->
     begin match f e with
@@ -205,8 +205,40 @@ let rec visit f (glue:(?l:'a -> t -> t)) = function
 (* val visit : (e -> 'a option) -> (?l:'a -> t -> t) -> t -> t *)
 ```
 
+There we go, we have a generic visitor for structures of type `t`.
 
 
+As we did before, we may now define `remove_A`, `remove_B` and `convert_Es_to_Ds`.
 
+
+```ocaml
+let glue ?l t = match l with Some l -> l @ t | None -> t;;
+```
+
+```ocaml
+let remove_A t = visit (function A -> Some [] | _ -> None) glue t;;
+```
+
+or all `B`s:
+
+```ocaml
+let remove_B t = visit (function B _ -> Some [] | _ -> None : e -> t option) glue t;;
+```
+
+and it's also very easy to convert all `E`s to `D`s:
+
+```ocaml
+let convert_Es_to_Ds t =
+  visit (function E(i) -> Some [D(string_of_int i)] | _ -> None) glue t;;
+```
+
+We could actually make it more generic by allowing `glue` to return something
+else than a `t`, and we could have something resembling
+`val visit : (e -> 'a option) -> (?l:'a -> t -> 'b) -> t -> 'b`.
+Well, the problem is that we have to tell `visit` how to reconstruct a visited `C`.
+It would be easy to have a more generic version of `visit` of type
+`val visit : (e -> 'a option) -> (?l:'a -> t -> ('b * t)) -> t -> ('b * t)`
+but that's become far from simple to understand, so let's not go there
+because I don't see the point anymore.
 
 {< end >}%% don't write anything after this line
