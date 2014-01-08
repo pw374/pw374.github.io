@@ -75,7 +75,9 @@
           </div>
         </div>
       </div>
-              <h2 id="OMDaMarkdownparserinOCaml"><a href='/posts/2013-09-05-22-31-26-about-omd.html'>OMD: a Markdown parser in OCaml</a></h2><h3 id="Motivations">Motivations</h3><p>There  are  so many  existing  implementations  of  Markdown, why  yet
+              <h2 id="OMDaMarkdownparserinOCaml"><a href='/posts/2013-09-05-22-31-26-about-omd.html'>OMD: a Markdown parser in OCaml</a></h2>
+<h3 id="Motivations">Motivations</h3>
+<p>There  are  so many  existing  implementations  of  Markdown, why  yet
 another one?   Well, after asking  the OCaml community  about existing
 ways to parse and manipulate  Markdown documents, it seemed that there
 were no stand-alone complete Markdown parser written in OCaml, meaning
@@ -92,7 +94,8 @@ somehow - time to have  a Markdown parser implemented using OCaml. And
 preferably  OCaml alone,  meaning that  one that  has  OCaml installed
 should be able  to use it easily without having to  deal with too many
 dependencies. Well, there it is: OMD!</p>
-<h3 id="IssueswereessentiallywithMarkdownitself">Issues... were essentially with Markdown itself</h3><p>Every computer  scientist knows how to  write a parser  for a language
+<h3 id="IssueswereessentiallywithMarkdownitself">Issues... were essentially with Markdown itself</h3>
+<p>Every computer  scientist knows how to  write a parser  for a language
 that is as simple as Markdown. Well, no, not every computer scientist,
 sadly, but at least every programmer should. Ok, sadly it isn&#39;t really
 the case either. Anyways.</p>
@@ -128,7 +131,8 @@ using this  syntax:</p>
 <pre><code>&lt;p&gt;[blah blah blah](the-url-which-can-be-absolute-or-relative&lt;/p&gt;</code></pre>
 <p>precisely because nothing is wrong in Markdown.</p>
 <p>And what if there are parentheses in your URL? What if they are unbalanced?</p>
-<h4 id="FlagrantAmbiguity">Flagrant Ambiguity</h4><p>The following is some text that has to mean something in Markdown...</p>
+<h4 id="FlagrantAmbiguity">Flagrant Ambiguity</h4>
+<p>The following is some text that has to mean something in Markdown...</p>
 <pre><code>* Alice is falling in love with Bob.
     * Bob is secretly in love with Alice, but he&#39;s seeing Eve.
   * Eve is in-between, she loves both Alice and Bob, she can&#39;t help it.</code></pre>
@@ -206,7 +210,8 @@ sub-list of hers. So, here is the HTML that OMD produces:</p>
 <p>Oh,  you might  have  noticed  that OMD  converts  quotes to  <code>&amp;apos;</code>
 because otherwise I  would need to differentiate when  they have to be
 converted from when it&#39;s optional.</p>
-<h3 id="Implementation">Implementation</h3><p>Pandoc&#39;s documentation says</p>
+<h3 id="Implementation">Implementation</h3>
+<p>Pandoc&#39;s documentation says</p>
 <blockquote><p>In contrast to most existing tools for converting markdown to HTML,
 which use regex substitutions, Pandoc has a modular design: it
 consists of a set of readers, which parse text in a given format and
@@ -234,7 +239,8 @@ course, it&#39;s also  a tool for any one who write  Markdown and wants it
 to be  converted (quickly)  to HTML.  OMD, so far,  is about  10 times
 faster than  Pandoc, and  I didn&#39;t  even make any  efforts to  make it
 fast.</p>
-<h4 id="Compatibility">Compatibility</h4><p>OMD has been developed using OCaml 4.0.1, <a href='https://github.com/pw374/omd/issues/19'>Christophe Troestler made
+<h4 id="Compatibility">Compatibility</h4>
+<p>OMD has been developed using OCaml 4.0.1, <a href='https://github.com/pw374/omd/issues/19'>Christophe Troestler made
 me make it compatible with OCaml
 3.12.1</a>.  Then I guess it
 might work with older version of OCaml but it&#39;s not certain (mainly
@@ -242,7 +248,8 @@ because OCaml&#39;s standard library has slightly changed, as I think I
 don&#39;t use any language features that were introduced in 3.12 or 4.0).</p>
 <p>By  the way,  thank  you  Christophe for  your  support, interest  and
 contributions to OMD :-)</p>
-<h3 id="FutureofOMD">Future of OMD</h3><p>OMD  already is  in OPAM.   A  very stable  version of  OMD should  be
+<h3 id="FutureofOMD">Future of OMD</h3>
+<p>OMD  already is  in OPAM.   A  very stable  version of  OMD should  be
 released soon.   As a  tool, it takes  Markdown as input  and produces
 HTML as output.   A Markdown backend has been  freshly implemented, so
 you can output  Markdown as well, which is  quite useful for debugging
@@ -251,7 +258,8 @@ the fix  point. You  can also  output &quot;text&quot;, in  the sense  that it&#
 basically the HTML  without the HTML tags, so  it&#39;s very non-formatted
 text.  There  also are  options to output  HTML table of  contents and
 parametrise their depths.</p>
-<h3 id="OMDandOCamlorg">OMD and OCaml.org</h3><p>We    are    at   OCaml    Labs    making    a    new   website    for
+<h3 id="OMDandOCamlorg">OMD and OCaml.org</h3>
+<p>We    are    at   OCaml    Labs    making    a    new   website    for
 <a href='http://ocaml.org'>ocaml.org</a>.   The  design   is  being  provided  by
 <a href='http://www.onespacemedia.com'>onespacemedia</a>.    At   the  time   I&#39;m
 writing  these  lines, I&#39;m  using  the  HTML/CSS/JS  for the  upcoming
@@ -260,7 +268,7 @@ OCaml.org to style my new Github-hosted website, so I can play with it
 <p>Most pages will be written in Markdown instead of HTML, so that people
 of the OCaml community may contribute to it in a more convenient way.</p>
 <p>And of course, that means that OMD will be used for OCaml.org.</p>
-<hr/><p style='font-size:80%;'><em>started on 2013-09-05 22:31:26+01:00, (re)generated on 2014-01-08 01:43:59+00:00
+<hr/><p style='font-size:80%;'><em>started on 2013-09-05 22:31:26+01:00, (re)generated on 2014-01-08 01:54:47+00:00
 </em></p><p>tags: • <a href='/tags/ocaml/'>ocaml</a> • <a href='/tags/markdown/'>markdown</a> • <a href='/tags/omd/'>omd</a> </p>          </div>
 
 

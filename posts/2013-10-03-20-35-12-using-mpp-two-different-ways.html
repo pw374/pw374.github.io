@@ -75,10 +75,12 @@
           </div>
         </div>
       </div>
-              <h2 id="UsingMPPintwodifferentsways"><a href='/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html'>Using MPP in two differents ways</a></h2><h3 id="MPPisnowanOPAMpackage">MPP is now an OPAM package</h3><p>First of all, I&#39;ve to say I&#39;ve finally made an OPAM package 
+              <h2 id="UsingMPPintwodifferentsways"><a href='/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html'>Using MPP in two differents ways</a></h2><h3 id="MPPisnowanOPAMpackage">MPP is now an OPAM package</h3>
+<p>First of all, I&#39;ve to say I&#39;ve finally made an OPAM package 
 for MPP! At the time I&#39;m writing these words, it&#39;s still waiting
 for merging. <a href='/posts/2013-10-03-20-39-07-OPAMaging-MPP.html'>Read more here.</a></p>
-<h3 id="DescriptionofMPP">Description of MPP</h3><p>MPP is a preprocessor that has been designed to allow any (non-insane)
+<h3 id="DescriptionofMPP">Description of MPP</h3>
+<p>MPP is a preprocessor that has been designed to allow any (non-insane)
 programming language to  be used as a preprocessor  for any text-based
 file. The particularity is that  the users keep their initial language
 as their  primary language:  the language(s) brought  by MPP  is (are)
@@ -99,7 +101,8 @@ can customise MPP such that MPP can work for any text file.</p>
  taken...  But I don&#39;t think that it&#39;s a realistic scenario, so let&#39;s
  just forget about it.</p>
 </blockquote>
-<h3 id="PrincipleofMPP">Principle of MPP</h3><p>The principle on which MPP is based is pretty simple. The users define
+<h3 id="PrincipleofMPP">Principle of MPP</h3>
+<p>The principle on which MPP is based is pretty simple. The users define
 the tokens they want to use to determine the beginning and the end 
 of MPP blocks. And there are 3 kinds of MPP blocks:</p>
 <ol>
@@ -119,7 +122,8 @@ as a preprocessor language.</p>
  very  painful and  it  would start  by making  it  impure enough  to
  interact with the rest of the world.</p>
 </blockquote>
-<h3 id="Example1thebasics">Example 1: the basics</h3><p>So, let&#39;s say  you&#39;re writing a program using the  OCaml language, and
+<h3 id="Example1thebasics">Example 1: the basics</h3>
+<p>So, let&#39;s say  you&#39;re writing a program using the  OCaml language, and
 you want <code>x</code> to be a random integer.</p>
 <p>You can write this:</p>
 <pre class='ocaml'><code class='ocaml'><span class='keyword'>let</span> <span class='lower'>x</span> <span class='keywordsign'>=</span> <span class='constructor module'>Random</span><span class='keywordsign'>.</span><span class='lower'>int</span> <span class='lower'>max_int</span></code></pre>
@@ -168,7 +172,8 @@ And note that only the most inner nesting block can be nameless and that&#39;s
 <em>in some cases only</em>.</p>
 <p>Note: the  technique presented above (in  example 1) has been  used to
 generate the new OCaml website.</p>
-<h3 id="Example2usingOCamlasapreprocessorlanguage">Example 2: using OCaml as a preprocessor language</h3><p>When MPP is used with the option <code>-l</code>, it produces a program that prints
+<h3 id="Example2usingOCamlasapreprocessorlanguage">Example 2: using OCaml as a preprocessor language</h3>
+<p>When MPP is used with the option <code>-l</code>, it produces a program that prints
 the file, using information provided to MPP about the language specified
 with <code>-l</code>. For instance, <code>mpp -l ocaml</code> will produce an OCaml program.</p>
 <p>If you apply <code>mpp -l ocaml</code> to a file F that contains no MPP commands,
@@ -221,7 +226,7 @@ to go into details just right  now. What&#39;s important is that it&#39;s nice
 and it  works. I&#39;ve  always wanted  to be able  to <em>easily</em>  embed the
 OCaml language in any text (LaTeX, ML, HTML, Bash, etc.) file, and now
 I can!!  :)</p>
-<hr/><p style='font-size:80%;'><em>started on 2013-10-03 20:35:12+00:00, (re)generated on 2014-01-08 01:43:59+00:00
+<hr/><p style='font-size:80%;'><em>started on 2013-10-03 20:35:12+00:00, (re)generated on 2014-01-08 01:54:48+00:00
 </em></p><p>tags: • <a href='/tags/ocaml/'>ocaml</a> • <a href='/tags/mpp/'>mpp</a> </p>          </div>
 
 
