@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Wed, 08 Jan 2014 01:54:53 +0000</pubDate><lastBuildDate>Wed, 08 Jan 2014 01:54:53 +0000</lastBuildDate>
+<?xml version='1.0' encoding='UTF-8'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Wed, 08 Jan 2014 02:09:40 +0000</pubDate><lastBuildDate>Wed, 08 Jan 2014 02:09:40 +0000</lastBuildDate>
     <item>
       <title>OMD: a Markdown parser in OCaml</title>
       <link>http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html</link>
