@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Wed, 08 Jan 2014 01:41:41 +0000</pubDate><lastBuildDate>Wed, 08 Jan 2014 01:41:41 +0000</lastBuildDate>
+<?xml version='1.0' encoding='UTF-8'?><rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'><channel><title>pw374</title><link>http://pw374.github.io/</link><atom:link href='http://pw374.github.io/blog-rss.xml' rel='self' type='application/rss+xml' /><description>pw374 blog</description><language>en-gb</language><pubDate>Wed, 08 Jan 2014 01:44:05 +0000</pubDate><lastBuildDate>Wed, 08 Jan 2014 01:44:05 +0000</lastBuildDate>
     <item>
       <title>OMD: a Markdown parser in OCaml</title>
       <link>http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html</link>
@@ -7,6 +7,191 @@
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
       <guid>http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html</guid>
       <description><![CDATA[
+&#60;h3 id=&#34;Motivations&#34;&#62;Motivations&#60;/h3&#62;&#60;p&#62;There  are  so many  existing  implementations  of  Markdown, why  yet
+another one?   Well, after asking  the OCaml community  about existing
+ways to parse and manipulate  Markdown documents, it seemed that there
+were no stand-alone complete Markdown parser written in OCaml, meaning
+that they  were incomplete (i.e., not fully  compatible with Markdown)
+or  interfaces  to  some  Markdown  parsers  implemented  using  other
+languages than OCaml.&#60;/p&#62;
+&#60;p&#62;Since in OCaml  Labs we&#38;#39;re working a lot with  Github, and Github uses
+Markdown a  lot (Github  web pages hosting,  Github issues,  etc.) and
+other  sites are also  using Markdown  as well,  and Markdown  is very
+popular and  easy to  learn, and  flexible in the  sense that  you can
+always  fall back  to HTML  when you  want to  express  something that
+doesn&#38;#39;t have  a special syntax in  Markdown, blah blah blah,  it was -
+somehow - time to have  a Markdown parser implemented using OCaml. And
+preferably  OCaml alone,  meaning that  one that  has  OCaml installed
+should be able  to use it easily without having to  deal with too many
+dependencies. Well, there it is: OMD!&#60;/p&#62;
+&#60;h3 id=&#34;IssueswereessentiallywithMarkdownitself&#34;&#62;Issues... were essentially with Markdown itself&#60;/h3&#62;&#60;p&#62;Every computer  scientist knows how to  write a parser  for a language
+that is as simple as Markdown. Well, no, not every computer scientist,
+sadly, but at least every programmer should. Ok, sadly it isn&#38;#39;t really
+the case either. Anyways.&#60;/p&#62;
+&#60;p&#62;Markdown is a rather simple language,  if you look at the specs. Well,
+that depends on what you actuall call &#38;quot;specs&#38;quot;, of course. According to
+&#60;a href=&#39;http://en.wikipedia.org/wiki/Markdow&#39;&#62;Wikipedia&#60;/a&#62;,     Markdown    was
+invented by &#60;a href=&#39;http://daringfireball.net&#39;&#62;John Gruber&#60;/a&#62;, and Aaron Swartz
+helped  him. Then the  original document  that describes  the Markdown
+language          is          available         online          there:
+&#60;a href=&#39;http://daringfireball.net/projects/markdown/syntax&#39;&#62;http://daringfireball.net/projects/markdown/syntax&#60;/a&#62;.  And you can see
+that         searching        for         &#60;a href=&#39;https://www.google.com/#q=Markdown+syntax&#39;&#62;&#38;quot;Markdown+syntax&#38;quot;        on
+Google&#60;/a&#62; makes that page the
+top result (and here again, I&#38;#39;m kind  of helping it be and stay on the
+top...).&#60;/p&#62;
+&#60;p&#62;Actually, Markdown is not that  simple to parse.  Why? Because so many
+things are  just left to the  imagination of the  people who implement
+parsers  for  this  language,   because  programs  can&#38;#39;t  decide  by
+themselves  what&#38;#39;s right  to do.   It&#38;#39;s  really the  author(s) of  the
+program that  decides what the  program does. And in  Markdown, so
+many  things  are ambiguous  and  Gruber&#38;#39;s  document doesn&#38;#39;t  actually
+describe a  grammar at all.  It just tells  you how to write  this and
+that, but if you write it slightly differently, it doesn&#38;#39;t tell you
+what the outcome would be and by just reading the document, you really
+can&#38;#39;t tell what the output will be.&#60;/p&#62;
+&#60;p&#62;&#60;em&#62;&#60;strong&#62;The one thing to have in mind is that there are no errors in Markdown.&#60;/strong&#62;&#60;/em&#62;
+Every text file is a valid Markdown file, it might just be converted 
+to some HTML you wouldn&#38;#39;t expect. For instance, you may write a link 
+using this  syntax:&#60;/p&#62;
+&#60;pre&#62;&#60;code&#62;[blah blah blah](the-url-which-can-be-absolute-or-relative)&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;and it gets converted to&#60;/p&#62;
+&#60;pre&#62;&#60;code&#62;&#38;lt;p&#38;gt;&#38;lt;a href=&#38;quot;the-url-which-can-be-absolute-or-relative&#38;quot;&#38;gt;blah blah blah&#38;lt;/a&#38;gt;&#38;lt;/p&#38;gt;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;But if you forget the closing parenthesis, then it becomes that instead&#60;/p&#62;
+&#60;pre&#62;&#60;code&#62;&#38;lt;p&#38;gt;[blah blah blah](the-url-which-can-be-absolute-or-relative&#38;lt;/p&#38;gt;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;precisely because nothing is wrong in Markdown.&#60;/p&#62;
+&#60;p&#62;And what if there are parentheses in your URL? What if they are unbalanced?&#60;/p&#62;
+&#60;h4 id=&#34;FlagrantAmbiguity&#34;&#62;Flagrant Ambiguity&#60;/h4&#62;&#60;p&#62;The following is some text that has to mean something in Markdown...&#60;/p&#62;
+&#60;pre&#62;&#60;code&#62;* Alice is falling in love with Bob.
+    * Bob is secretly in love with Alice, but he&#38;#39;s seeing Eve.
+  * Eve is in-between, she loves both Alice and Bob, she can&#38;#39;t help it.&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;So, Pandoc, which a tool that converts a document in language A to a
+document in language B, where A and B can be the same or different
+languages amongst LaTeX, HTML, Markdown and (many) others, considers
+that Eve is on the same level as Bob. So its HTML output is&#60;/p&#62;
+&#60;pre&#62;&#60;code&#62;&#38;lt;ul&#38;gt;
+&#38;lt;li&#38;gt;Alice is falling in love with Bob.
+&#38;lt;ul&#38;gt;
+&#38;lt;li&#38;gt;Bob is secretly in love with Alice, but he&#38;#39;s seeing Eve.&#38;lt;/li&#38;gt;
+&#38;lt;/ul&#38;gt;&#38;lt;/li&#38;gt;
+&#38;lt;li&#38;gt;Eve is in-between, she loves both Alice and Bob, she can&#38;#39;t help it.&#38;lt;/li&#38;gt;
+&#38;lt;/ul&#38;gt;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;But if instead you add Dylan as in&#60;/p&#62;
+&#60;pre&#62;&#60;code&#62;* Alice is falling in love with Bob.
+   * Dylan, a new character, is being conceived here.
+    * Bob is secretly in love with Alice, but he&#38;#39;s seeing Eve.
+  * Eve is in-between, she loves both Alice and Bob, she can&#38;#39;t help it.&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;then &#60;em&#62;of course&#60;/em&#62; Eve is not on the same level as Bob anymore and goes
+with Dylan and Alice, Bob is on his own.&#60;/p&#62;
+&#60;pre&#62;&#60;code&#62;&#38;lt;ul&#38;gt;
+&#38;lt;li&#38;gt;Alice is falling in love with Bob.&#38;lt;/li&#38;gt;
+&#38;lt;li&#38;gt;Dylan, a new character, is being conceived here.
+&#38;lt;ul&#38;gt;
+&#38;lt;li&#38;gt;Bob is secretly in love with Alice, but he&#38;#39;s seeing Eve.&#38;lt;/li&#38;gt;
+&#38;lt;/ul&#38;gt;&#38;lt;/li&#38;gt;
+&#38;lt;li&#38;gt;Eve is in-between, she loves both Alice and Bob, she can&#38;#39;t help it.&#38;lt;/li&#38;gt;
+&#38;lt;/ul&#38;gt;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;This doesn&#38;#39;t make much sense...&#60;/p&#62;
+&#60;p&#62;And Github&#38;#39;s embedded Markdown  to HTML converter chooses some similar
+broken semantics. If one writes bullets on different levels, it shouldn&#38;#39;t
+be meaningless.&#60;/p&#62;
+&#60;p&#62;Also, on Github, if you write&#60;/p&#62;
+&#60;pre&#62;&#60;code&#62;* 1
+  * 2
+    * 3
+      * 4
+        * 5
+          * 6
+            * 7
+              * 8
+                * 9
+                  * 10&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Then 2 and 3 are on the same level, as for 4 and 5, 6 and 7, and 8 and 9.
+1 and 10 are on their own. And if you extract 2 and 3, meaning&#60;/p&#62;
+&#60;pre&#62;&#60;code&#62;  * 2
+    * 3&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;then 2 and 3 are not on the same level anymore! 
+See for yourself:&#60;/p&#62;
+&#60;ul&#62;
+ &#60;li&#62;raw version: &#60;a href=&#39;https://raw.github.com/pw374/sandbox/master/mad-lists.md&#39;&#62;https://raw.github.com/pw374/sandbox/master/mad-lists.md&#60;/a&#62;&#60;/li&#62;
+ &#60;li&#62;rendered-by-Github version: &#60;a href=&#39;https://github.com/pw374/sandbox/blob/master/mad-lists.md&#39;&#62;https://github.com/pw374/sandbox/blob/master/mad-lists.md&#60;/a&#62;&#60;/li&#62;
+&#60;/ul&#62;
+
+&#60;p&#62;With OMD, hopefully, there is a deterministic meaning for each level of indentation. The list where there were Alice, Bob and Eve is converted to this to the least insane semantics I could think of.&#60;/p&#62;
+&#60;p&#62;The idea  is that, since Eve  is neither on  the same level as  Bob or
+Alice, Eve should be in a new list (because, obviously, she&#38;#39;s the only
+one on that  level anyway). So she  is in a new list.  And since she&#38;#39;s
+not on a deeper level than Bob, she shouldn&#38;#39;t be on a sub-list of his.
+But  she is  on a  deeper level  than Alice,  so she  has to  be  on a
+sub-list of hers. So, here is the HTML that OMD produces:&#60;/p&#62;
+&#60;pre&#62;&#60;code&#62;&#38;lt;ul&#38;gt;
+ &#38;lt;li&#38;gt;Alice is falling in love with Bob.
+  &#38;lt;ul&#38;gt;
+   &#38;lt;li&#38;gt;Bob is secretly in love with Alice, but he&#38;amp;apos;s seeing Eve.
+   &#38;lt;/li&#38;gt;
+  &#38;lt;/ul&#38;gt;
+  &#38;lt;ul&#38;gt;
+   &#38;lt;li&#38;gt;Eve is in-between, she loves both Alice and Bob, she can&#38;amp;apos;t help it.
+   &#38;lt;/li&#38;gt;
+  &#38;lt;/ul&#38;gt;
+ &#38;lt;/li&#38;gt;
+&#38;lt;/ul&#38;gt;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Oh,  you might  have  noticed  that OMD  converts  quotes to  &#60;code&#62;&#38;amp;apos;&#60;/code&#62;
+because otherwise I  would need to differentiate when  they have to be
+converted from when it&#38;#39;s optional.&#60;/p&#62;
+&#60;h3 id=&#34;Implementation&#34;&#62;Implementation&#60;/h3&#62;&#60;p&#62;Pandoc&#38;#39;s documentation says&#60;/p&#62;
+&#60;blockquote&#62;&#60;p&#62;In contrast to most existing tools for converting markdown to HTML,
+which use regex substitutions, Pandoc has a modular design: it
+consists of a set of readers, which parse text in a given format and
+produce a native representation of the document, and a set of writers,
+which convert this native representation into a target format.
+Thus, adding an input or output format requires only adding a reader
+or writer.&#60;/p&#62;
+&#60;/blockquote&#62;
+&#60;p&#62;Come on,  most tools are using regular  expressions substitutions?!  I
+can only imagine the nightmare that  it must be to implement and debug
+such an implementation  -- no wait, I can&#38;#39;t because  I just don&#38;#39;t want
+to imagine such a nightmare.&#60;/p&#62;
+&#60;p&#62;I used functions and function calls, a lot of them are tail recursive,
+not  all of  them but  then it  means  I don&#38;#39;t  need them  to be  tail
+recursive, and  those functions  basically take a  list of  tokens and
+return a  new list  with possibly fewer  tokens and the  expression to
+which the missing ones were converted into.&#60;/p&#62;
+&#60;p&#62;So far, in version 0.4 (which is  not released yet at the time I write
+this), there&#38;#39;s a little less than  8k lines of pure OCaml code.  (Note
+that I didn&#38;#39;t write &#38;quot;pure functional&#38;quot;, I wrote &#38;quot;pure OCaml&#38;quot;.)&#60;/p&#62;
+&#60;p&#62;OMD is an  open-source free and libre software  library that any OCaml
+developer can use  (hopefully quite easily since it  doesn&#38;#39;t depend on
+anything else  that the standard  OCaml compiler and library).  And of
+course, it&#38;#39;s also  a tool for any one who write  Markdown and wants it
+to be  converted (quickly)  to HTML.  OMD, so far,  is about  10 times
+faster than  Pandoc, and  I didn&#38;#39;t  even make any  efforts to  make it
+fast.&#60;/p&#62;
+&#60;h4 id=&#34;Compatibility&#34;&#62;Compatibility&#60;/h4&#62;&#60;p&#62;OMD has been developed using OCaml 4.0.1, &#60;a href=&#39;https://github.com/pw374/omd/issues/19&#39;&#62;Christophe Troestler made
+me make it compatible with OCaml
+3.12.1&#60;/a&#62;.  Then I guess it
+might work with older version of OCaml but it&#38;#39;s not certain (mainly
+because OCaml&#38;#39;s standard library has slightly changed, as I think I
+don&#38;#39;t use any language features that were introduced in 3.12 or 4.0).&#60;/p&#62;
+&#60;p&#62;By  the way,  thank  you  Christophe for  your  support, interest  and
+contributions to OMD :-)&#60;/p&#62;
+&#60;h3 id=&#34;FutureofOMD&#34;&#62;Future of OMD&#60;/h3&#62;&#60;p&#62;OMD  already is  in OPAM.   A  very stable  version of  OMD should  be
+released soon.   As a  tool, it takes  Markdown as input  and produces
+HTML as output.   A Markdown backend has been  freshly implemented, so
+you can output  Markdown as well, which is  quite useful for debugging
+or if you  want to know how many iterations you  need before you reach
+the fix  point. You  can also  output &#38;quot;text&#38;quot;, in  the sense  that it&#38;#39;s
+basically the HTML  without the HTML tags, so  it&#38;#39;s very non-formatted
+text.  There  also are  options to output  HTML table of  contents and
+parametrise their depths.&#60;/p&#62;
+&#60;h3 id=&#34;OMDandOCamlorg&#34;&#62;OMD and OCaml.org&#60;/h3&#62;&#60;p&#62;We    are    at   OCaml    Labs    making    a    new   website    for
+&#60;a href=&#39;http://ocaml.org&#39;&#62;ocaml.org&#60;/a&#62;.   The  design   is  being  provided  by
+&#60;a href=&#39;http://www.onespacemedia.com&#39;&#62;onespacemedia&#60;/a&#62;.    At   the  time   I&#38;#39;m
+writing  these  lines, I&#38;#39;m  using  the  HTML/CSS/JS  for the  upcoming
+OCaml.org to style my new Github-hosted website, so I can play with it
+&#60;em&#62;more&#60;/em&#62;.&#60;/p&#62;
+&#60;p&#62;Most pages will be written in Markdown instead of HTML, so that people
+of the OCaml community may contribute to it in a more convenient way.&#60;/p&#62;
+&#60;p&#62;And of course, that means that OMD will be used for OCaml.org.&#60;/p&#62;
       ]]></description>
     </item>
 
@@ -18,8 +203,7 @@
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
       <guid>http://pw374.github.io/posts/2013-09-24-01-50-14-opamdoc-take1.html</guid>
       <description><![CDATA[
-&#60;h3 id=&#34;OPAMDOC&#34;&#62;&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/&#39;&#62;OPAM-DOC&#60;/a&#62;&#60;/h3&#62;
-&#60;p&#62;The tool &#60;code&#62;ocamldoc&#60;/code&#62; shipped with the standard distribution of the
+&#60;h3 id=&#34;OPAMDOC&#34;&#62;&#60;a href=&#39;https://github.com/ocamllabs/opam-doc/&#39;&#62;OPAM-DOC&#60;/a&#62;&#60;/h3&#62;&#60;p&#62;The tool &#60;code&#62;ocamldoc&#60;/code&#62; shipped with the standard distribution of the
 OCaml compiler suffers from some limitations because it doesn&#38;#39;t have
 access to all the information it needs. Notably, if you want to build
 the documentation of some package &#60;code&#62;a&#60;/code&#62; that depends on some package
@@ -33,8 +217,7 @@ And each package description links to its documentation. And the documentation
 for all packages is built as a whole, which means that if the documentation of 
 a package links to all other packages on which it depends. Isn&#38;#39;t it nice? 
 :)&#60;/p&#62;
-&#60;h3 id=&#34;Installandrunopamdoc&#34;&#62;Install and run opamdoc&#60;/h3&#62;
-&#60;p&#62;opamdoc is still under active development, the current step is
+&#60;h3 id=&#34;Installandrunopamdoc&#34;&#62;Install and run opamdoc&#60;/h3&#62;&#60;p&#62;opamdoc is still under active development, the current step is
 &#60;a href=&#39;https://github.com/ocamllabs/opam-doc/issues/&#39;&#62;finding and fixing remaining issues&#60;/a&#62; and
 packaging.&#60;/p&#62;
 &#60;p&#62;If you want to use opamdoc now, here&#38;#39;s some instructions based on
@@ -59,8 +242,7 @@ This is a problem for a few packages (&#60;code&#62;Core&#60;/code&#62; is one o
 please &#60;a href=&#39;https://github.com/ocamllabs/opam-doc/issues&#39;&#62;open an issue&#60;/a&#62;, 
 and if you want to customize the way the documentation is built, 
 don&#38;#39;t hesitate to edit &#60;code&#62;opamdoc-rebuild&#60;/code&#62; and/or &#60;code&#62;opamdoc-generate&#60;/code&#62; (they are Bash scripts).&#60;/p&#62;
-&#60;h4 id=&#34;Afewnotesaboutthoseinstructions&#34;&#62;A few notes about those instructions&#60;/h4&#62;
-&#60;p&#62;The first line, which is &#60;code&#62;opam remote add opamdoc git://github.com/avsm/opamdoc-dev&#60;/code&#62;, 
+&#60;h4 id=&#34;Afewnotesaboutthoseinstructions&#34;&#62;A few notes about those instructions&#60;/h4&#62;&#60;p&#62;The first line, which is &#60;code&#62;opam remote add opamdoc git://github.com/avsm/opamdoc-dev&#60;/code&#62;, 
 will give sense to the second one, which is &#60;code&#62;opam switch 4.01.0beta1+opamdoc&#60;/code&#62;.
 And &#60;code&#62;4.01.0beta1+opamdoc&#60;/code&#62; is a customised compiler that produces on the side the &#60;code&#62;.cm{t,d}{,i}&#60;/code&#62; files
 that are used by opamdoc. Using it is very convenient! If you don&#38;#39;t use it, you need to produce
@@ -70,8 +252,7 @@ work to  make it work  with versions of  the compiler prior  to 4.01.0
 because it uses features introduced by this very version.&#60;/p&#62;
 &#60;p&#62;Just in case, here follow the customised version of &#60;code&#62;opamdoc-rebuild&#60;/code&#62; and &#60;code&#62;opamdoc-generate&#60;/code&#62; that 
 I used to build the documentation available on &#60;a href=&#39;http://ocaml-redesign.github.io/pkg/docs/&#39;&#62;http://ocaml-redesign.github.io/pkg/docs/&#60;/a&#62;.&#60;/p&#62;
-&#60;h4 id=&#34;opamdocrebuild&#34;&#62;&#60;code&#62;opamdoc-rebuild&#60;/code&#62;&#60;/h4&#62;
-&#60;p&#62;Here&#38;#39;s my customised version of &#60;code&#62;opamdoc-rebuild&#60;/code&#62;:&#60;/p&#62;
+&#60;h4 id=&#34;opamdocrebuild&#34;&#62;&#60;code&#62;opamdoc-rebuild&#60;/code&#62;&#60;/h4&#62;&#60;p&#62;Here&#38;#39;s my customised version of &#60;code&#62;opamdoc-rebuild&#60;/code&#62;:&#60;/p&#62;
 &#60;pre&#62;&#60;code&#62;#!/usr/bin/env bash
 # Rebuild the cmd/cmt archive in ~/.opam/&#38;lt;switch&#38;gt;/opamdoc
 # Copies all the cmt/cmti/cmd files found in the OPAM build
@@ -127,8 +308,7 @@ for pkg in ${PKGS}; do
     done
   done
 done&#60;/code&#62;&#60;/pre&#62;
-&#60;h4 id=&#34;opamdocgenerate&#34;&#62;&#60;code&#62;opamdoc-generate&#60;/code&#62;&#60;/h4&#62;
-&#60;p&#62;Here&#38;#39;s my customised version of &#60;code&#62;opamdoc-generate&#60;/code&#62;.&#60;/p&#62;
+&#60;h4 id=&#34;opamdocgenerate&#34;&#62;&#60;code&#62;opamdoc-generate&#60;/code&#62;&#60;/h4&#62;&#60;p&#62;Here&#38;#39;s my customised version of &#60;code&#62;opamdoc-generate&#60;/code&#62;.&#60;/p&#62;
 &#60;pre&#62;&#60;code&#62;#!/usr/bin/env bash
 # Rebuild the cmd/cmt archive in ~/.opam/&#38;lt;switch&#38;gt;/opamdoc
 # Copies all the cmt/cmti/cmd files found in the OPAM build
@@ -205,8 +385,7 @@ and
 The former implements the HTML backend of opamdoc, and the latter
 contains the JavaScript engine that loads the documentation. This blog
 post is mostly about my experience with those two files.&#60;/p&#62;
-&#60;h3 id=&#34;generateml&#34;&#62;generate.ml&#60;/h3&#62;
-&#60;p&#62;This big file (about 1.5 kloc) contains the functions to retrieve
+&#60;h3 id=&#34;generateml&#34;&#62;generate.ml&#60;/h3&#62;&#60;p&#62;This big file (about 1.5 kloc) contains the functions to retrieve
 the information from cmt, cmd, cmti, cmdi and cmi files in order to
 build the HTML document.&#60;/p&#62;
 &#60;p&#62;Side note:&#60;/p&#62;
@@ -217,8 +396,7 @@ so it&#38;#39;s pretty recent work. Previously, they were produced by a
 separate tool developed at OCamlPro for
 &#60;a href=&#39;http://www.typerex.org&#39;&#62;TypeRex&#60;/a&#62;.&#60;/p&#62;
 &#60;/blockquote&#62;
-&#60;h4 id=&#34;Tworeasonswhyit39snotsupereasy&#34;&#62;Two reasons why it&#38;#39;s not super easy&#60;/h4&#62;
-&#60;p&#62;Well, this  can actually  be explain  in just a  few words.   To begin
+&#60;h4 id=&#34;Tworeasonswhyit39snotsupereasy&#34;&#62;Two reasons why it&#38;#39;s not super easy&#60;/h4&#62;&#60;p&#62;Well, this  can actually  be explain  in just a  few words.   To begin
 with, there  are many cases to  address. Well, that is  not &#60;em&#62;exact&#60;/em&#62;. I
 should say that  there are may cases to address  &#60;em&#62;and&#60;/em&#62; those cases are
 fairly &#60;strong&#62;poorly  documented&#60;/strong&#62;, which is &#38;quot;normal&#38;quot; given  that there was
@@ -262,8 +440,7 @@ async_unix,  core, core_bench,  core_extended,  core_kernel} in  total
 (well, this  number should  increase in the  future, but  linearly, as
 people  will hopefully  start  documenting all  those packages).   And
 that&#38;#39;s why we have a JavaScript loader.&#60;/p&#62;
-&#60;h3 id=&#34;opamdocconfigmlordocsloaderjs&#34;&#62;opam_doc_config.ml, or docs_loader.js&#60;/h3&#62;
-&#60;p&#62;Since the JavaScript  may have to load tens of  megabytes of HTML, you
+&#60;h3 id=&#34;opamdocconfigmlordocsloaderjs&#34;&#62;opam_doc_config.ml, or docs_loader.js&#60;/h3&#62;&#60;p&#62;Since the JavaScript  may have to load tens of  megabytes of HTML, you
 have to program some nasty functions and loops... and at some point it
 does become big enough for  your browser to stop responding while it&#38;#39;s
 busy  loading your documentation.  So there  are several  solutions to
@@ -527,12 +704,10 @@ between 0 and 255 inclusive).&#60;/p&#62;
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
       <guid>http://pw374.github.io/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html</guid>
       <description><![CDATA[
-&#60;h3 id=&#34;MPPisnowanOPAMpackage&#34;&#62;MPP is now an OPAM package&#60;/h3&#62;
-&#60;p&#62;First of all, I&#38;#39;ve to say I&#38;#39;ve finally made an OPAM package 
+&#60;h3 id=&#34;MPPisnowanOPAMpackage&#34;&#62;MPP is now an OPAM package&#60;/h3&#62;&#60;p&#62;First of all, I&#38;#39;ve to say I&#38;#39;ve finally made an OPAM package 
 for MPP! At the time I&#38;#39;m writing these words, it&#38;#39;s still waiting
 for merging. &#60;a href=&#39;/posts/2013-10-03-20-39-07-OPAMaging-MPP.html&#39;&#62;Read more here.&#60;/a&#62;&#60;/p&#62;
-&#60;h3 id=&#34;DescriptionofMPP&#34;&#62;Description of MPP&#60;/h3&#62;
-&#60;p&#62;MPP is a preprocessor that has been designed to allow any (non-insane)
+&#60;h3 id=&#34;DescriptionofMPP&#34;&#62;Description of MPP&#60;/h3&#62;&#60;p&#62;MPP is a preprocessor that has been designed to allow any (non-insane)
 programming language to  be used as a preprocessor  for any text-based
 file. The particularity is that  the users keep their initial language
 as their  primary language:  the language(s) brought  by MPP  is (are)
@@ -553,8 +728,7 @@ can customise MPP such that MPP can work for any text file.&#60;/p&#62;
  taken...  But I don&#38;#39;t think that it&#38;#39;s a realistic scenario, so let&#38;#39;s
  just forget about it.&#60;/p&#62;
 &#60;/blockquote&#62;
-&#60;h3 id=&#34;PrincipleofMPP&#34;&#62;Principle of MPP&#60;/h3&#62;
-&#60;p&#62;The principle on which MPP is based is pretty simple. The users define
+&#60;h3 id=&#34;PrincipleofMPP&#34;&#62;Principle of MPP&#60;/h3&#62;&#60;p&#62;The principle on which MPP is based is pretty simple. The users define
 the tokens they want to use to determine the beginning and the end 
 of MPP blocks. And there are 3 kinds of MPP blocks:&#60;/p&#62;
 &#60;ol&#62;
@@ -574,8 +748,7 @@ as a preprocessor language.&#60;/p&#62;
  very  painful and  it  would start  by making  it  impure enough  to
  interact with the rest of the world.&#60;/p&#62;
 &#60;/blockquote&#62;
-&#60;h3 id=&#34;Example1thebasics&#34;&#62;Example 1: the basics&#60;/h3&#62;
-&#60;p&#62;So, let&#38;#39;s say  you&#38;#39;re writing a program using the  OCaml language, and
+&#60;h3 id=&#34;Example1thebasics&#34;&#62;Example 1: the basics&#60;/h3&#62;&#60;p&#62;So, let&#38;#39;s say  you&#38;#39;re writing a program using the  OCaml language, and
 you want &#60;code&#62;x&#60;/code&#62; to be a random integer.&#60;/p&#62;
 &#60;p&#62;You can write this:&#60;/p&#62;
 &#60;pre class=&#39;ocaml&#39;&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;x&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Random&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;int&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;max_int&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
@@ -624,8 +797,7 @@ And note that only the most inner nesting block can be nameless and that&#38;#39
 &#60;em&#62;in some cases only&#60;/em&#62;.&#60;/p&#62;
 &#60;p&#62;Note: the  technique presented above (in  example 1) has been  used to
 generate the new OCaml website.&#60;/p&#62;
-&#60;h3 id=&#34;Example2usingOCamlasapreprocessorlanguage&#34;&#62;Example 2: using OCaml as a preprocessor language&#60;/h3&#62;
-&#60;p&#62;When MPP is used with the option &#60;code&#62;-l&#60;/code&#62;, it produces a program that prints
+&#60;h3 id=&#34;Example2usingOCamlasapreprocessorlanguage&#34;&#62;Example 2: using OCaml as a preprocessor language&#60;/h3&#62;&#60;p&#62;When MPP is used with the option &#60;code&#62;-l&#60;/code&#62;, it produces a program that prints
 the file, using information provided to MPP about the language specified
 with &#60;code&#62;-l&#60;/code&#62;. For instance, &#60;code&#62;mpp -l ocaml&#60;/code&#62; will produce an OCaml program.&#60;/p&#62;
 &#60;p&#62;If you apply &#60;code&#62;mpp -l ocaml&#60;/code&#62; to a file F that contains no MPP commands,
@@ -692,12 +864,10 @@ I can!!  :)&#60;/p&#62;
 &#60;p&#62;&#60;em&#62;Please read
 &#60;a href=&#39;/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html&#39;&#62;this&#60;/a&#62; if
 you want to know more about MPP.&#60;/em&#62;&#60;/p&#62;
-&#60;h3 id=&#34;AnnouncementI39veOPAMagedMPP&#34;&#62;Announcement: I&#38;#39;ve OPAMaged MPP!&#60;/h3&#62;
-&#60;p&#62;So, I&#38;#39;ve eventually OPAMaged MPP (i.e., made an OPAM package for MPP)!
+&#60;h3 id=&#34;AnnouncementI39veOPAMagedMPP&#34;&#62;Announcement: I&#38;#39;ve OPAMaged MPP!&#60;/h3&#62;&#60;p&#62;So, I&#38;#39;ve eventually OPAMaged MPP (i.e., made an OPAM package for MPP)!
 Now MPP officially  has a version number, and at  the time I&#38;#39;m writing
 these lines, the  current version is 0.1.0.&#60;/p&#62;
-&#60;h3 id=&#34;Happythatiteventuallyworked&#34;&#62;Happy that it eventually worked...&#60;/h3&#62;
-&#60;p&#62;Yes, I&#38;#39;m  quite happy that MPP  now has an  OPAM package. To do  so, I
+&#60;h3 id=&#34;Happythatiteventuallyworked&#34;&#62;Happy that it eventually worked...&#60;/h3&#62;&#60;p&#62;Yes, I&#38;#39;m  quite happy that MPP  now has an  OPAM package. To do  so, I
 copied the &#60;code&#62;_oasis&#60;/code&#62; and the &#60;code&#62;Makefile&#60;/code&#62; files from MPP and adapted them
 for MPP.  At  first I wanted to avoid using  oasis because for reasons
 that are still unknown to me,  some people told me (half-joking?) that
@@ -707,8 +877,7 @@ amount  of time  a  Makefile that  met the  requirements  for an  OPAM
 package. Building  MPP is  quite trivial, installing  it in  the right
 place and being able to uninstall it, well, less trivial (perhaps I&#38;#39;ve
 just missed a simple thing in the process).&#60;/p&#62;
-&#60;h3 id=&#34;Asidenote&#34;&#62;A side note&#60;/h3&#62;
-&#60;p&#62;Although the  MPP project  started a  while ago now,  it&#38;#39;s still  at a
+&#60;h3 id=&#34;Asidenote&#34;&#62;A side note&#60;/h3&#62;&#60;p&#62;Although the  MPP project  started a  while ago now,  it&#38;#39;s still  at a
 pretty early  stage of development  since I&#38;#39;ve been mostly  working on
 the   tools   that   are   needed  to   build   the   &#60;a href=&#39;http://amirchaudhry.com/ocamlorg-request-for-feedback/&#39;&#62;new   ocaml.org
 website&#60;/a&#62;, such
@@ -775,6 +944,174 @@ manually update the function &#60;code&#62;to_string&#60;/code&#62;.&#60;/p&#62;
       <author>philippe.wang@cl.cam.ac.uk (Philippe Wang)</author>
       <guid>http://pw374.github.io/posts/2013-10-07-12-56-46-highpower-LEDs-for-superbright-light.html</guid>
       <description><![CDATA[
+&#60;p&#62;I&#38;#39;ve been &#38;quot;playing&#38;quot; with COB LEDs for about half a year now. Here&#38;#39;s a 
+summary of my experience.&#60;/p&#62;
+&#60;h3 id=&#34;Preliminaries&#34;&#62;Preliminaries&#60;/h3&#62;&#60;h4 id=&#34;COBLEDs&#34;&#62;COB LEDs&#60;/h4&#62;&#60;p&#62;A  &#38;quot;COB LED&#38;quot; is a  basically a bunch of tiny  LEDs put on
+together to  provide a very  energy-efficient and usually  very bright
+LED (using  both parallel  and series circuit  schemes). Note  that it
+means the  voltage of COB LEDs  are not the voltage  of &#38;quot;normal LEDs&#38;quot;,
+since putting some LEDs in series means adding up voltage values!&#60;/p&#62;
+&#60;h4 id=&#34;AnLEDdoesnotbehavelikeanincandescentlightbulb&#34;&#62;An LED does not behave like an incandescent light bulb&#60;/h4&#62;&#60;p&#62;Also,  note that  if there&#38;#39;s  a roughly  linear relation
+between light  intensity and voltage  for classic lamps, it&#38;#39;s  not the
+case  at all  with LEDs!  With  LEDs, basically,  the light  intensity
+varies with the amperage, not the voltage. So if you lower the voltage
+by a  very little bit, it will  shine as bright if  the amperage keeps
+up; if  you lower  the voltage too  much, it basically  stops emitting
+light (e.g.,  if you give  it 16V instead  of 19V, you have  so little
+light that it&#38;#39;s  really useless), but if you  increase the voltage too
+much you still fry your LEDs so you don&#38;#39;t want to do that at all.&#60;/p&#62;
+&#60;h4 id=&#34;LightcolorsmeasuredinKelvin&#34;&#62;Light colors, measured in Kelvin&#60;/h4&#62;&#60;p&#62;Basically,  2700K  to   3300K  correspond  to  classic  (discontinued)
+incandescent  light bulbs,  and  it&#38;#39;s quite  close  to classic  candle
+light, which  is about  1850K.  6500K  is day light  as in  &#38;quot;the light
+provided by the Sun on a sunny  day at noon&#38;quot;, which seems very cool if
+it&#38;#39;s  dark outside or  if you  have warm  light around.   My favourite
+artificial light color  is generally from 4000K to  5000K.  I find the
+3000K quite  acceptable, below  that is too  warm, above 6000K  is too
+cool.&#60;/p&#62;
+&#60;p&#62;&#60;strong&#62;Don&#38;#39;t  get  me  wrong:  in  this  post, &#38;quot;cool&#38;quot;  not  a  synonym  for
+&#38;quot;awesome&#38;quot;, stick to its original meaning instead.&#60;/strong&#62;&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#39;http://en.wikipedia.org/wiki/Color_temperature#Categorizing_different_lighting&#39;&#62;Read more on Wikipedia.&#60;/a&#62;&#60;/p&#62;
+&#60;h4 id=&#34;Colorspectraldistribution&#34;&#62;Color spectral distribution&#60;/h4&#62;&#60;p&#62;Note  that LEDs  generally have  a very  narrow light  color spectrum.
+That  means that  instead  of emitting  light  of a  lot of  different
+colors, including  some colors  you don&#38;#39;t see  or colors that  are not
+very much noticed because they are less intensively emitted, LEDs will
+really emitt  just the color  you asked for.  That is not such  a good
+thing (it&#38;#39;s not  so bad either). But as a  consequence, you might feel
+that the light  emitted by an LED is not very  comfortable.  What I do
+is that I mainly  use warm light LEDs and I add  a few cool light LEDs
+amongst them: it goes  from 1 cool for 6 warms to  1 for 1. The result
+of 1  for 1 is quite  nice when it&#38;#39;s  bright outside, but it&#38;#39;s  not so
+nice if it&#38;#39;s in the middle of the night.&#60;/p&#62;
+&#60;ul&#62;
+ &#60;li&#62;&#60;p&#62;spectral power distribution: &#60;a href=&#39;http://en.wikipedia.org/wiki/Spectral_power_distribution&#39;&#62;read more on Wikipedia.&#60;/a&#62;; &#60;a href=&#39;https://www.google.com/search?q=led+spectral+power+distribution&#39;&#62;find more on Google.&#60;/a&#62;&#60;/p&#62;
+ &#60;/li&#62;
+ &#60;li&#62;&#60;p&#62;LED color rendering index: &#60;a href=&#39;http://en.wikipedia.org/wiki/High_CRI_LED_Lighting&#39;&#62;read more on Wikipedia.&#60;/a&#62;; &#60;a href=&#39;https://www.google.com/search?q=led+color+rendering+index&#39;&#62;find more on Google.&#60;/a&#62;&#60;/p&#62;
+ &#60;/li&#62;
+&#60;/ul&#62;
+
+&#60;h3 id=&#34;Whynotsimplybuynormallamps&#34;&#62;Why not simply buy normal lamps?&#60;/h3&#62;&#60;p&#62;Well, buying new  lamps for having more light  implicates buying light
+bulbs as  well. I&#38;#39;m  not a very  big fan  of light bulbs  that contain
+mercury  because if  you ever  break one,  you&#38;#39;ll breathe  mercury gas
+(much likely in  small quantities though). And I  can&#38;#39;t install lights
+on the wall  without asking my landlady for permission,  and even if I
+did have permission,  it would mean putting electric  wires inside the
+wall and that&#38;#39;s not really an  idea that speaks to me (I&#38;#39;ve never done
+that) and  that means painting the  wall afterwards (not a  big fan of
+painting walls either). What about  LEDs then? Don&#38;#39;t I need to install
+them on the wall  anyway? Well, no, I don&#38;#39;t! I have  access to some of
+the iron  based framework, and  as LEDs are  light weight and  flat, I
+stick them  on some material  on which I  put some magnets,  et voilà!
+(Now I&#38;#39;m even a bigger fan of strong magnets than before.)&#60;/p&#62;
+&#60;p&#62;Well, I  won&#38;#39;t deny it, the  main reason why  I wanted to use  LEDs is
+that   it&#38;#39;s   super  high   tech,   it&#38;#39;s   fun,   it&#38;#39;s  powerful   and
+energy-efficient (and  ecological), it&#38;#39;s  nice, it&#38;#39;s the  future, it&#38;#39;s
+geek. Also, we plan on using LEDs massively in university of Cambridge
+buildings, starting with the department of computer science.&#60;/p&#62;
+&#60;h3 id=&#34;WhatI39veused&#34;&#62;What I&#38;#39;ve used&#60;/h3&#62;&#60;h4 id=&#34;LEDs&#34;&#62;LEDs&#60;/h4&#62;&#60;p&#62;I&#38;#39;ve           essentially            used           &#60;a href=&#39;http://www.rapidonline.com/Electronic-Components/SMD-Power-LEDs-6W-COB-Star-519319&#39;&#62;6W           COB
+LEDs&#60;/a&#62;,
+which — according  to the specs given by their  manufacturers — are as
+efficient  as 120lm/W  or 108lm/W,  depending on  if you  prefer white
+light or  warm white  light. I gave  a try  to more a  classic (though
+high-power)  LED before:  &#60;a href=&#39;http://www.rapidonline.com/Electronic-Components/Power-LED-Modules-9x-1W-White-and-Warm-White-502683&#39;&#62;9  pieces of  1W  LEDs put  together on  an
+aluminium
+disc&#60;/a&#62;. Well,
+I switched  to COB LEDs for three  reasons. The first one  is that COB
+LEDs are more energy-efficient.  The second one is that the voltage of
+the COB  LEDs that I use is  higher (19V instead of  10V), which means
+that for a  given wattage, the current intensity  (amperage) is lower,
+and  that means  less chance  for the  wires to  heat...  (I&#38;#39;m  not an
+electronician nor  a physisist, please  correct me if I&#38;#39;m  wrong.) And
+the third one is  that COB LEDs are very compact. The  &#38;quot;9 pieces of 1W
+LEDs on a  disc&#38;quot; is really big: the diameter is  88mm. The drawback is
+that the COB LEDs that I use are only available in the 6500K and 3000K
+color  temperatures, whereas the  other ones  are available  in 6500K,
+4000K, 3000K and 2500K; 400K being my favourite.&#60;/p&#62;
+&#60;h4 id=&#34;Powersupplyunits&#34;&#62;Power supply units&#60;/h4&#62;&#60;p&#62;It&#38;#39;s not that  easy to provide electrical power  to LEDs... because we
+need a  potentially quite  high amperage, the  right voltage,  and the
+latter has to  be very stable (or at least never  reach a higher value
+than the expected  one, otherwise the LEDs burn  and die quite easily,
+and we  don&#38;#39;t want to kill  some hardware that&#38;#39;s supposed  to last ten
+and up to thirty years).&#60;/p&#62;
+&#60;p&#62;I     recommend    &#60;a href=&#39;http://www.rapidonline.com/Electrical-Power/36w-Volt-Adjustable-Multi-Output-Psu-eup-85-2908&#39;&#62;this    power     supply    unit     (PSU)    from
+Rapid&#60;/a&#62;
+if you&#38;#39;re  powering at most 30  watts of LEDs  at a voltage of  24V or
+less for three  reasons: it seems to  me so far that it&#38;#39;s  a very good
+quality PSU, the voltage is well  regulated, it does provide up to 30W
+without  complaining  or  heating  up,  it switches  on  very  quickly
+(virtually instantaneously). I have used 2 of them for about 6 months.
+(I haven&#38;#39;t  tried to make it  work at 36W because  it would supposedly
+diminish its lifespan.)&#60;/p&#62;
+&#60;p&#62;Well, that 36W PSU is  currently (early October 2013)  out of stock,
+and since I visited  (randomly) a  Maplin store  and saw 
+&#60;a href=&#39;http://www.maplin.co.uk/maplin-120w-auto-voltage-universal-laptop-power-supply-with-usb-charging-531311&#39;&#62;this 120W  laptop power supply
+unit&#60;/a&#62; for less than £40,
+I bought two of them to give  them a shot. They are a lot cheaper than
+the 36W PSU I&#38;#39;ve been using so far, if we compare the price-over-power
+ratio.  Well,  the voltage  they deliver seems  okay: according  to my
+cheap multimeter,  so it&#38;#39;s not really the  most reliable measurement,
+they deliver 19.2V when using a  19V head. The main drawback of this adaptor
+is that  it takes  time to &#38;quot;boot&#38;quot;! (Yes, it means it will &#60;em&#62;not&#60;/em&#62; deliver power 
+during those 5 seconds.)   It&#38;#39;s not  really a problem  for a
+laptop, but for a lighting system,  having to wait 5 full seconds 
+just seems  like forever. So it means that  if I want instantaneous
+light-on feature, I need a switch  between the PSU and the LED instead
+of between the wall plug and  the PSU. Well, in practice, I think I&#38;#39;ll
+simply wait 5  seconds, because I&#38;#39;ll only use them when  I want a very
+very bright light, since I  already have 2 LED-based lighting devices
+powered by those 36W PSUs that provide power instantaneously.&#60;/p&#62;
+&#60;p&#62;The other drawback is that it&#38;#39;s made to work with (existing) laptops
+and they provide one connector per model (i.e., shape of the head and
+voltage), so you can&#38;#39;t use any connector and still assume you&#38;#39;ll be able
+to select the voltage: here, the head determines the voltage you&#38;#39;ll get.&#60;/p&#62;
+&#60;h4 id=&#34;Heat&#34;&#62;Heat!&#60;/h4&#62;&#60;p&#62;One of the biggest (potential) problem  with COB LEDs is that, as they
+are  very powerful and  very tiny,  you&#38;#39;re supposed  to stick  them on
+something that can dissipate the heat that they produce. What I learnt
+from that is that iron is  a very very slow heat conductor compared to
+aluminium.               I&#38;#39;m              using             &#60;a href=&#39;http://www.amazon.co.uk/dp/B002HMQE86/&#39;&#62;aluminium
+rulers&#60;/a&#62;   because   it&#38;#39;s   the
+cheapest flat thing made of  aluminium that I could find.  Three rules
+very easily dissipate  the heat produced by 4  LEDs.  I tried tripling
+the density  of LEDs... It was not  a good idea, as  the rulers become
+hot quite rapidly: within a few  minutes, they reach close to 50°C. So
+with 4 LEDs per ruler, active fan cooling may dissipate the heat.&#60;/p&#62;
+&#60;h4 id=&#34;StickingCOBLEDs&#34;&#62;Sticking COB LEDs&#60;/h4&#62;&#60;p&#62;To    stick   LEDs,    I   used    some   &#60;a href=&#39;http://www.akasa.com.tw/update.php?tpl=product/product.detail.tpl&#38;amp;type=Accessories&#38;amp;type_sub=Thermal%20Interface&#38;amp;model=AK-TT12-80&#39;&#62;akasa    thermal   adhesive
+tape&#60;/a&#62; that I bought on
+Amazon, and it works pretty well.&#60;/p&#62;
+&#60;h4 id=&#34;Theworstpart&#34;&#62;The worst part...&#60;/h4&#62;&#60;p&#62;... is obviously, to me, the soldering part. It&#38;#39;s quite hard to solder
+those COB LEDs because the contact spots are very small, so it takes
+a tremendous amount of time.&#60;/p&#62;
+&#60;h3 id=&#34;Overall&#34;&#62;Overall&#60;/h3&#62;&#60;h4 id=&#34;Whybrightlightisimportant&#34;&#62;Why bright light is important...&#60;/h4&#62;&#60;p&#62;I feel  that it&#38;#39;s important to  me to face (very)  bright light during
+the day, and  it&#38;#39;s best if it comes directly  from the sun. Apparently
+(although I&#38;#39;m not  a hundred percent sure) it&#38;#39;s  actually important to
+be exposed to (very) bright light at least 30 minutes a day.&#60;/p&#62;
+&#60;p&#62;So, instead of using a very expensive 
+&#60;a href=&#39;https://www.google.com/search?q=SAD+light&#39;&#62;S.A.D.  light&#60;/a&#62; 
+to prevent potential
+&#60;a href=&#39;http://en.wikipedia.org/wiki/Seasonal_affective_disorder&#39;&#62;seasonal affective disorder&#60;/a&#62;,
+well, I&#38;#39;m using very bright state-of-the-art LEDs to light up my home. :-)&#60;/p&#62;
+&#60;h4 id=&#34;Conclusion&#34;&#62;Conclusion&#60;/h4&#62;&#60;p&#62;LEDs are awesome because they need very little space compared to other
+light-emitting devices.&#60;/p&#62;
+&#60;p&#62;As they&#38;#39;re very energy-efficient, using them for indirect lighting
+doesn&#38;#39;t consume too much electricity.&#60;/p&#62;
+&#60;p&#62;They can last up to 10 or 30 years if they&#38;#39;re taken well care of.
+So once you make them, you don&#38;#39;t need to worry about them for a while...
+Well, I&#38;#39;m not sure the power supply units can last that many years,
+but it&#38;#39;s not the hard part to change.&#60;/p&#62;
+&#60;p&#62;If    you     live    in    Cambridge    (UK),     you    could    use
+&#60;a href=&#39;http://makespace.org&#39;&#62;Makespace&#60;/a&#62;  to build  your own  LED-based super
+bright and/or  super smart lighting system. Well,  given my low-budget
+when I  started building those LED-based lighting  systems, I couldn&#38;#39;t
+afford Makespace membership, so I kind of have all I need to handcraft
+at home.&#60;/p&#62;
+&#60;h5 id=&#34;Pictures&#34;&#62;Pictures&#60;/h5&#62;&#60;p&#62;4 COB LEDs on 3 aluminium  rulers, in parallel.  The 3 aluminum rulers
+are  stuck  together using  aluminium  tape,  which  has good  thermal
+conductivity, reflects light not too badly and is not too expensive.&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#39;/img/4-COB-LEDs-off.jpg&#39;&#62;&#60;img src=&#39;/img/4-COB-LEDs-off-640.jpg&#39; alt=&#39;4-COB-LEDs-off-640.jpg&#39; /&#62;&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#39;/img/4-COB-LEDs-off-unplugged.jpg&#39;&#62;&#60;img src=&#39;/img/4-COB-LEDs-off-unplugged-640.jpg&#39; alt=&#39;4-COB-LEDs-off-unplugged-640.jpg&#39; /&#62;&#60;/a&#62;&#60;/p&#62;
+&#60;p&#62;&#60;a href=&#39;/img/4-COB-LEDs-off2.jpg&#39;&#62;&#60;img src=&#39;/img/4-COB-LEDs-off2-640.jpg&#39; alt=&#39;4-COB-LEDs-off2-640.jpg&#39; /&#62;&#60;/a&#62;&#60;/p&#62;
+&#60;h6 id=&#34;IfyoudowantLEDsbutdon39twanttosolderanything&#34;&#62;If you do want LEDs but don&#38;#39;t want to solder anything&#60;/h6&#62;&#60;p&#62;Well, you may find a lot of websites on
+&#60;a href=&#39;https://www.google.com/search?q=COB+LED&#39;&#62;Google&#60;/a&#62; selling LEDs, you may also try
+&#60;a href=&#39;http://kosilum.com/&#39;&#62;this one&#60;/a&#62;, which belongs to a friend of mine.&#60;/p&#62;
       ]]></description>
     </item>
 
@@ -797,8 +1134,7 @@ in object-oriented programming. The “problem” is that we don&#38;#39;t have 
 same inheritance mechanism in functional programming, meaning that the default
 behaviour has to be implemented with functions instead of using methods
 that can be overriden in subclasses.&#60;/p&#62;
-&#60;h2 id=&#34;Firstattempt&#34;&#62;First attempt&#60;/h2&#62;
-&#60;p&#62;The following implementation met my needs:&#60;/p&#62;
+&#60;h2 id=&#34;Firstattempt&#34;&#62;First attempt&#60;/h2&#62;&#60;p&#62;The following implementation met my needs:&#60;/p&#62;
 &#60;pre class=&#39;ocaml&#39;&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;rec&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62;
   &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62;
   &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
@@ -842,8 +1178,7 @@ to do something like&#60;/p&#62;
 we still have to make trivial recursive calls that are just annoying
 to write (trivial code should be avoided whenever possible because it
 increases the chances to introduce nasty bugs).&#60;/p&#62;
-&#60;h2 id=&#34;Whataboutgenericity&#34;&#62;What about genericity?&#60;/h2&#62;
-&#60;p&#62;Well, perhaps we might want to have a visitor that doesn&#38;#39;t always 
+&#60;h2 id=&#34;Whataboutgenericity&#34;&#62;What about genericity?&#60;/h2&#62;&#60;p&#62;Well, perhaps we might want to have a visitor that doesn&#38;#39;t always 
 return a &#60;code&#62;t&#60;/code&#62;. Can we make it generic using polymorphic abstractions?
 The implementation of &#60;code&#62;visit&#60;/code&#62; returns a value, so if we want it to 
 be able to return something else, we have to parameterise the default
