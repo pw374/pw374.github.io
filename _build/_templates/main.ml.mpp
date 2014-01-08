@@ -68,8 +68,8 @@ let _ = if tryocaml then printf
           <nav id="nav-secondary">
             <ul class="nav nav-list">
               <li class="nav-header"><a href="#">{< let _ = if List.mem "root" tags then print_string "Tags" else print_string "Table of Contents" >}</a></li>
-              {< let () = let module M = Toc(Printer) in () >}
             </ul>
+              {< let () = let module M = Toc(Printer) in () >}
           </nav>
         </div>
         <div id="content-primary" class="span8">

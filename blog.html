@@ -63,32 +63,96 @@
           <nav id="nav-secondary">
             <ul class="nav nav-list">
               <li class="nav-header"><a href="#">Table of Contents</a></li>
+            </ul>
               <ul>
- <li>  <ul>
-   <li><a href='#Functionalvisitorsforacomplextreeshapeddatastructure'><a href='/posts/2014-01-06-09-24-25-functional-visitors.html'>Functional visitors for a complex tree-shaped data structure</a></a>
+ <li><a href='#Functionalvisitorsforacomplextreeshapeddatastructure'><a href='/posts/2014-01-06-09-24-25-functional-visitors.html'>Functional visitors for a complex tree-shaped data structure</a></a>
+  <ul>
+   <li><a href='#Firstattempt'>First attempt</a>
    </li>
-   <li><a href='#HighpowerLEDsforsuperbrightlight'><a href='/posts/2013-10-07-12-56-46-highpower-LEDs-for-superbright-light.html'>High-power LEDs for super-bright light</a></a>
-   </li>
-   <li><a href='#ExampleAusecaseofMPPinanOCamlprogram'><a href='/posts/2013-10-04-13-31-30-example-use-case-of-MPP.html'>(Example) A use case of MPP in an OCaml program</a></a>
-   </li>
-   <li><a href='#OPAMagingMPP'><a href='/posts/2013-10-03-20-39-07-OPAMaging-MPP.html'>OPAMaging MPP</a></a>
-   </li>
-   <li><a href='#UsingMPPintwodifferentsways'><a href='/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html'>Using MPP in two differents ways</a></a>
-   </li>
-   <li><a href='#ExerciseOddoreven'><a href='/posts/2013-09-26-20-15-24-odd-or-even.html'>(Exercise) Odd or even?</a></a>
-   </li>
-   <li><a href='#ExerciseAretheremore1sor0s'><a href='/posts/2013-09-25-16-19-07-ones-or-zeros.html'>(Exercise) Are there more 1s or 0s?</a></a>
-   </li>
-   <li><a href='#OntheImplementationofOPAMDOC'><a href='/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html'>On the Implementation of OPAMDOC</a></a>
-   </li>
-   <li><a href='#OPAMDOCwithmultipleOCamlpackages'><a href='/posts/2013-09-24-01-50-14-opamdoc-take1.html'>OPAM-DOC with multiple OCaml packages</a></a>
-   </li>
-   <li><a href='#OMDaMarkdownparserinOCaml'><a href='/posts/2013-09-05-22-31-26-about-omd.html'>OMD: a Markdown parser in OCaml</a></a>
+   <li><a href='#Whataboutgenericity'>What about genericity?</a>
    </li>
   </ul>
+
+ </li>
+ <li><a href='#HighpowerLEDsforsuperbrightlight'><a href='/posts/2013-10-07-12-56-46-highpower-LEDs-for-superbright-light.html'>High-power LEDs for super-bright light</a></a>
+  <ul>
+   <li><a href='#Preliminaries'>Preliminaries</a>
+   </li>
+   <li><a href='#Whynotsimplybuynormallamps'>Why not simply buy normal lamps?</a>
+   </li>
+   <li><a href='#WhatI39veused'>What I&#39;ve used</a>
+   </li>
+   <li><a href='#Overall'>Overall</a>
+   </li>
+  </ul>
+
+ </li>
+ <li><a href='#ExampleAusecaseofMPPinanOCamlprogram'><a href='/posts/2013-10-04-13-31-30-example-use-case-of-MPP.html'>(Example) A use case of MPP in an OCaml program</a></a>
+ </li>
+ <li><a href='#OPAMagingMPP'><a href='/posts/2013-10-03-20-39-07-OPAMaging-MPP.html'>OPAMaging MPP</a></a>
+  <ul>
+   <li><a href='#AnnouncementI39veOPAMagedMPP'>Announcement: I&#39;ve OPAMaged MPP!</a>
+   </li>
+   <li><a href='#Happythatiteventuallyworked'>Happy that it eventually worked...</a>
+   </li>
+   <li><a href='#Asidenote'>A side note</a>
+   </li>
+  </ul>
+
+ </li>
+ <li><a href='#UsingMPPintwodifferentsways'><a href='/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html'>Using MPP in two differents ways</a></a>
+  <ul>
+   <li><a href='#MPPisnowanOPAMpackage'>MPP is now an OPAM package</a>
+   </li>
+   <li><a href='#DescriptionofMPP'>Description of MPP</a>
+   </li>
+   <li><a href='#PrincipleofMPP'>Principle of MPP</a>
+   </li>
+   <li><a href='#Example1thebasics'>Example 1: the basics</a>
+   </li>
+   <li><a href='#Example2usingOCamlasapreprocessorlanguage'>Example 2: using OCaml as a preprocessor language</a>
+   </li>
+  </ul>
+
+ </li>
+ <li><a href='#ExerciseOddoreven'><a href='/posts/2013-09-26-20-15-24-odd-or-even.html'>(Exercise) Odd or even?</a></a>
+ </li>
+ <li><a href='#ExerciseAretheremore1sor0s'><a href='/posts/2013-09-25-16-19-07-ones-or-zeros.html'>(Exercise) Are there more 1s or 0s?</a></a>
+ </li>
+ <li><a href='#OntheImplementationofOPAMDOC'><a href='/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html'>On the Implementation of OPAMDOC</a></a>
+  <ul>
+   <li><a href='#generateml'>generate.ml</a>
+   </li>
+   <li><a href='#opamdocconfigmlordocsloaderjs'>opam_doc_config.ml, or docs_loader.js</a>
+   </li>
+  </ul>
+
+ </li>
+ <li><a href='#OPAMDOCwithmultipleOCamlpackages'><a href='/posts/2013-09-24-01-50-14-opamdoc-take1.html'>OPAM-DOC with multiple OCaml packages</a></a>
+  <ul>
+   <li><a href='#OPAMDOC'><a href='https://github.com/ocamllabs/opam-doc/'>OPAM-DOC</a></a>
+   </li>
+   <li><a href='#Installandrunopamdoc'>Install and run opamdoc</a>
+   </li>
+  </ul>
+
+ </li>
+ <li><a href='#OMDaMarkdownparserinOCaml'><a href='/posts/2013-09-05-22-31-26-about-omd.html'>OMD: a Markdown parser in OCaml</a></a>
+  <ul>
+   <li><a href='#Motivations'>Motivations</a>
+   </li>
+   <li><a href='#IssueswereessentiallywithMarkdownitself'>Issues... were essentially with Markdown itself</a>
+   </li>
+   <li><a href='#Implementation'>Implementation</a>
+   </li>
+   <li><a href='#FutureofOMD'>Future of OMD</a>
+   </li>
+   <li><a href='#OMDandOCamlorg'>OMD and OCaml.org</a>
+   </li>
+  </ul>
+
  </li>
 </ul>
-            </ul>
           </nav>
         </div>
         <div id="content-primary" class="span8">

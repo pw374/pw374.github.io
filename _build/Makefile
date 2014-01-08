@@ -74,7 +74,7 @@ _tmp/%.contents.html.ml:_tmp/%.contents.html Makefile
 	rm -f $@.tmp
 
 _tmp/%.toc.html:_tmp/%.contents.md Makefile
-	${OMD} -otoc  < $< > $@
+	omd -otoc -ts 0 < $< > $@
 
 _tmp/%.toc.html.ml:_tmp/%.toc.html Makefile
 	${MPPOCAML_BLIND} < $< > $@.tmp
@@ -97,7 +97,7 @@ _tmp/blog.toc.ml:_tmp/blog.toc.html Makefile
 _tmp/blog.toc.html:_tmp/blog.toc.md Makefile
 	omd < $< > $@
 _tmp/blog.toc.md:_tmp/blogposts.contents.tmp.md Makefile
-	omd -otoc  < $< > $@
+	omd -otoc -ts 0 < $< > $@
 #	(cd ../tags && for i in * ; do echo " * [$$i](/$$(sed 's/ /%20/g' <<<$$i)/)" ; done) > $@
 _tmp/blog.md.ml:blog.md.ml.mpp Makefile
 	${MPPOCAML} < $< > $@
