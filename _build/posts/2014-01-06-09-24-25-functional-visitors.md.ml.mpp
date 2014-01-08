@@ -30,7 +30,7 @@ same inheritance mechanism in functional programming, meaning that the default
 behaviour has to be implemented with functions instead of using methods
 that can be overriden in subclasses.
 
-## First attempt
+### First attempt
 
 The following implementation met my needs:
 
@@ -93,7 +93,7 @@ we still have to make trivial recursive calls that are just annoying
 to write (trivial code should be avoided whenever possible because it
 increases the chances to introduce nasty bugs).
 
-## What about genericity?
+### What about genericity?
 
 Well, perhaps we might want to have a visitor that doesn't always 
 return a `t`. Can we make it generic using polymorphic abstractions?
