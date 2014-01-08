@@ -1,0 +1,289 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Functional visitors for a complex tree-shaped data structure &ndash; pw374</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Web Fonts -->
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" />
+    <link href="http://fonts.googleapis.com/css?family=Domine:400,700" rel="stylesheet" />
+    <!-- Only part of Bootstrap that we don't load from a CDN is our own customized CSS build. -->
+    <link href="/css/bootstrap.css" rel="stylesheet" media="screen" />
+    <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="/"><img src="https://1.gravatar.com/avatar/bac6aa3e290e47c0aeeb0c6b826d9fa4?d=https%3A%2F%2Fidenticons.github.com%2F81952a25f2c72f330d4eaf04cdbe89e4.png&s=36" alt="[img]"></a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li ><a href="/">root</a></li>
+<!--
+              <li ><a href="/projects.html">projects</a></li>
+-->
+              <li ><a href="/blog.html">blog</a></li>
+<!--
+              <li class='active'><a href="/tags/ocaml/">#ocaml</a></li>
+-->
+            </ul>
+            <!-- <form class="navbar-search pull-right"> -->
+            <!--   <input class="search-query" type="text" placeholder="Search" /> -->
+            <!-- </form> -->
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="span4">
+          <nav id="nav-secondary">
+            <ul class="nav nav-list">
+              <li class="nav-header"><a href="#">Table of Contents</a></li>
+                          </ul>
+          </nav>
+        </div>
+        <div id="content-primary" class="span8">
+          <div class="content">
+      <div id='tryocaml' class="content" style='display:none;'>
+        <div class="container">
+          <div class="row">
+            <div id="lesson-message"></div>
+            <div id="languages" style='display:none;'></div>
+            <div id="menu-lessons" style='display:none'>
+              <table class="zebra-striped">
+                <tr><td id="text-x"><code></code></td> <td id=""></td></tr>
+              </table>
+            </div>
+            <div class="span9 ocaml">
+              <div id="toplevel-container">
+                <pre id="output"></pre>
+                <div id="sharp">#</div>
+                <div id="toplevel"></div>
+              </div>
+              <div id="buttons"></div>
+              <div id="graphics-title"></div>
+              <div id="graphics"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+              <h2 id="Functionalvisitorsforacomplextreeshapeddatastructure"><a href='/posts/2014-01-06-09-24-25-functional-visitors.html'>Functional visitors for a complex tree-shaped data structure</a></h2><p>Let&#39;s consider this data type:</p>
+<pre class='ocaml'><code class='ocaml'><span class='keyword'>type</span> <span class='lower'>e</span> <span class='keywordsign'>=</span> <span class='keywordsign'>|</span> <span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>B</span> <span class='keyword'>of</span> <span class='lower'>t</span> <span class='keywordsign'>|</span> <span class='constructor module'>C</span> <span class='keyword'>of</span> <span class='lower'>string</span> <span class='keywordsign'>*</span> <span class='lower'>t</span> <span class='keywordsign'>*</span> <span class='lower'>t</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keyword'>of</span> <span class='lower'>string</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keyword'>of</span> <span class='lower'>int</span>
+<span class='keyword'>and</span>  <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>e</span> <span class='lower'>list</span></code></pre>
+<p>If we want to write an abstraction to apply a function to this 
+data structure (the one of type t)
+without being bothered to treat the whole structure everytime,
+we can get some inspiration from the visitor design pattern commonly used
+in object-oriented programming. The “problem” is that we don&#39;t have the 
+same inheritance mechanism in functional programming, meaning that the default
+behaviour has to be implemented with functions instead of using methods
+that can be overriden in subclasses.</p>
+<h2 id="Firstattempt">First attempt</h2>
+<p>The following implementation met my needs:</p>
+<pre class='ocaml'><code class='ocaml'><span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>=</span> <span class='keyword'>function</span>
+  <span class='keywordsign'>|</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>-&#62;</span> <span class='keywordsign operator'>[]</span>
+  <span class='keywordsign'>|</span> <span class='keywordsign'>(</span><span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>_</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>_</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
+    <span class='keyword'>begin</span> <span class='keyword'>match</span> <span class='lower'>f</span> <span class='lower'>e</span> <span class='keyword'>with</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>l</span> <span class='keywordsign infix'>@</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>tl</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>tl</span>
+    <span class='keyword'>end</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>B</span><span class='keywordsign'>(</span><span class='lower'>t</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
+    <span class='keyword'>begin</span> <span class='keyword'>match</span> <span class='lower'>f</span> <span class='lower'>e</span> <span class='keyword'>with</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>l</span> <span class='keywordsign infix'>@</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>tl</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>B</span><span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>t</span><span class='keywordsign'>)</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>tl</span>
+    <span class='keyword'>end</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>t2</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
+    <span class='keyword'>begin</span> <span class='keyword'>match</span> <span class='lower'>f</span> <span class='lower'>e</span> <span class='keyword'>with</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>l</span> <span class='keywordsign infix'>@</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>tl</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>t2</span><span class='keywordsign'>)</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>tl</span>
+    <span class='keyword'>end</span>
+<span class='comment'>(* val visit : (e -&#62; t option) -&#62; t -&#62; t *)</span></code></pre>
+<p>With this abstraction, it becomes very easy to write a function
+that removes all <code>A</code>s:</p>
+<pre class='ocaml'><code class='ocaml'><span class='keyword'>let</span> <span class='lower'>remove_A</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>A</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>t</span></code></pre>
+<p>or all <code>B</code>s:</p>
+<pre class='ocaml'><code class='ocaml'><span class='keyword'>let</span> <span class='lower'>remove_B</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>B</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>t</span></code></pre>
+<p>and it&#39;s also very easy to convert all <code>E</code>s to <code>D</code>s:</p>
+<pre class='ocaml'><code class='ocaml'><span class='keyword'>let</span> <span class='lower'>convert_Es_to_Ds</span> <span class='lower'>t</span> <span class='keywordsign'>=</span>
+  <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>E</span><span class='keywordsign'>(</span><span class='lower'>i</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign'>[</span><span class='constructor module'>D</span><span class='keywordsign'>(</span><span class='lower'>string_of_int</span> <span class='lower'>i</span><span class='keywordsign'>)</span><span class='keywordsign'>]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>t</span></code></pre>
+<p>Doing this with some <code>fold</code> abstraction is not suitable because we would need
+to do something like</p>
+<pre class='ocaml'><code class='ocaml'><span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>remove_B</span> <span class='lower'>t</span> <span class='keywordsign'>=</span>
+  <span class='constructor module'>List</span><span class='keywordsign'>.</span><span class='lower'>rev</span>
+    <span class='keywordsign'>(</span><span class='lower'>fold</span>
+       <span class='keywordsign'>(</span><span class='keyword'>fun</span> <span class='lower'>r</span> <span class='keywordsign'>-&#62;</span>
+          <span class='keyword'>function</span>
+          <span class='keywordsign'>|</span> <span class='constructor module'>B</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>r</span>
+          <span class='keywordsign'>|</span> <span class='keywordsign'>(</span><span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>_</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>_</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>e</span><span class='keywordsign'>::</span><span class='lower'>r</span>
+          <span class='keywordsign'>|</span> <span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>t2</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>remove_B</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>remove_B</span> <span class='lower'>t2</span><span class='keywordsign'>)</span><span class='keywordsign'>)</span>
+       <span class='keywordsign operator'>[]</span>
+       <span class='lower'>t</span><span class='keywordsign'>)</span></code></pre>
+<p>in which case what bothers me most is the line that has
+<code>C(s, remove_B t1, remove_B t2)</code> because it means that 
+we still have to make trivial recursive calls that are just annoying
+to write (trivial code should be avoided whenever possible because it
+increases the chances to introduce nasty bugs).</p>
+<h2 id="Whataboutgenericity">What about genericity?</h2>
+<p>Well, perhaps we might want to have a visitor that doesn&#39;t always 
+return a <code>t</code>. Can we make it generic using polymorphic abstractions?
+The implementation of <code>visit</code> returns a value, so if we want it to 
+be able to return something else, we have to parameterise the default
+behaviour.</p>
+<p>So, let&#39;s add a parameter to the function <code>visit</code> and see what it looks like.
+Well,  let&#39;s call it <code>glue</code> since it&#39;s a function that glues 2 things together
+(if you find a better name, please let me know).</p>
+<pre class='ocaml'><code class='ocaml'><span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='keywordsign'>=</span> <span class='keyword'>function</span>
+  <span class='keywordsign'>|</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>-&#62;</span> <span class='keywordsign operator'>[]</span>
+  <span class='keywordsign'>|</span> <span class='keywordsign'>(</span><span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>_</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>_</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
+    <span class='keyword'>begin</span> <span class='keyword'>match</span> <span class='lower'>f</span> <span class='lower'>e</span> <span class='keyword'>with</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='lower'>l</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>(</span><span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+    <span class='keyword'>end</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>B</span><span class='keywordsign'>(</span><span class='lower'>t</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
+    <span class='keyword'>begin</span> <span class='keyword'>match</span> <span class='lower'>f</span> <span class='lower'>e</span> <span class='keyword'>with</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='lower'>l</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>(</span><span class='constructor module'>B</span><span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>t</span><span class='keywordsign'>)</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+    <span class='keyword'>end</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>t2</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
+    <span class='keyword'>begin</span> <span class='keyword'>match</span> <span class='lower'>f</span> <span class='lower'>e</span> <span class='keyword'>with</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='lower'>l</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span>
+        <span class='lower'>glue</span> <span class='keywordsign operator'>[]</span>
+          <span class='keywordsign'>(</span><span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>t2</span><span class='keywordsign'>)</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+    <span class='keyword'>end</span>
+<span class='comment'>(* val visit : (e -&#62; &#39;a list option) -&#62; (&#39;a list -&#62; t -&#62; t) -&#62; t -&#62; t *)</span></code></pre>
+<p>We&#39;re almost there. There&#39;s still that <code>&#39;a list</code>, which is less generic
+than <code>&#39;a</code>. Well, <code>glue</code> needs to have 2 parameters because it has to
+be able to treat both branches of the pattern-matching filter, so we could 
+make the first parameter optional. We could use optional arguments, and
+we can see that <code>f</code> already returns an option, 
+can we just take advantage of that? Well, if we replace for instance</p>
+<pre class='ocaml'><code class='ocaml'>  <span class='keywordsign'>|</span> <span class='keywordsign'>(</span><span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>_</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>_</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
+    <span class='keyword'>begin</span> <span class='keyword'>match</span> <span class='lower'>f</span> <span class='lower'>e</span> <span class='keyword'>with</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='lower'>l</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>(</span><span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+    <span class='keyword'>end</span></code></pre>
+<p>by</p>
+<pre class='ocaml'><code class='ocaml'>  <span class='keywordsign'>|</span> <span class='keywordsign'>(</span><span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>_</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>_</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
+      <span class='lower'>glue</span> <span class='keywordsign'>(</span><span class='lower'>f</span> <span class='lower'>e</span><span class='keywordsign'>)</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span></code></pre>
+<p>it does work for this branch but it doesn&#39;t for the others because
+one purpose of the visitor is to deeply traverse the
+data structure automatically.
+So we&#39;re back to optional arguments...</p>
+<p>And so we could have that:</p>
+<pre class='ocaml'><code class='ocaml'><span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>?</span><span class='keywordsign'>(</span><span class='lower'>glue</span><span class='keywordsign'>=</span><span class='keywordsign'>(</span><span class='keyword'>fun</span> <span class='keywordsign'>?</span><span class='lower'>l</span> <span class='lower'>r</span> <span class='keywordsign'>-&#62;</span> <span class='keyword'>match</span> <span class='lower'>l</span> <span class='keyword'>with</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>r</span> <span class='keywordsign'>|</span> <span class='constructor module'>Some</span> <span class='lower'>l</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>l</span> <span class='keywordsign infix'>@</span> <span class='lower'>r</span><span class='keywordsign'>)</span><span class='keywordsign'>)</span> <span class='keywordsign'>=</span> <span class='keyword'>function</span>
+  <span class='keywordsign'>|</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>-&#62;</span> <span class='keywordsign operator'>[]</span>
+  <span class='keywordsign'>|</span> <span class='keywordsign'>(</span><span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>_</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>_</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
+    <span class='keyword'>begin</span> <span class='keyword'>match</span> <span class='lower'>f</span> <span class='lower'>e</span> <span class='keyword'>with</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='keywordsign'>~</span><span class='lower'>l</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>~</span><span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='keywordsign'>(</span><span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>~</span><span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+    <span class='keyword'>end</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>B</span><span class='keywordsign'>(</span><span class='lower'>t</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
+    <span class='keyword'>begin</span> <span class='keyword'>match</span> <span class='lower'>f</span> <span class='lower'>e</span> <span class='keyword'>with</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='keywordsign'>~</span><span class='lower'>l</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>~</span><span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='keywordsign'>(</span><span class='constructor module'>B</span><span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>~</span><span class='lower'>glue</span> <span class='lower'>t</span><span class='keywordsign'>)</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>~</span><span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+    <span class='keyword'>end</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>t2</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
+    <span class='keyword'>begin</span> <span class='keyword'>match</span> <span class='lower'>f</span> <span class='lower'>e</span> <span class='keyword'>with</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='keywordsign'>~</span><span class='lower'>l</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>~</span><span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span>
+        <span class='lower'>glue</span> 
+          <span class='keywordsign'>(</span><span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>~</span><span class='lower'>glue</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>~</span><span class='lower'>glue</span> <span class='lower'>t2</span><span class='keywordsign'>)</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>~</span><span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+    <span class='keyword'>end</span>
+<span class='comment'>(* val visit : (e -&#62; t option) -&#62; ?glue:(?l:t -&#62; t -&#62; t) -&#62; t -&#62; t *)</span></code></pre>
+<p>Then the problem is that it&#39;s not polymorphic any more, while we want it to be polymorphic!
+So let&#39;s drop the default value for the parameter <code>glue</code>.</p>
+<pre class='ocaml'><code class='ocaml'><span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>(</span><span class='lower'>glue</span><span class='keywordsign'>:</span><span class='keywordsign'>(</span><span class='keywordsign'>?</span><span class='lower'>l</span><span class='keywordsign'>:</span><span class='keywordsign'>&#39;</span><span class='lower'>a</span><span class='keywordsign'>-&#62;</span> <span class='lower'>t</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>t</span><span class='keywordsign'>)</span><span class='keywordsign'>)</span> <span class='keywordsign'>=</span> <span class='keyword'>function</span>
+  <span class='keywordsign'>|</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>-&#62;</span> <span class='keywordsign operator'>[]</span>
+  <span class='keywordsign'>|</span> <span class='keywordsign'>(</span><span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>_</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>_</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
+    <span class='keyword'>begin</span> <span class='keyword'>match</span> <span class='lower'>f</span> <span class='lower'>e</span> <span class='keyword'>with</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='keywordsign'>~</span><span class='lower'>l</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='keywordsign'>(</span><span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+    <span class='keyword'>end</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>B</span><span class='keywordsign'>(</span><span class='lower'>t</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
+    <span class='keyword'>begin</span> <span class='keyword'>match</span> <span class='lower'>f</span> <span class='lower'>e</span> <span class='keyword'>with</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='keywordsign'>~</span><span class='lower'>l</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='keywordsign'>(</span><span class='constructor module'>B</span><span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>t</span><span class='keywordsign'>)</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+    <span class='keyword'>end</span>
+  <span class='keywordsign'>|</span> <span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>t2</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
+    <span class='keyword'>begin</span> <span class='keyword'>match</span> <span class='lower'>f</span> <span class='lower'>e</span> <span class='keyword'>with</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='keywordsign'>~</span><span class='lower'>l</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+      <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span>
+        <span class='lower'>glue</span> 
+          <span class='keywordsign'>(</span><span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>t2</span><span class='keywordsign'>)</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+    <span class='keyword'>end</span>
+<span class='comment'>(* val visit : (e -&#62; &#39;a option) -&#62; (?l:&#39;a -&#62; t -&#62; t) -&#62; t -&#62; t *)</span></code></pre>
+<p>There we go, we have a generic visitor for structures of type <code>t</code>.</p>
+<p>As we did before, we may now define <code>remove_A</code>, <code>remove_B</code> and <code>convert_Es_to_Ds</code>, 
+using the following quite simple definition of <code>glue</code>.</p>
+<pre class='ocaml'><code class='ocaml'><span class='keyword'>let</span> <span class='lower'>glue</span> <span class='keywordsign'>?</span><span class='lower'>l</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='keyword'>match</span> <span class='lower'>l</span> <span class='keyword'>with</span> <span class='constructor module'>Some</span> <span class='lower'>l</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>l</span> <span class='keywordsign infix'>@</span> <span class='lower'>t</span> <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>t</span></code></pre>
+<pre class='ocaml'><code class='ocaml'><span class='keyword'>let</span> <span class='lower'>remove_A</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>A</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>glue</span> <span class='lower'>t</span></code></pre>
+<pre class='ocaml'><code class='ocaml'><span class='keyword'>let</span> <span class='lower'>remove_B</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>B</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span> <span class='keywordsign'>:</span> <span class='lower'>e</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>t</span> <span class='lower'>option</span><span class='keywordsign'>)</span> <span class='lower'>glue</span> <span class='lower'>t</span></code></pre>
+<pre class='ocaml'><code class='ocaml'><span class='keyword'>let</span> <span class='lower'>convert_Es_to_Ds</span> <span class='lower'>t</span> <span class='keywordsign'>=</span>
+  <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>E</span><span class='keywordsign'>(</span><span class='lower'>i</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign'>[</span><span class='constructor module'>D</span><span class='keywordsign'>(</span><span class='lower'>string_of_int</span> <span class='lower'>i</span><span class='keywordsign'>)</span><span class='keywordsign'>]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>glue</span> <span class='lower'>t</span></code></pre>
+<p>We could actually make it more generic by allowing <code>glue</code> to return something
+else than a <code>t</code>, and we could have something resembling
+<code>val visit : (e -&gt; &#39;a option) -&gt; (?l:&#39;a -&gt; t -&gt; &#39;b) -&gt; t -&gt; &#39;b</code>.
+Well, the problem is that we have to tell <code>visit</code> how to reconstruct a visited <code>C</code>.
+It would be easy to have a more generic version of <code>visit</code> of type
+<code>val visit : (e -&gt; &#39;a option) -&gt; (?l:&#39;a -&gt; t -&gt; (&#39;b * t)) -&gt; t -&gt; (&#39;b * t)</code>
+but that&#39;s become far from simple to understand: it looks like some sort of <code>visit</code> 
+and <code>fold</code> merged together. Hmmm... Let&#39;s not go that far, for now.</p>
+<hr/><p style='font-size:80%;'><em>started on 2014-01-06 09:24:25+00:00, (re)generated on 2014-01-08 01:41:36+00:00
+</em></p><p>tags: • <a href='/tags/ocaml/'>ocaml</a> </p>          </div>
+
+
+<!-- START: Livefyre Embed -->
+<div id="livefyre-comments"></div>
+<script type="text/javascript" src="http://zor.livefyre.com/wjs/v3.0/javascripts/livefyre.js"></script>
+<script type="text/javascript">
+(function () {
+    var articleId = fyre.conv.load.makeArticleId(null);
+    fyre.conv.load({}, [{
+        el: 'livefyre-comments',
+        network: "livefyre.com",
+        siteId: "343786",
+        articleId: articleId,
+        signed: false,
+        collectionMeta: {
+            articleId: articleId,
+            url: fyre.conv.load.makeCollectionUrl(),
+        }
+    }], function() {});
+}());
+</script>
+<!-- END: Livefyre Embed -->
+
+        </div>
+      </div>
+    </div>
+    <footer id="footer" class="navbar navbar-inverse navbar-fixed-bottom">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <ul class="nav pull-left">
+            <li><a href="/blog-rss.xml">RSS</a></li>
+            <li><a href="/blog-atom.xml">Atom</a></li>
+          </ul>
+          <ul class="nav pull-right">
+            <li><a href="https://github.com/pw374/pw374.github.io">on GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+    <!-- Load javascript from CDN -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      // <!--
+      // -->
+    </script>
+  </body>
+</html>

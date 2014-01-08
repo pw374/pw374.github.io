@@ -47,21 +47,7 @@
           <nav id="nav-secondary">
             <ul class="nav nav-list">
               <li class="nav-header"><a href="#">Table of Contents</a></li>
-              <ul>
- <li><a href='#OntheImplementationofOPAMDOC'> <a href='/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html'>On the Implementation of OPAMDOC</a></a>
-  <ul>
-   <li><a href='#generateml'> generate.ml</a>
-    <ul>
-     <li><a href='#Tworeasonswhyit39snotsupereasy'> Two reasons why it&#39;s not super easy</a>
-     </li>
-    </ul>
-   </li>
-   <li><a href='#opamdocconfigmlordocsloaderjs'> opam_doc_config.ml, or docs_loader.js</a>
-   </li>
-  </ul>
- </li>
-</ul>
-            </ul>
+                          </ul>
           </nav>
         </div>
         <div id="content-primary" class="span8">
@@ -89,8 +75,7 @@
           </div>
         </div>
       </div>
-              <h2 id="OntheImplementationofOPAMDOC"> <a href='/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html'>On the Implementation of OPAMDOC</a></h2><p>
-<a href='https://github.com/ocamllabs/opam-doc/commits/master'>Early this year, Leo White started the implementation of
+              <h2 id="OntheImplementationofOPAMDOC"><a href='/posts/2013-09-24-14-19-56-on-the-implementation-of-opamdoc.html'>On the Implementation of OPAMDOC</a></h2><p><a href='https://github.com/ocamllabs/opam-doc/commits/master'>Early this year, Leo White started the implementation of
 opamdoc</a>.
 Then <a href='https://github.com/vincent-botbol'>Vincent Botbol</a> worked on it
 from late May to mid August during his stay in Cambridge.</p>
@@ -114,20 +99,19 @@ and
 The former implements the HTML backend of opamdoc, and the latter
 contains the JavaScript engine that loads the documentation. This blog
 post is mostly about my experience with those two files.</p>
-<h3 id="generateml"> generate.ml</h3>
+<h3 id="generateml">generate.ml</h3>
 <p>This big file (about 1.5 kloc) contains the functions to retrieve
 the information from cmt, cmd, cmti, cmdi and cmi files in order to
 build the HTML document.</p>
 <p>Side note:</p>
-<blockquote><p>
-The <a href='http://www.ocamlpro.com/blog/2012/08/20/ocamlpro-and-4.00.0.html'><code>.cmt</code> files were officially introduced in the standard OCaml
+<blockquote><p>The <a href='http://www.ocamlpro.com/blog/2012/08/20/ocamlpro-and-4.00.0.html'><code>.cmt</code> files were officially introduced in the standard OCaml
 compiler in version
 4.00.0</a>,
 so it&#39;s pretty recent work. Previously, they were produced by a
 separate tool developed at OCamlPro for
 <a href='http://www.typerex.org'>TypeRex</a>.</p>
 </blockquote>
-<h4 id="Tworeasonswhyit39snotsupereasy"> Two reasons why it&#39;s not super easy</h4>
+<h4 id="Tworeasonswhyit39snotsupereasy">Two reasons why it&#39;s not super easy</h4>
 <p>Well, this  can actually  be explain  in just a  few words.   To begin
 with, there  are many cases to  address. Well, that is  not <em>exact</em>. I
 should say that  there are may cases to address  <em>and</em> those cases are
@@ -138,7 +122,7 @@ documentation.</p>
 <p>For instance, if you look into
 <a href='https://github.com/ocamllabs/opam-doc/blob/master/info.mli'><code>info.mli</code></a>, you
 can see that the first type definition is:</p>
-<pre><code class='ocaml'><span class='keyword'>type</span> <span class='lower'>style_kind</span> <span class='keywordsign'>=</span>
+<pre class='ocaml'><code class='ocaml'><span class='keyword'>type</span> <span class='lower'>style_kind</span> <span class='keywordsign'>=</span>
   <span class='keywordsign'>|</span> <span class='constructor module'>SK_bold</span>
   <span class='keywordsign'>|</span> <span class='constructor module'>SK_italic</span>
   <span class='keywordsign'>|</span> <span class='constructor module'>SK_emphasize</span>
@@ -147,8 +131,7 @@ can see that the first type definition is:</p>
   <span class='keywordsign'>|</span> <span class='constructor module'>SK_right</span>
   <span class='keywordsign'>|</span> <span class='constructor module'>SK_superscript</span>
   <span class='keywordsign'>|</span> <span class='constructor module'>SK_subscript</span>
-  <span class='keywordsign'>|</span> <span class='constructor module'>SK_custom</span> <span class='keyword'>of</span> <span class='lower'>string</span>
-</code></pre>
+  <span class='keywordsign'>|</span> <span class='constructor module'>SK_custom</span> <span class='keyword'>of</span> <span class='lower'>string</span></code></pre>
 <p>and the only documentation for this type is
 <code>(** The differents kinds of style.  *)</code>.
 Well, you can see that there&#39;s not really any
@@ -173,7 +156,7 @@ async_unix,  core, core_bench,  core_extended,  core_kernel} in  total
 (well, this  number should  increase in the  future, but  linearly, as
 people  will hopefully  start  documenting all  those packages).   And
 that&#39;s why we have a JavaScript loader.</p>
-<h3 id="opamdocconfigmlordocsloaderjs"> opam_doc_config.ml, or docs_loader.js</h3>
+<h3 id="opamdocconfigmlordocsloaderjs">opam_doc_config.ml, or docs_loader.js</h3>
 <p>Since the JavaScript  may have to load tens of  megabytes of HTML, you
 have to program some nasty functions and loops... and at some point it
 does become big enough for  your browser to stop responding while it&#39;s
@@ -201,7 +184,7 @@ But if you increase it too much, it&#39;ll become too slow...</p>
 mainly because when you write in OCaml, you have static type checking,
 and that saves so much time!</p>
 <p>To be followed...</p>
-<hr/><p style='font-size:80%;'><em>started on 2013-09-24 14:21:00+00:00, (re)generated on 2013-10-08 23:18:41+01:00
+<hr/><p style='font-size:80%;'><em>started on 2013-09-24 14:21:00+00:00, (re)generated on 2014-01-08 01:41:36+00:00
 </em></p><p>tags: • <a href='/tags/ocaml/'>ocaml</a> • <a href='/tags/opamdoc/'>opamdoc</a> </p>          </div>
 
 

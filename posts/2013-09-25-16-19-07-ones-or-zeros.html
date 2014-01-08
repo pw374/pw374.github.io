@@ -61,11 +61,7 @@
           <nav id="nav-secondary">
             <ul class="nav nav-list">
               <li class="nav-header"><a href="#">Table of Contents</a></li>
-              <ul>
- <li><a href='#ExerciseAretheremore1sor0s'> <a href='/posts/2013-09-25-16-19-07-ones-or-zeros.html'>(Exercise) Are there more 1s or 0s?</a></a>
- </li>
-</ul>
-            </ul>
+                          </ul>
           </nav>
         </div>
         <div id="content-primary" class="span8">
@@ -93,10 +89,8 @@
           </div>
         </div>
       </div>
-              <h2 id="ExerciseAretheremore1sor0s"> <a href='/posts/2013-09-25-16-19-07-ones-or-zeros.html'>(Exercise) Are there more 1s or 0s?</a></h2><p>
-The challenge is this:</p>
-<blockquote><p>
-Provide a program that will determine,  given a set of 1s and 0s, if
+              <h2 id="ExerciseAretheremore1sor0s"><a href='/posts/2013-09-25-16-19-07-ones-or-zeros.html'>(Exercise) Are there more 1s or 0s?</a></h2><p>The challenge is this:</p>
+<blockquote><p>Provide a program that will determine,  given a set of 1s and 0s, if
 there are more 0s or more 1s.</p>
 </blockquote>
 <p>So  the   first  question  that  comes   to  my  mind   is  about  the
@@ -110,9 +104,8 @@ end, if  your counter has  its initial value,  then you have  the same
 number of 1s and 0s. If it&#39;s  lesser, then it has more 0s, else it has
 more 1s.</p>
 <p>Let&#39;s declare a type for the result.</p>
-<pre><code class='tryocaml'><span class='keyword'>type</span> <span class='lower'>result</span> <span class='keywordsign'>=</span> <span class='constructor module'>Equal</span> <span class='keywordsign'>|</span> <span class='constructor module'>More_zeros</span> <span class='keywordsign'>|</span> <span class='constructor module'>More_ones</span>
-<a href="javascript:octry('type result = Equal | More_zeros | More_ones\n');">[try]</a></code></pre>
-<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>count</span> <span class='lower'>l</span> <span class='keywordsign'>=</span>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>type</span> <span class='lower'>result</span> <span class='keywordsign'>=</span> <span class='constructor module'>Equal</span> <span class='keywordsign'>|</span> <span class='constructor module'>More_zeros</span> <span class='keywordsign'>|</span> <span class='constructor module'>More_ones</span><a href="javascript:octry('type result = Equal | More_zeros | More_ones');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>count</span> <span class='lower'>l</span> <span class='keywordsign'>=</span>
   <span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>loop</span> <span class='lower'>counter</span> <span class='keywordsign'>=</span> <span class='keyword'>function</span>
     <span class='keywordsign'>|</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>counter</span>
     <span class='keywordsign'>|</span> <span class='number'>1</span><span class='keywordsign'>::</span><span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>loop</span> <span class='keywordsign'>(</span><span class='lower'>counter</span><span class='keywordsign'>+</span><span class='number'>1</span><span class='keywordsign'>)</span> <span class='lower'>tl</span>
@@ -127,8 +120,7 @@ more 1s.</p>
   <span class='keyword'>else</span> <span class='keyword'>if</span> <span class='lower'>r</span> <span class='keywordsign'>&#62;</span> <span class='number'>0</span> <span class='keyword'>then</span>
     <span class='constructor module'>More_ones</span>
   <span class='keyword'>else</span>
-    <span class='constructor module'>More_zeros</span>    
-<a href="javascript:octry('let count l =\n  let rec loop counter = function\n    | [] -&#62; counter\n    | 1::tl -&#62; loop (counter+1) tl\n    | 0::tl -&#62; loop (counter-1) tl\n    | _::tl -&#62; loop counter tl\n    (* you might want to debate whether you should stop \n       when you get something else than a 0 or a 1. *)\n  in\n  let r = loop 0 l in\n  if r = 0 then\n    Equal\n  else if r &#62; 0 then\n    More_ones\n  else\n    More_zeros    \n');">[try]</a></code></pre>
+    <span class='constructor module'>More_zeros</span>    <a href="javascript:octry('let count l =\n  let rec loop counter = function\n    | [] -&#62; counter\n    | 1::tl -&#62; loop (counter+1) tl\n    | 0::tl -&#62; loop (counter-1) tl\n    | _::tl -&#62; loop counter tl\n    (* you might want to debate whether you should stop \n       when you get something else than a 0 or a 1. *)\n  in\n  let r = loop 0 l in\n  if r = 0 then\n    Equal\n  else if r &#62; 0 then\n    More_ones\n  else\n    More_zeros    ');">[try]</a></code></pre>
 <p>Well, what&#39;s the risk with this  program? The risk is that the integer
 <code>counter</code> overflows, of course! If you have a very long list of 1s (or
 0s)  only, you  may  get things  just  wrong.  However,  in OCaml,  in
@@ -171,7 +163,7 @@ done) one by one.  We don&#39;t want to do that.</p>
 size 256.   Each cell of that  array will contain the  right number to
 add to the counter. This way, we can read a byte, get its number of 0s
 and 1s in O(1).</p>
-<pre><code class='tryocaml'><span class='comment'>(* this table is computed only once *)</span>
+<pre class='tryocaml'><code class='tryocaml'><span class='comment'>(* this table is computed only once *)</span>
 <span class='keyword'>let</span> <span class='lower'>table</span> <span class='keywordsign'>=</span>
   <span class='keyword'>let</span> <span class='lower'>number_for_a_byte</span> <span class='lower'>b</span> <span class='keywordsign'>=</span>
     <span class='keyword'>let</span> <span class='lower'>r</span> <span class='keywordsign'>=</span> <span class='lower'>ref</span> <span class='number'>0</span> <span class='keyword'>in</span>
@@ -187,13 +179,12 @@ and 1s in O(1).</p>
   <span class='keyword'>for</span> <span class='lower'>i</span> <span class='keywordsign'>=</span> <span class='number'>0</span> <span class='keyword'>to</span> <span class='number'>255</span> <span class='keyword'>do</span>
     <span class='lower'>a</span><span class='keywordsign'>.</span><span class='keywordsign'>(</span><span class='lower'>i</span><span class='keywordsign'>)</span> <span class='keywordsign'>&#60;-</span> <span class='lower'>number_for_a_byte</span> <span class='lower'>i</span>
   <span class='keyword'>done</span><span class='keywordsign'>;</span>
-  <span class='lower'>a</span>
-<a href="javascript:octry('(* this table is computed only once *)\nlet table =\n  let number_for_a_byte b =\n    let r = ref 0 in\n    for i = 0 to 7 do\n      if (b lsr i) land 1 = 0 then\n        decr r\n      else\n        incr r\n    done;\n    !r\n  in\n  let a = Array.make 256 0 in\n  for i = 0 to 255 do\n    a.(i) &#60;- number_for_a_byte i\n  done;\n  a\n');">[try]</a></code></pre>
+  <span class='lower'>a</span><a href="javascript:octry('(* this table is computed only once *)\nlet table =\n  let number_for_a_byte b =\n    let r = ref 0 in\n    for i = 0 to 7 do\n      if (b lsr i) land 1 = 0 then\n        decr r\n      else\n        incr r\n    done;\n    !r\n  in\n  let a = Array.make 256 0 in\n  for i = 0 to 255 do\n    a.(i) &#60;- number_for_a_byte i\n  done;\n  a');">[try]</a></code></pre>
 <p>Then let&#39;s abstract from the means  to read new 0s and 1s, by assuming
 we&#39;ll be provided a function <code>f</code> that given <code>()</code> will return 8 bits in
 a value  of type  <code>char</code>, and will  raise the  exception <code>End_of_file</code>
 when it has no more bits to give.</p>
-<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>more_zeros_or_ones</span> <span class='lower'>f</span> <span class='keywordsign'>=</span>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>more_zeros_or_ones</span> <span class='lower'>f</span> <span class='keywordsign'>=</span>
   <span class='keyword'>let</span> <span class='lower'>c</span> <span class='keywordsign'>=</span> <span class='lower'>ref</span> <span class='number'>0</span> <span class='keyword'>in</span>
   <span class='keyword'>begin</span> <span class='keyword'>try</span> <span class='keyword'>while</span> <span class='keyword'>true</span> <span class='keyword'>do</span>
     <span class='lower'>c</span> <span class='keywordsign'>:=</span> <span class='keywordsign prefix'>!</span><span class='lower'>c</span> <span class='keywordsign'>+</span> <span class='lower'>table</span><span class='keywordsign'>.</span><span class='keywordsign'>(</span><span class='lower'>int_of_char</span><span class='keywordsign'>(</span><span class='lower'>f</span><span class='keywordsign'>(</span><span class='keywordsign'>)</span><span class='keywordsign'>)</span><span class='keywordsign'>)</span>
@@ -203,8 +194,7 @@ when it has no more bits to give.</p>
   <span class='keyword'>else</span> <span class='keyword'>if</span> <span class='keywordsign prefix'>!</span><span class='lower'>c</span> <span class='keywordsign'>&#62;</span> <span class='number'>0</span> <span class='keyword'>then</span>
     <span class='constructor module'>More_zeros</span>
   <span class='keyword'>else</span>
-    <span class='constructor module'>More_ones</span>
-<a href="javascript:octry('let more_zeros_or_ones f =\n  let c = ref 0 in\n  begin try while true do\n    c := !c + table.(int_of_char(f()))\n  done with End_of_file -&#62; () end;\n  if !c = 0 then\n    Equal\n  else if !c &#62; 0 then\n    More_zeros\n  else\n    More_ones\n');">[try]</a></code></pre>
+    <span class='constructor module'>More_ones</span><a href="javascript:octry('let more_zeros_or_ones f =\n  let c = ref 0 in\n  begin try while true do\n    c := !c + table.(int_of_char(f()))\n  done with End_of_file -&#62; () end;\n  if !c = 0 then\n    Equal\n  else if !c &#62; 0 then\n    More_zeros\n  else\n    More_ones');">[try]</a></code></pre>
 <p>Note  that <code>int_of_char</code>  has a  zero-cost (i.e.,  it  &quot;disappears&quot; at
 compile-time because  <code>int</code> and <code>char</code>  sort of share the  same memory
 representation).  If  you want  better performance, you  should inline
@@ -215,7 +205,7 @@ have a lot of memory but I&#39;m not so sure you&#39;d gain performance unless
 you  use nasty  tricks to  read larger  integers from  a  string. Then
 again, you may  not end up using  a string, in which case  you have to
 think with the whole problem in mind.</p>
-<hr/><p style='font-size:80%;'><em>started on 2013-09-25 16:19:07+00:00, (re)generated on 2013-10-08 23:18:41+01:00
+<hr/><p style='font-size:80%;'><em>started on 2013-09-25 16:19:07+00:00, (re)generated on 2014-01-08 01:41:36+00:00
 </em></p><p>tags: • <a href='/tags/ocaml/'>ocaml</a> • <a href='/tags/exercise/'>exercise</a> </p>          </div>
 
 

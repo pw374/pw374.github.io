@@ -47,25 +47,7 @@
           <nav id="nav-secondary">
             <ul class="nav nav-list">
               <li class="nav-header"><a href="#">Table of Contents</a></li>
-              <ul>
- <li><a href='#OPAMDOCwithmultipleOCamlpackages'> <a href='/posts/2013-09-24-01-50-14-opamdoc-take1.html'>OPAM-DOC with multiple OCaml packages</a></a>
-  <ul>
-   <li><a href='#OPAMDOC'> <a href='https://github.com/ocamllabs/opam-doc/'>OPAM-DOC</a></a>
-   </li>
-   <li><a href='#Installandrunopamdoc'> Install and run opamdoc</a>
-    <ul>
-     <li><a href='#Afewnotesaboutthoseinstructions'> A few notes about those instructions</a>
-     </li>
-     <li><a href='#opamdocrebuild'> <code>opamdoc-rebuild</code></a>
-     </li>
-     <li><a href='#opamdocgenerate'> <code>opamdoc-generate</code></a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
-</ul>
-            </ul>
+                          </ul>
           </nav>
         </div>
         <div id="content-primary" class="span8">
@@ -93,7 +75,7 @@
           </div>
         </div>
       </div>
-              <h2 id="OPAMDOCwithmultipleOCamlpackages"> <a href='/posts/2013-09-24-01-50-14-opamdoc-take1.html'>OPAM-DOC with multiple OCaml packages</a></h2><h3 id="OPAMDOC"> <a href='https://github.com/ocamllabs/opam-doc/'>OPAM-DOC</a></h3>
+              <h2 id="OPAMDOCwithmultipleOCamlpackages"><a href='/posts/2013-09-24-01-50-14-opamdoc-take1.html'>OPAM-DOC with multiple OCaml packages</a></h2><h3 id="OPAMDOC"><a href='https://github.com/ocamllabs/opam-doc/'>OPAM-DOC</a></h3>
 <p>The tool <code>ocamldoc</code> shipped with the standard distribution of the
 OCaml compiler suffers from some limitations because it doesn&#39;t have
 access to all the information it needs. Notably, if you want to build
@@ -108,7 +90,7 @@ And each package description links to its documentation. And the documentation
 for all packages is built as a whole, which means that if the documentation of 
 a package links to all other packages on which it depends. Isn&#39;t it nice? 
 :)</p>
-<h3 id="Installandrunopamdoc"> Install and run opamdoc</h3>
+<h3 id="Installandrunopamdoc">Install and run opamdoc</h3>
 <p>opamdoc is still under active development, the current step is
 <a href='https://github.com/ocamllabs/opam-doc/issues/'>finding and fixing remaining issues</a> and
 packaging.</p>
@@ -121,11 +103,9 @@ eval `opam config env`
 opam install opamdoc
 opamdoc-rebuild
 opamdoc-generate
-open ~/.opam/4.01.0beta1+opamdoc/opamhtml/index.html
-</code></pre>
+open ~/.opam/4.01.0beta1+opamdoc/opamhtml/index.html</code></pre>
 <ul>
- <li><code>opamdoc-rebuild</code> builds a database of cmt/cmd files in <code>~/.opam/4.01.0beta1+opamdoc/opamdoc</code>.
- </li>
+ <li><code>opamdoc-rebuild</code> builds a database of cmt/cmd files in <code>~/.opam/4.01.0beta1+opamdoc/opamdoc</code>.</li>
  <li><code>opamdoc-generate</code> builds a package HTML list in <code>~/.opam/4.01.0beta+opamdoc/opamhtml</code>.</li>
 </ul>
 </blockquote>
@@ -136,7 +116,7 @@ This is a problem for a few packages (<code>Core</code> is one of them).</p>
 please <a href='https://github.com/ocamllabs/opam-doc/issues'>open an issue</a>, 
 and if you want to customize the way the documentation is built, 
 don&#39;t hesitate to edit <code>opamdoc-rebuild</code> and/or <code>opamdoc-generate</code> (they are Bash scripts).</p>
-<h4 id="Afewnotesaboutthoseinstructions"> A few notes about those instructions</h4>
+<h4 id="Afewnotesaboutthoseinstructions">A few notes about those instructions</h4>
 <p>The first line, which is <code>opam remote add opamdoc git://github.com/avsm/opamdoc-dev</code>, 
 will give sense to the second one, which is <code>opam switch 4.01.0beta1+opamdoc</code>.
 And <code>4.01.0beta1+opamdoc</code> is a customised compiler that produces on the side the <code>.cm{t,d}{,i}</code> files
@@ -147,7 +127,7 @@ work to  make it work  with versions of  the compiler prior  to 4.01.0
 because it uses features introduced by this very version.</p>
 <p>Just in case, here follow the customised version of <code>opamdoc-rebuild</code> and <code>opamdoc-generate</code> that 
 I used to build the documentation available on <a href='http://ocaml-redesign.github.io/pkg/docs/'>http://ocaml-redesign.github.io/pkg/docs/</a>.</p>
-<h4 id="opamdocrebuild"> <code>opamdoc-rebuild</code></h4>
+<h4 id="opamdocrebuild"><code>opamdoc-rebuild</code></h4>
 <p>Here&#39;s my customised version of <code>opamdoc-rebuild</code>:</p>
 <pre><code>#!/usr/bin/env bash
 # Rebuild the cmd/cmt archive in ~/.opam/&lt;switch&gt;/opamdoc
@@ -203,9 +183,8 @@ for pkg in ${PKGS}; do
         fi
     done
   done
-done
-</code></pre>
-<h4 id="opamdocgenerate"> <code>opamdoc-generate</code></h4>
+done</code></pre>
+<h4 id="opamdocgenerate"><code>opamdoc-generate</code></h4>
 <p>Here&#39;s my customised version of <code>opamdoc-generate</code>.</p>
 <pre><code>#!/usr/bin/env bash
 # Rebuild the cmd/cmt archive in ~/.opam/&lt;switch&gt;/opamdoc
@@ -246,10 +225,9 @@ for pkg in ${PKGS}; do
     echo $pkg $name
     $dry $OPAMDOC -p $name $fs
   fi
-done
-</code></pre>
+done</code></pre>
 <p>Enjoy.</p>
-<hr/><p style='font-size:80%;'><em>started on 2013-09-24 01:50:14+01:00, (re)generated on 2013-10-08 23:18:41+01:00
+<hr/><p style='font-size:80%;'><em>started on 2013-09-24 01:50:14+01:00, (re)generated on 2014-01-08 01:41:36+00:00
 </em></p><p>tags: • <a href='/tags/ocaml/'>ocaml</a> • <a href='/tags/opamdoc/'>opamdoc</a> • <a href='/tags/opam/'>opam</a> </p>          </div>
 
 

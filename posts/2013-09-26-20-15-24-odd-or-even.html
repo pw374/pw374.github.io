@@ -61,11 +61,7 @@
           <nav id="nav-secondary">
             <ul class="nav nav-list">
               <li class="nav-header"><a href="#">Table of Contents</a></li>
-              <ul>
- <li><a href='#ExerciseOddoreven'> <a href='/posts/2013-09-26-20-15-24-odd-or-even.html'>(Exercise) Odd or even?</a></a>
- </li>
-</ul>
-            </ul>
+                          </ul>
           </nav>
         </div>
         <div id="content-primary" class="span8">
@@ -93,10 +89,8 @@
           </div>
         </div>
       </div>
-              <h2 id="ExerciseOddoreven"> <a href='/posts/2013-09-26-20-15-24-odd-or-even.html'>(Exercise) Odd or even?</a></h2><p>
-This is the exercice:</p>
-<blockquote><p>
-Given a string (of bytes), is the number of bits set to 1 odd or even?</p>
+              <h2 id="ExerciseOddoreven"><a href='/posts/2013-09-26-20-15-24-odd-or-even.html'>(Exercise) Odd or even?</a></h2><p>This is the exercice:</p>
+<blockquote><p>Given a string (of bytes), is the number of bits set to 1 odd or even?</p>
 </blockquote>
 <p>Let&#39;s now find some possible solutions.</p>
 <p>Well, the  most naive way is  to count them  all, and then see  if the
@@ -104,7 +98,7 @@ number is even or odd. But it&#39;s  probably better not to use an integer
 to count them all  and then see if that counter is  odd or even, since
 we can instead use a Boolean: each time we see a 1, we can simply flip
 the Boolean value!</p>
-<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>has_an_odd_number_of_1</span> <span class='lower'>s</span> <span class='keywordsign'>=</span>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>has_an_odd_number_of_1</span> <span class='lower'>s</span> <span class='keywordsign'>=</span>
   <span class='keyword'>let</span> <span class='lower'>res</span> <span class='keywordsign'>=</span> <span class='lower'>ref</span> <span class='keyword'>false</span> <span class='keyword'>in</span>
   <span class='keyword'>for</span> <span class='lower'>i</span> <span class='keywordsign'>=</span> <span class='number'>0</span> <span class='keyword'>to</span> <span class='constructor module'>String</span><span class='keywordsign'>.</span><span class='lower'>length</span> <span class='lower'>s</span> <span class='keywordsign'>-</span> <span class='number'>1</span> <span class='keyword'>do</span>
     <span class='keyword'>let</span> <span class='lower'>x</span> <span class='keywordsign'>=</span> <span class='lower'>int_of_char</span> <span class='lower'>s</span><span class='keywordsign operator'>.[</span><span class='lower'>i</span><span class='keywordsign'>]</span> <span class='keyword'>in</span>
@@ -113,11 +107,9 @@ the Boolean value!</p>
         <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span> <span class='keywordsign'>&#60;-</span> <span class='lower'>not</span> <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span><span class='keywordsign'>;</span>
     <span class='keyword'>done</span>
   <span class='keyword'>done</span><span class='keywordsign'>;</span>
-  <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span>
-<a href="javascript:octry('let has_an_odd_number_of_1 s =\n  let res = ref false in\n  for i = 0 to String.length s - 1 do\n    let x = int_of_char s.[i] in\n    for j = 0 to 7 do\n      if (x lsr j) land 1 = 1 then\n        res.contents &#60;- not res.contents;\n    done\n  done;\n  res.contents\n');">[try]</a></code></pre>
+  <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span><a href="javascript:octry('let has_an_odd_number_of_1 s =\n  let res = ref false in\n  for i = 0 to String.length s - 1 do\n    let x = int_of_char s.[i] in\n    for j = 0 to 7 do\n      if (x lsr j) land 1 = 1 then\n        res.contents &#60;- not res.contents;\n    done\n  done;\n  res.contents');">[try]</a></code></pre>
 <p>Side note:</p>
-<blockquote><p>
-Moreover, we can see that using a  Boolean means it will not limit the
+<blockquote><p>Moreover, we can see that using a  Boolean means it will not limit the
 number of  bits we  may read, whereas  an integer...   well, actually,
 when we reach  the maximum value of integers (of  type int, or Int32.t
 or Int64.t,  which — in  OCaml — are  respectively Pervasives.max_int,
@@ -129,28 +121,23 @@ code that tells us if an integer is odd or even. For instance,
 we can write <code>is_odd</code> these ways:</p>
 <p>Well,  let&#39;s   start  with   a  very   classic  mathematically-elegant
 implementation of two mutually recursive functions:</p>
-<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>is_odd</span> <span class='keywordsign'>=</span> <span class='keyword'>function</span>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>is_odd</span> <span class='keywordsign'>=</span> <span class='keyword'>function</span>
  <span class='keywordsign'>|</span> <span class='number'>0</span> <span class='keywordsign'>-&#62;</span> <span class='keyword'>false</span>
  <span class='keywordsign'>|</span> <span class='lower'>n</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>is_even</span> <span class='keywordsign'>(</span><span class='lower'>n</span><span class='keywordsign'>-</span><span class='number'>1</span><span class='keywordsign'>)</span>
 <span class='keyword'>and</span> <span class='lower'>is_even</span> <span class='keywordsign'>=</span> <span class='keyword'>function</span>
  <span class='keywordsign'>|</span> <span class='number'>0</span> <span class='keywordsign'>-&#62;</span> <span class='keyword'>true</span>
- <span class='keywordsign'>|</span> <span class='lower'>n</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>is_odd</span> <span class='keywordsign'>(</span><span class='lower'>n</span><span class='keywordsign'>-</span><span class='number'>1</span><span class='keywordsign'>)</span>
-<a href="javascript:octry('let rec is_odd = function\n | 0 -&#62; false\n | n -&#62; is_even (n-1)\nand is_even = function\n | 0 -&#62; true\n | n -&#62; is_odd (n-1)\n');">[try]</a></code></pre>
+ <span class='keywordsign'>|</span> <span class='lower'>n</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>is_odd</span> <span class='keywordsign'>(</span><span class='lower'>n</span><span class='keywordsign'>-</span><span class='number'>1</span><span class='keywordsign'>)</span><a href="javascript:octry('let rec is_odd = function\n | 0 -&#62; false\n | n -&#62; is_even (n-1)\nand is_even = function\n | 0 -&#62; true\n | n -&#62; is_odd (n-1)');">[try]</a></code></pre>
 <p>Note that it needs a lot of computation when the integer is &quot;big&quot;...</p>
 <p>And this is probably the shortest version:</p>
-<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keyword'>mod</span> <span class='number'>2</span> <span class='keywordsign infix'>&#60;&#62;</span> <span class='number'>0</span>
-<a href="javascript:octry('let is_odd n = n mod 2 &#60;&#62; 0\n');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keyword'>mod</span> <span class='number'>2</span> <span class='keywordsign infix'>&#60;&#62;</span> <span class='number'>0</span><a href="javascript:octry('let is_odd n = n mod 2 &#60;&#62; 0');">[try]</a></code></pre>
 <p>Now note that we cannot write this and expect it to work properly in 
 all cases:</p>
-<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keyword'>mod</span> <span class='number'>2</span> <span class='keywordsign'>=</span> <span class='number'>1</span>
-<a href="javascript:octry('let is_odd n = n mod 2 = 1\n');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keyword'>mod</span> <span class='number'>2</span> <span class='keywordsign'>=</span> <span class='number'>1</span><a href="javascript:octry('let is_odd n = n mod 2 = 1');">[try]</a></code></pre>
 <p>and that&#39;s because if n is negative and odd, then n mod 2 is -1, not 1.</p>
 <p>A tricky version that uses properties on integers:</p>
-<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keywordsign infix'>&#60;&#62;</span> <span class='number'>0</span> <span class='keywordsign'>&#38;&#38;</span> <span class='keywordsign'>(</span><span class='keywordsign'>(</span><span class='lower'>n</span> <span class='keywordsign infix'>/</span> <span class='number'>2</span><span class='keywordsign'>)</span> <span class='keywordsign'>*</span> <span class='number'>2</span><span class='keywordsign'>)</span> <span class='keywordsign infix'>&#60;&#62;</span> <span class='lower'>n</span>
-<a href="javascript:octry('let is_odd n = n &#60;&#62; 0 &#38;&#38; ((n / 2) * 2) &#60;&#62; n\n');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keywordsign infix'>&#60;&#62;</span> <span class='number'>0</span> <span class='keywordsign'>&#38;&#38;</span> <span class='keywordsign'>(</span><span class='keywordsign'>(</span><span class='lower'>n</span> <span class='keywordsign infix'>/</span> <span class='number'>2</span><span class='keywordsign'>)</span> <span class='keywordsign'>*</span> <span class='number'>2</span><span class='keywordsign'>)</span> <span class='keywordsign infix'>&#60;&#62;</span> <span class='lower'>n</span><a href="javascript:octry('let is_odd n = n &#60;&#62; 0 &#38;&#38; ((n / 2) * 2) &#60;&#62; n');">[try]</a></code></pre>
 <p>Another tricky version that uses properties on machine integers:</p>
-<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keywordsign'>land</span> <span class='number'>1</span> <span class='keywordsign'>=</span> <span class='number'>1</span>
-<a href="javascript:octry('let is_odd n = n land 1 = 1\n');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keywordsign'>land</span> <span class='number'>1</span> <span class='keywordsign'>=</span> <span class='number'>1</span><a href="javascript:octry('let is_odd n = n land 1 = 1');">[try]</a></code></pre>
 <p>Well, there is the same number  of characters as the shortest version,
 and actually  this version is  probably the most efficient  because we
 know that the  <code>land</code> operation is easy for the  computer, whereas the
@@ -173,7 +160,7 @@ When we have  a 1 and a 0, we  keep the 1.  So if we  take those bytes
 byte by byte,  and XOR them with  each other, at the end  we will have
 one remaining byte  that will tell us  if the whole string  had an odd
 number of 1 or not.</p>
-<pre><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>has_an_odd_number_of_1__efficient</span> <span class='lower'>s</span> <span class='keywordsign'>=</span>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>has_an_odd_number_of_1__efficient</span> <span class='lower'>s</span> <span class='keywordsign'>=</span>
   <span class='keyword'>let</span> <span class='lower'>l</span> <span class='keywordsign'>=</span> <span class='constructor module'>String</span><span class='keywordsign'>.</span><span class='lower'>length</span> <span class='lower'>s</span> <span class='keyword'>in</span>
   <span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>loop</span> <span class='lower'>c</span> <span class='lower'>i</span> <span class='keywordsign'>=</span>
     <span class='keyword'>if</span> <span class='lower'>i</span> <span class='keywordsign'>=</span> <span class='lower'>l</span> <span class='keyword'>then</span>
@@ -185,13 +172,12 @@ number of 1 or not.</p>
       <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span>
     <span class='keyword'>else</span>
       <span class='lower'>loop</span> <span class='keywordsign'>(</span><span class='lower'>c</span> <span class='keywordsign'>lxor</span> <span class='lower'>int_of_char</span> <span class='lower'>s</span><span class='keywordsign operator'>.[</span><span class='lower'>i</span><span class='keywordsign'>]</span><span class='keywordsign'>)</span> <span class='keywordsign'>(</span><span class='lower'>succ</span> <span class='lower'>i</span><span class='keywordsign'>)</span>
-  <span class='keyword'>in</span> <span class='lower'>loop</span> <span class='number'>0</span> <span class='number'>0</span>
-<a href="javascript:octry('let has_an_odd_number_of_1__efficient s =\n  let l = String.length s in\n  let rec loop c i =\n    if i = l then\n      let res = ref false in\n      for j = 0 to 7 do\n        if (c lsr j) land 1 = 1 then\n          res.contents &#60;- not res.contents;\n      done;\n      res.contents\n    else\n      loop (c lxor int_of_char s.[i]) (succ i)\n  in loop 0 0\n');">[try]</a></code></pre>
+  <span class='keyword'>in</span> <span class='lower'>loop</span> <span class='number'>0</span> <span class='number'>0</span><a href="javascript:octry('let has_an_odd_number_of_1__efficient s =\n  let l = String.length s in\n  let rec loop c i =\n    if i = l then\n      let res = ref false in\n      for j = 0 to 7 do\n        if (c lsr j) land 1 = 1 then\n          res.contents &#60;- not res.contents;\n      done;\n      res.contents\n    else\n      loop (c lxor int_of_char s.[i]) (succ i)\n  in loop 0 0');">[try]</a></code></pre>
 <p>And... There we go!  :-)</p>
 <p>Note that <code>int_of_char</code> is a zero-cost operation (but <code>char_of_int</code> is
 not, because it  has to check that  the value of the  given integer is
 between 0 and 255 inclusive).</p>
-<hr/><p style='font-size:80%;'><em>started on 2013-09-26 20:15:24+00:00, (re)generated on 2013-10-08 23:18:41+01:00
+<hr/><p style='font-size:80%;'><em>started on 2013-09-26 20:15:24+00:00, (re)generated on 2014-01-08 01:41:36+00:00
 </em></p><p>tags: • <a href='/tags/ocaml/'>ocaml</a> • <a href='/tags/exercise/'>exercise</a> </p>          </div>
 
 
