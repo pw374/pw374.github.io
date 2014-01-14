@@ -16,7 +16,7 @@ include Meta
 module Post(Printer:Printer) = struct open Printer >}
 
 Let's consider this data type:
-```ocaml
+```tryocaml
 type e = | A | B of t | C of string * t * t | D of string | E of int
 and  t = e list
 ```
@@ -34,7 +34,7 @@ that can be overriden in subclasses.
 
 The following implementation met my needs:
 
-```ocaml
+```tryocaml
 let rec visit f = function
   | [] -> []
   | (A | E _ | D _) as e :: tl ->
@@ -57,25 +57,25 @@ let rec visit f = function
 
 With this abstraction, it becomes very easy to write a function
 that removes all `A`s:
-```ocaml
+```tryocaml
 let remove_A t = visit (function A -> Some [] | _ -> None) t
 ```
 
 or all `B`s:
-```ocaml
+```tryocaml
 let remove_B t = visit (function B _ -> Some [] | _ -> None) t
 ```
 
 and it's also very easy to convert all `E`s to `D`s:
 
-```ocaml
+```tryocaml
 let convert_Es_to_Ds t =
   visit (function E(i) -> Some [D(string_of_int i)] | _ -> None) t
 ```
 
 Doing this with some `fold` abstraction is not suitable because we would need
 to do something like
-```ocaml
+```tryocaml
 let rec remove_B t =
   List.rev
     (fold
@@ -105,7 +105,7 @@ So, let's add a parameter to the function `visit` and see what it looks like.
 Well,  let's call it `glue` since it's a function that glues 2 things together
 (if you find a better name, please let me know).
 
-```ocaml
+```tryocaml
 let rec visit f glue = function
   | [] -> []
   | (A | E _ | D _) as e :: tl ->
@@ -134,7 +134,7 @@ be able to treat both branches of the pattern-matching filter, so we could
 make the first parameter optional. We could use optional arguments, and
 we can see that `f` already returns an option, 
 can we just take advantage of that? Well, if we replace for instance
-```ocaml
+```tryocaml
   | (A | E _ | D _) as e :: tl ->
     begin match f e with
       | Some(l) -> glue l (visit f glue tl)
@@ -142,7 +142,7 @@ can we just take advantage of that? Well, if we replace for instance
     end
 ```
 by
-```ocaml
+```tryocaml
   | (A | E _ | D _) as e :: tl ->
       glue (f e) (visit f glue tl)
 ```
@@ -152,7 +152,7 @@ data structure automatically.
 So we're back to optional arguments...
 
 And so we could have that:
-```ocaml
+```tryocaml
 let rec visit f ?(glue=(fun ?l r -> match l with None -> r | Some l -> l @ r)) = function
   | [] -> []
   | (A | E _ | D _) as e :: tl ->
@@ -178,7 +178,7 @@ let rec visit f ?(glue=(fun ?l r -> match l with None -> r | Some l -> l @ r)) =
 Then the problem is that it's not polymorphic any more, while we want it to be polymorphic!
 So let's drop the default value for the parameter `glue`.
 
-```ocaml
+```tryocaml
 let rec visit f (glue:(?l:'a -> t -> t)) = function
   | [] -> []
   | (A | E _ | D _) as e :: tl ->
@@ -208,19 +208,19 @@ As we did before, we may now define `remove_A`, `remove_B` and `convert_Es_to_Ds
 using the following quite simple definition of `glue`.
 
 
-```ocaml
+```tryocaml
 let glue ?l t = match l with Some l -> l @ t | None -> t
 ```
 
-```ocaml
+```tryocaml
 let remove_A t = visit (function A -> Some [] | _ -> None) glue t
 ```
 
-```ocaml
+```tryocaml
 let remove_B t = visit (function B _ -> Some [] | _ -> None : e -> t option) glue t
 ```
 
-```ocaml
+```tryocaml
 let convert_Es_to_Ds t =
   visit (function E(i) -> Some [D(string_of_int i)] | _ -> None) glue t
 ```
