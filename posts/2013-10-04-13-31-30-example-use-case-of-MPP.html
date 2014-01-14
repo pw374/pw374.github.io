@@ -94,7 +94,8 @@
         </div>
       </div>
               <h2 id="ExampleAusecaseofMPPinanOCamlprogram"><a href='/posts/2013-10-04-13-31-30-example-use-case-of-MPP.html'>(Example) A use case of MPP in an OCaml program</a></h2><p>Let&#39;s say you have a big variant type such as this one:</p>
-<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>type</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>B</span> <span class='keywordsign'>|</span> <span class='constructor module'>C</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>|</span> <span class='constructor module'>F</span> <span class='keywordsign'>|</span> <span class='constructor module'>G</span><a href="javascript:octry('type t = A | B | C | D | E | F | G');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>type</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>B</span> <span class='keywordsign'>|</span> <span class='constructor module'>C</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>|</span> <span class='constructor module'>F</span> <span class='keywordsign'>|</span> <span class='constructor module'>G</span>
+<a href="javascript:octry('type t = A | B | C | D | E | F | G');">[try]</a></code></pre>
 <p>and you want to implement a <code>t -&gt; string</code> function.
 With MPP, you can write this:</p>
 <pre class='ocaml'><code class='ocaml'><span class='keywordsign'>{&#60;</span> <span class='keyword'>let</span> <span class='lower'>l</span> <span class='keywordsign'>=</span> <span class='keywordsign'>[</span><span class='string'>&#34;A&#34;</span><span class='keywordsign'>;</span> <span class='string'>&#34;B&#34;</span><span class='keywordsign'>;</span> <span class='string'>&#34;C&#34;</span><span class='keywordsign'>;</span> <span class='string'>&#34;D&#34;</span><span class='keywordsign'>;</span> <span class='string'>&#34;E&#34;</span><span class='keywordsign'>;</span> <span class='string'>&#34;F&#34;</span><span class='keywordsign'>;</span> <span class='string'>&#34;G&#34;</span><span class='keywordsign'>;</span><span class='keywordsign'>]</span> <span class='keywordsign'>&#62;</span><span class='keywordsign'>}</span>
@@ -110,10 +111,19 @@ With MPP, you can write this:</p>
 <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>-&#62;</span> <span class='string'>&#34;D&#34;</span>
 <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>-&#62;</span> <span class='string'>&#34;E&#34;</span>
 <span class='keywordsign'>|</span> <span class='constructor module'>F</span> <span class='keywordsign'>-&#62;</span> <span class='string'>&#34;F&#34;</span>
-<span class='keywordsign'>|</span> <span class='constructor module'>G</span> <span class='keywordsign'>-&#62;</span> <span class='string'>&#34;G&#34;</span><a href="javascript:octry('type t = | A | B | C | D | E | F | G \nlet to_string = function\n| A -&#62; &#34;A&#34;\n| B -&#62; &#34;B&#34;\n| C -&#62; &#34;C&#34;\n| D -&#62; &#34;D&#34;\n| E -&#62; &#34;E&#34;\n| F -&#62; &#34;F&#34;\n| G -&#62; &#34;G&#34;');">[try]</a></code></pre>
+<span class='keywordsign'>|</span> <span class='constructor module'>G</span> <span class='keywordsign'>-&#62;</span> <span class='string'>&#34;G&#34;</span>
+<a href="javascript:octry('type t = | A | B | C | D | E | F | G 
+let to_string = function
+| A -&#62; &#34;A&#34;
+| B -&#62; &#34;B&#34;
+| C -&#62; &#34;C&#34;
+| D -&#62; &#34;D&#34;
+| E -&#62; &#34;E&#34;
+| F -&#62; &#34;F&#34;
+| G -&#62; &#34;G&#34;');">[try]</a></code></pre>
 <p>As you may see, if you grow the type <code>t</code> by adding more cases, you don&#39;t have to 
 manually update the function <code>to_string</code>.</p>
-<hr/><p style='font-size:80%;'><em>started on 2013-10-04 13:31:30+00:00, (re)generated on 2014-01-14 22:16:28+00:00
+<hr/><p style='font-size:80%;'><em>started on 2013-10-04 13:31:30+00:00, (re)generated on 2014-01-14 22:21:56+00:00
 </em></p><p>tags: • <a href='/tags/ocaml/'>ocaml</a> • <a href='/tags/mpp/'>mpp</a> </p>          </div>
 
 

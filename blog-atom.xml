@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2014-01-14T22:16:30+00:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
+<?xml version='1.0' encoding='UTF-8'?><feed xmlns='http://www.w3.org/2005/Atom'><title>pw374</title><link href='http://pw374.github.io/' /><link type='application/atom+xml' rel='self' href='http://pw374.github.io/blog-atom.xml' /><updated>2014-01-14T22:21:59+00:00</updated><id>http://pw374.github.io/</id><author><name>Philippe Wang</name><email>philippe.wang@cl.cam.ac.uk</email></author>
   <entry>
     <id>http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html</id>
     <link type="text/html" rel="alternate" href="http://pw374.github.io/posts/2013-09-05-22-31-26-about-omd.html"/>
@@ -727,158 +727,7 @@ between 0 and 255 inclusive).&#60;/p&#62;
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-10-03-20-35-12-using-mpp-two-different-ways.html</uri>
     </author>
-    <content type="html">&#60;h3 id=&#34;MPPisnowanOPAMpackage&#34;&#62;MPP is now an OPAM package&#60;/h3&#62;
-&#60;p&#62;First of all, I&#38;#39;ve to say I&#38;#39;ve finally made an OPAM package 
-for MPP! At the time I&#38;#39;m writing these words, it&#38;#39;s still waiting
-for merging. &#60;a href=&#39;/posts/2013-10-03-20-39-07-OPAMaging-MPP.html&#39;&#62;Read more here.&#60;/a&#62;&#60;/p&#62;
-&#60;h3 id=&#34;DescriptionofMPP&#34;&#62;Description of MPP&#60;/h3&#62;
-&#60;p&#62;MPP is a preprocessor that has been designed to allow any (non-insane)
-programming language to  be used as a preprocessor  for any text-based
-file. The particularity is that  the users keep their initial language
-as their  primary language:  the language(s) brought  by MPP  is (are)
-secondary. It  means that ideally, if  you give a random  text file to
-MPP, MPP  will return it  unchanged! And  in practice, you  can always
-parameterize MPP  (on the command line,  or in an MPP  file) such that
-for a given text file, MPP will return it unchanged.&#60;/p&#62;
-&#60;p&#62;Of course, the purpose of MPP is not to replace the &#38;quot;cat&#38;quot; command!
-But having the property that you can guarantee that MPP will behave as
-the &#38;quot;cat&#38;quot; command if you want it to is important, because it means you
-can customise MPP such that MPP can work for any text file.&#60;/p&#62;
-&#60;p&#62;Side note:&#60;/p&#62;
-&#60;blockquote&#62;&#60;p&#62;Well,  if you  discover a  language that has  some kind  of infinite
- semantics, which  are somehow automatically defined  by itself, such
- that  every  possible  sequence  of  bytes has  a  meaning  in  this
- language, MPP  might not  work because  you would  have a  hard time
- finding a token that&#38;#39;s not already taken, since there&#38;#39;re all already
- taken...  But I don&#38;#39;t think that it&#38;#39;s a realistic scenario, so let&#38;#39;s
- just forget about it.&#60;/p&#62;
-&#60;/blockquote&#62;
-&#60;h3 id=&#34;PrincipleofMPP&#34;&#62;Principle of MPP&#60;/h3&#62;
-&#60;p&#62;The principle on which MPP is based is pretty simple. The users define
-the tokens they want to use to determine the beginning and the end 
-of MPP blocks. And there are 3 kinds of MPP blocks:&#60;/p&#62;
-&#60;ol&#62;
- &#60;li&#62;basic MPP block;&#60;/li&#62;
- &#60;li&#62;basic MPP block with possible nesting;&#60;/li&#62;
- &#60;li&#62;foreign MPP block.&#60;/li&#62;
-&#60;/ol&#62;
-
-&#60;p&#62;The first and the second are used  for the same things except that the
-second allows nesting. The third kind  is the most interesting one, as
-it&#38;#39;s the one  that allows to embed virtually  any programming language
-as a preprocessor language.&#60;/p&#62;
-&#60;p&#62;Side note:&#60;/p&#62;
-&#60;blockquote&#62;&#60;p&#62;Well,  you can&#38;#39;t easily use  pure lambda calculus as  a preprocessor
- language.   Your programming  language has  to have  some notion  of
- input/output to  process text. Using  pure lambda calculus  might be
- very  painful and  it  would start  by making  it  impure enough  to
- interact with the rest of the world.&#60;/p&#62;
-&#60;/blockquote&#62;
-&#60;h3 id=&#34;Example1thebasics&#34;&#62;Example 1: the basics&#60;/h3&#62;
-&#60;p&#62;So, let&#38;#39;s say  you&#38;#39;re writing a program using the  OCaml language, and
-you want &#60;code&#62;x&#60;/code&#62; to be a random integer.&#60;/p&#62;
-&#60;p&#62;You can write this:&#60;/p&#62;
-&#60;pre class=&#39;ocaml&#39;&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;x&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Random&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;int&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;max_int&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;and if you want to be sure  that the number is different each time you
-execute  your  program,  you   should  use  &#60;code&#62;Random.self_init&#60;/code&#62;  or  an
-equivalent.&#60;/p&#62;
-&#60;p&#62;Now what if you want a random number to be generated at compile time?
-You can&#38;#39;t do it in pure OCaml. You need to preprocess your file and/or
-to read from another file...&#60;/p&#62;
-&#60;p&#62;With MPP, you can write this:&#60;/p&#62;
-&#60;pre class=&#39;ocaml&#39;&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;x&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;&#38;#60;&#38;#60;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;cmd&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;echo&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;$&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;RANDOM&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;&#38;#62;&#38;#62;&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;if you use mpp with these parameters: &#60;code&#62;-so &#38;#39;&#38;lt;&#38;lt;&#38;#39; -sc &#38;#39;&#38;gt;&#38;gt;&#38;#39;&#60;/code&#62; to set
-opening and closing tokens to &#60;code&#62;&#38;lt;&#38;lt;&#60;/code&#62; and &#60;code&#62;&#38;gt;&#38;gt;&#60;/code&#62;. 
-Default tokens are respectively &#60;code&#62;((&#60;/code&#62; and &#60;code&#62;))&#60;/code&#62; but if you&#38;#39;re writing
-some OCaml code, you shouldn&#38;#39;t use &#60;code&#62;((&#60;/code&#62; and &#60;code&#62;))&#60;/code&#62; because
-there&#38;#39;s quite a chance that they appear as OCaml code in your file.&#60;/p&#62;
-&#60;p&#62;What happens with MPP is that it simply echoes everything that is
-not MPP, and when it&#38;#39;s MPP, it interprets the commands.
-The &#60;code&#62;cmd&#60;/code&#62; builtin is probably the simplest and the most powerful,
-since it calls your shell with what follows &#60;code&#62;cmd&#60;/code&#62;. The first
-line is the command that is called, and what follows is given to
-the command as its standard input.&#60;/p&#62;
-&#60;p&#62;So, basically,&#60;/p&#62;
-&#60;pre class=&#39;ocaml&#39;&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;x&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;&#38;#60;&#38;#60;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;cmd&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;echo&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;$&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;RANDOM&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;&#38;#62;&#38;#62;&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;mod&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;42&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;given to MPP has the same semantics as this Bash script&#60;/p&#62;
-&#60;pre class=&#39;bash&#39;&#62;&#60;code class=&#39;bash&#39;&#62;echo -n &#38;#39;let x = &#38;#39;
-echo $RANDOM
-echo &#38;#39; mod 42&#38;#39;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;Now, instead of using non-nesting tokens, you can use nesting tokens,
-the only difference being that you can nest commands. Wait, what if
-you nest with non-nesting commands? Well, MPP has a very simple syntax.
-If you can&#38;#39;t nest, you really can&#38;#39;t nest.
-So, if you write &#60;code&#62;&#38;lt;&#38;lt; echo &#38;lt;&#38;lt; echo 42 &#38;gt;&#38;gt; &#38;gt;&#38;gt;&#60;/code&#62; it just doesn&#38;#39;t work!
-Moreover, you have a syntax error because the first &#60;code&#62;&#38;gt;&#38;gt;&#60;/code&#62; is seen as the
-closing token for the first &#60;code&#62;&#38;lt;&#38;lt;&#60;/code&#62;, and MPP stops when there&#38;#39;s a syntax
-error. If you want to echo &#60;code&#62;&#38;lt;&#38;lt; echo 42 &#38;gt;&#38;gt;&#60;/code&#62;, it is possible, you just
-have to name your block, as in &#60;code&#62;&#38;lt;&#38;lt;name echo &#38;lt;&#38;lt; echo 42 &#38;gt;&#38;gt; name&#38;gt;&#38;gt;&#60;/code&#62;
-and then it just works!&#60;/p&#62;
-&#60;p&#62;Note that with nesting tokens, you have to name &#60;strong&#62;all&#60;/strong&#62; outer tokens.
-The default tokens are &#60;code&#62;{{&#60;/code&#62; and &#60;code&#62;}}&#60;/code&#62;. So, to nest some commands, you
-can write for instance &#60;code&#62;{{name set x {{ cmd cat foo.txt }} name}}&#60;/code&#62;.
-Note that the the most inner block doesn&#38;#39;t have to be a nesting one,
-as it doens&#38;#39;t nest any. It means you could write
-&#60;code&#62;{{name set x &#38;lt;&#38;lt; cmd cat foo.txt &#38;gt;&#38;gt; name}}&#60;/code&#62; instead.
-And note that only the most inner nesting block can be nameless and that&#38;#39;s 
-&#60;em&#62;in some cases only&#60;/em&#62;.&#60;/p&#62;
-&#60;p&#62;Note: the  technique presented above (in  example 1) has been  used to
-generate the new OCaml website.&#60;/p&#62;
-&#60;h3 id=&#34;Example2usingOCamlasapreprocessorlanguage&#34;&#62;Example 2: using OCaml as a preprocessor language&#60;/h3&#62;
-&#60;p&#62;When MPP is used with the option &#60;code&#62;-l&#60;/code&#62;, it produces a program that prints
-the file, using information provided to MPP about the language specified
-with &#60;code&#62;-l&#60;/code&#62;. For instance, &#60;code&#62;mpp -l ocaml&#60;/code&#62; will produce an OCaml program.&#60;/p&#62;
-&#60;p&#62;If you apply &#60;code&#62;mpp -l ocaml&#60;/code&#62; to a file F that contains no MPP commands,
-then you have an OCaml  program  that, when executed, produces the 
-original file F.&#60;/p&#62;
-&#60;p&#62;When you use &#60;code&#62;-l ocaml&#60;/code&#62;, all &#38;quot;foreign blocks&#38;quot; are considered as 
-OCaml code and it will just &#38;quot;pass through&#38;quot;.
-So, if you write &#60;code&#62;42 {&#38;lt; let x = 23 &#38;gt;} Hello&#60;/code&#62;,
-it will be translated to this program:&#60;/p&#62;
-&#60;pre class=&#39;ocaml&#39;&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;print_string&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;42 &#38;#34;&#60;/span&#62;
-&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;x&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;number&#39;&#62;23&#60;/span&#62;
-&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;print_string&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34; Hello&#38;#34;&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;It&#38;#39;s not exactly as flexible as &#38;quot;you can write anything at the top-level&#38;quot;.
-Indeed, you may write any valid top-level definition. It could be
-a type definition, a module definition, really anything you want that
-is valid at the top level and that does not require double semi-colons.
-That is, you cannot write &#60;code&#62;{&#38;lt; print_int 42 &#38;gt;}&#60;/code&#62;because it&#38;#39;s not a valid top-level phrase, you should write this instead
-&#60;code&#62;{&#38;lt; let _ = print_int 42 &#38;gt;}&#60;/code&#62;.
-If you really love playing at edges, you could write
-&#60;code&#62;{&#38;lt; ;; print_int 42 ;; &#38;gt;}&#60;/code&#62;and it might work... if there is something preceding. If there isn&#38;#39;t
-(but that&#38;#39;s not trivial to guess because the semantics of MPP might 
-change on this precise point, I don&#38;#39;t know, I can&#38;#39;t promise right now),
-then you could perhaps write &#60;code&#62;{&#38;lt; print_int 42;; &#38;gt;}&#60;/code&#62;.&#60;/p&#62;
-&#60;p&#62;But you can&#38;#39;t convert a block of text into an OCaml function. You can&#38;#39;t
-write something like you would do in PHP, such as:&#60;/p&#62;
-&#60;pre&#62;&#60;code&#62;&#38;lt;ul&#38;gt;
-  {&#38;lt; for i = 1 to 42 do &#38;gt;}
-    &#38;lt;li&#38;gt; {&#38;lt; print_int i &#38;gt;} &#38;lt;/li&#38;gt;
-  {&#38;lt; done &#38;gt;}
-&#38;lt;/ul&#38;gt;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;Oh but wait!  You can use functors...&#60;/p&#62;
-&#60;p&#62;So in functor-style, you can write this:&#60;/p&#62;
-&#60;pre&#62;&#60;code&#62;&#38;lt;ul&#38;gt;
-  {&#38;lt; module I (X:sig val i : int end) = struct &#38;gt;}
-    &#38;lt;li&#38;gt; {&#38;lt; let _ = print_int X.i &#38;gt;} &#38;lt;/li&#38;gt;
-  {&#38;lt; end &#38;gt;}
-  {&#38;lt; let _ = for i = 1 to 42 do
-       let module M = I(struct let i = i end) in
-       ()
-     done &#38;gt;}
-&#38;lt;/ul&#38;gt;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;Sorry if that hurts  your eyes, but life is not  always easy.  Oh, and
-if you think it&#38;#39;s  overkill, well, of course it is,  that&#38;#39;s a tiny toy
-example! I&#38;#39;m actually using this  functor-style to write this blog. It
-means that  I generate a  template with the functor-style  headers and
-footers and I write inside the functor using Markdown, and when I need
-to write some OCaml code, I use MPP features. And when I need to print
-MPP stuff, I use  the 2 worlds of MPP, but it&#38;#39;s late  and I don&#38;#39;t want
-to go into details just right  now. What&#38;#39;s important is that it&#38;#39;s nice
-and it  works. I&#38;#39;ve  always wanted  to be able  to &#60;em&#62;easily&#60;/em&#62;  embed the
-OCaml language in any text (LaTeX, ML, HTML, Bash, etc.) file, and now
-I can!!  :)&#60;/p&#62;
-    </content>
+    <content type="html">    </content>
   </entry>
   <entry>
     <id>http://pw374.github.io/posts/2013-10-03-20-39-07-OPAMaging-MPP.html</id>
@@ -946,27 +795,7 @@ yo), patching it is not as simple as it could be...&#60;/p&#62;
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-10-04-13-31-30-example-use-case-of-MPP.html</uri>
     </author>
-    <content type="html">&#60;p&#62;Let&#38;#39;s say you have a big variant type such as this one:&#60;/p&#62;
-&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;type&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;F&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;G&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;and you want to implement a &#60;code&#62;t -&#38;gt; string&#60;/code&#62; function.
-With MPP, you can write this:&#60;/p&#62;
-&#60;pre class=&#39;ocaml&#39;&#62;&#60;code class=&#39;ocaml&#39;&#62;&#60;span class=&#39;keywordsign&#39;&#62;{&#38;#60;&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;[&#60;/span&#62;&#60;span class=&#39;string&#39;&#62;&#38;#34;A&#38;#34;&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;;&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;B&#38;#34;&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;;&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;C&#38;#34;&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;;&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;D&#38;#34;&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;;&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;E&#38;#34;&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;;&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;F&#38;#34;&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;;&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;G&#38;#34;&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;;&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;&#38;#62;&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;}&#60;/span&#62;
-&#60;span class=&#39;keyword&#39;&#62;type&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;{&#38;#60;&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;List&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;iter&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;Printf&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;printf&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;| %s &#38;#34;&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;&#38;#62;&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;}&#60;/span&#62;
-&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;to_string&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62;
-&#60;span class=&#39;keywordsign&#39;&#62;{&#38;#60;&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;List&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;iter&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keyword&#39;&#62;fun&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Printf&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;printf&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;| %s -&#38;#62; %S&#38;#34;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;&#38;#62;&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;}&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;and then you have that:&#60;/p&#62;
-&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;type&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;F&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;G&#60;/span&#62; 
-&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;to_string&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62;
-&#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;A&#38;#34;&#60;/span&#62;
-&#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;B&#38;#34;&#60;/span&#62;
-&#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;C&#38;#34;&#60;/span&#62;
-&#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;D&#38;#34;&#60;/span&#62;
-&#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;E&#38;#34;&#60;/span&#62;
-&#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;F&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;F&#38;#34;&#60;/span&#62;
-&#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;G&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;string&#39;&#62;&#38;#34;G&#38;#34;&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
-&#60;p&#62;As you may see, if you grow the type &#60;code&#62;t&#60;/code&#62; by adding more cases, you don&#38;#39;t have to 
-manually update the function &#60;code&#62;to_string&#60;/code&#62;.&#60;/p&#62;
-    </content>
+    <content type="html">    </content>
   </entry>
   <entry>
     <id>http://pw374.github.io/posts/2013-10-07-12-56-46-highpower-LEDs-for-superbright-light.html</id>
@@ -978,192 +807,7 @@ manually update the function &#60;code&#62;to_string&#60;/code&#62;.&#60;/p&#62;
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2013-10-07-12-56-46-highpower-LEDs-for-superbright-light.html</uri>
     </author>
-    <content type="html">&#60;p&#62;I&#38;#39;ve been &#38;quot;playing&#38;quot; with COB LEDs for about half a year now. Here&#38;#39;s a 
-summary of my experience.&#60;/p&#62;
-&#60;h3 id=&#34;Preliminaries&#34;&#62;Preliminaries&#60;/h3&#62;
-&#60;h4 id=&#34;COBLEDs&#34;&#62;COB LEDs&#60;/h4&#62;
-&#60;p&#62;A  &#38;quot;COB LED&#38;quot; is a  basically a bunch of tiny  LEDs put on
-together to  provide a very  energy-efficient and usually  very bright
-LED (using  both parallel  and series circuit  schemes). Note  that it
-means the  voltage of COB LEDs  are not the voltage  of &#38;quot;normal LEDs&#38;quot;,
-since putting some LEDs in series means adding up voltage values!&#60;/p&#62;
-&#60;h4 id=&#34;AnLEDdoesnotbehavelikeanincandescentlightbulb&#34;&#62;An LED does not behave like an incandescent light bulb&#60;/h4&#62;
-&#60;p&#62;Also,  note that  if there&#38;#39;s  a roughly  linear relation
-between light  intensity and voltage  for classic lamps, it&#38;#39;s  not the
-case  at all  with LEDs!  With  LEDs, basically,  the light  intensity
-varies with the amperage, not the voltage. So if you lower the voltage
-by a  very little bit, it will  shine as bright if  the amperage keeps
-up; if  you lower  the voltage too  much, it basically  stops emitting
-light (e.g.,  if you give  it 16V instead  of 19V, you have  so little
-light that it&#38;#39;s  really useless), but if you  increase the voltage too
-much you still fry your LEDs so you don&#38;#39;t want to do that at all.&#60;/p&#62;
-&#60;h4 id=&#34;LightcolorsmeasuredinKelvin&#34;&#62;Light colors, measured in Kelvin&#60;/h4&#62;
-&#60;p&#62;Basically,  2700K  to   3300K  correspond  to  classic  (discontinued)
-incandescent  light bulbs,  and  it&#38;#39;s quite  close  to classic  candle
-light, which  is about  1850K.  6500K  is day light  as in  &#38;quot;the light
-provided by the Sun on a sunny  day at noon&#38;quot;, which seems very cool if
-it&#38;#39;s  dark outside or  if you  have warm  light around.   My favourite
-artificial light color  is generally from 4000K to  5000K.  I find the
-3000K quite  acceptable, below  that is too  warm, above 6000K  is too
-cool.&#60;/p&#62;
-&#60;p&#62;&#60;strong&#62;Don&#38;#39;t  get  me  wrong:  in  this  post, &#38;quot;cool&#38;quot;  not  a  synonym  for
-&#38;quot;awesome&#38;quot;, stick to its original meaning instead.&#60;/strong&#62;&#60;/p&#62;
-&#60;p&#62;&#60;a href=&#39;http://en.wikipedia.org/wiki/Color_temperature#Categorizing_different_lighting&#39;&#62;Read more on Wikipedia.&#60;/a&#62;&#60;/p&#62;
-&#60;h4 id=&#34;Colorspectraldistribution&#34;&#62;Color spectral distribution&#60;/h4&#62;
-&#60;p&#62;Note  that LEDs  generally have  a very  narrow light  color spectrum.
-That  means that  instead  of emitting  light  of a  lot of  different
-colors, including  some colors  you don&#38;#39;t see  or colors that  are not
-very much noticed because they are less intensively emitted, LEDs will
-really emitt  just the color  you asked for.  That is not such  a good
-thing (it&#38;#39;s not  so bad either). But as a  consequence, you might feel
-that the light  emitted by an LED is not very  comfortable.  What I do
-is that I mainly  use warm light LEDs and I add  a few cool light LEDs
-amongst them: it goes  from 1 cool for 6 warms to  1 for 1. The result
-of 1  for 1 is quite  nice when it&#38;#39;s  bright outside, but it&#38;#39;s  not so
-nice if it&#38;#39;s in the middle of the night.&#60;/p&#62;
-&#60;ul&#62;
- &#60;li&#62;&#60;p&#62;spectral power distribution: &#60;a href=&#39;http://en.wikipedia.org/wiki/Spectral_power_distribution&#39;&#62;read more on Wikipedia.&#60;/a&#62;; &#60;a href=&#39;https://www.google.com/search?q=led+spectral+power+distribution&#39;&#62;find more on Google.&#60;/a&#62;&#60;/p&#62;
- &#60;/li&#62;
- &#60;li&#62;&#60;p&#62;LED color rendering index: &#60;a href=&#39;http://en.wikipedia.org/wiki/High_CRI_LED_Lighting&#39;&#62;read more on Wikipedia.&#60;/a&#62;; &#60;a href=&#39;https://www.google.com/search?q=led+color+rendering+index&#39;&#62;find more on Google.&#60;/a&#62;&#60;/p&#62;
- &#60;/li&#62;
-&#60;/ul&#62;
-
-&#60;h3 id=&#34;Whynotsimplybuynormallamps&#34;&#62;Why not simply buy normal lamps?&#60;/h3&#62;
-&#60;p&#62;Well, buying new  lamps for having more light  implicates buying light
-bulbs as  well. I&#38;#39;m  not a very  big fan  of light bulbs  that contain
-mercury  because if  you ever  break one,  you&#38;#39;ll breathe  mercury gas
-(much likely in  small quantities though). And I  can&#38;#39;t install lights
-on the wall  without asking my landlady for permission,  and even if I
-did have permission,  it would mean putting electric  wires inside the
-wall and that&#38;#39;s not really an  idea that speaks to me (I&#38;#39;ve never done
-that) and  that means painting the  wall afterwards (not a  big fan of
-painting walls either). What about  LEDs then? Don&#38;#39;t I need to install
-them on the wall  anyway? Well, no, I don&#38;#39;t! I have  access to some of
-the iron  based framework, and  as LEDs are  light weight and  flat, I
-stick them  on some material  on which I  put some magnets,  et voilà!
-(Now I&#38;#39;m even a bigger fan of strong magnets than before.)&#60;/p&#62;
-&#60;p&#62;Well, I  won&#38;#39;t deny it, the  main reason why  I wanted to use  LEDs is
-that   it&#38;#39;s   super  high   tech,   it&#38;#39;s   fun,   it&#38;#39;s  powerful   and
-energy-efficient (and  ecological), it&#38;#39;s  nice, it&#38;#39;s the  future, it&#38;#39;s
-geek. Also, we plan on using LEDs massively in university of Cambridge
-buildings, starting with the department of computer science.&#60;/p&#62;
-&#60;h3 id=&#34;WhatI39veused&#34;&#62;What I&#38;#39;ve used&#60;/h3&#62;
-&#60;h4 id=&#34;LEDs&#34;&#62;LEDs&#60;/h4&#62;
-&#60;p&#62;I&#38;#39;ve           essentially            used           &#60;a href=&#39;http://www.rapidonline.com/Electronic-Components/SMD-Power-LEDs-6W-COB-Star-519319&#39;&#62;6W           COB
-LEDs&#60;/a&#62;,
-which — according  to the specs given by their  manufacturers — are as
-efficient  as 120lm/W  or 108lm/W,  depending on  if you  prefer white
-light or  warm white  light. I gave  a try  to more a  classic (though
-high-power)  LED before:  &#60;a href=&#39;http://www.rapidonline.com/Electronic-Components/Power-LED-Modules-9x-1W-White-and-Warm-White-502683&#39;&#62;9  pieces of  1W  LEDs put  together on  an
-aluminium
-disc&#60;/a&#62;. Well,
-I switched  to COB LEDs for three  reasons. The first one  is that COB
-LEDs are more energy-efficient.  The second one is that the voltage of
-the COB  LEDs that I use is  higher (19V instead of  10V), which means
-that for a  given wattage, the current intensity  (amperage) is lower,
-and  that means  less chance  for the  wires to  heat...  (I&#38;#39;m  not an
-electronician nor  a physisist, please  correct me if I&#38;#39;m  wrong.) And
-the third one is  that COB LEDs are very compact. The  &#38;quot;9 pieces of 1W
-LEDs on a  disc&#38;quot; is really big: the diameter is  88mm. The drawback is
-that the COB LEDs that I use are only available in the 6500K and 3000K
-color  temperatures, whereas the  other ones  are available  in 6500K,
-4000K, 3000K and 2500K; 400K being my favourite.&#60;/p&#62;
-&#60;h4 id=&#34;Powersupplyunits&#34;&#62;Power supply units&#60;/h4&#62;
-&#60;p&#62;It&#38;#39;s not that  easy to provide electrical power  to LEDs... because we
-need a  potentially quite  high amperage, the  right voltage,  and the
-latter has to  be very stable (or at least never  reach a higher value
-than the expected  one, otherwise the LEDs burn  and die quite easily,
-and we  don&#38;#39;t want to kill  some hardware that&#38;#39;s supposed  to last ten
-and up to thirty years).&#60;/p&#62;
-&#60;p&#62;I     recommend    &#60;a href=&#39;http://www.rapidonline.com/Electrical-Power/36w-Volt-Adjustable-Multi-Output-Psu-eup-85-2908&#39;&#62;this    power     supply    unit     (PSU)    from
-Rapid&#60;/a&#62;
-if you&#38;#39;re  powering at most 30  watts of LEDs  at a voltage of  24V or
-less for three  reasons: it seems to  me so far that it&#38;#39;s  a very good
-quality PSU, the voltage is well  regulated, it does provide up to 30W
-without  complaining  or  heating  up,  it switches  on  very  quickly
-(virtually instantaneously). I have used 2 of them for about 6 months.
-(I haven&#38;#39;t  tried to make it  work at 36W because  it would supposedly
-diminish its lifespan.)&#60;/p&#62;
-&#60;p&#62;Well, that 36W PSU is  currently (early October 2013)  out of stock,
-and since I visited  (randomly) a  Maplin store  and saw 
-&#60;a href=&#39;http://www.maplin.co.uk/maplin-120w-auto-voltage-universal-laptop-power-supply-with-usb-charging-531311&#39;&#62;this 120W  laptop power supply
-unit&#60;/a&#62; for less than £40,
-I bought two of them to give  them a shot. They are a lot cheaper than
-the 36W PSU I&#38;#39;ve been using so far, if we compare the price-over-power
-ratio.  Well,  the voltage  they deliver seems  okay: according  to my
-cheap multimeter,  so it&#38;#39;s not really the  most reliable measurement,
-they deliver 19.2V when using a  19V head. The main drawback of this adaptor
-is that  it takes  time to &#38;quot;boot&#38;quot;! (Yes, it means it will &#60;em&#62;not&#60;/em&#62; deliver power 
-during those 5 seconds.)   It&#38;#39;s not  really a problem  for a
-laptop, but for a lighting system,  having to wait 5 full seconds 
-just seems  like forever. So it means that  if I want instantaneous
-light-on feature, I need a switch  between the PSU and the LED instead
-of between the wall plug and  the PSU. Well, in practice, I think I&#38;#39;ll
-simply wait 5  seconds, because I&#38;#39;ll only use them when  I want a very
-very bright light, since I  already have 2 LED-based lighting devices
-powered by those 36W PSUs that provide power instantaneously.&#60;/p&#62;
-&#60;p&#62;The other drawback is that it&#38;#39;s made to work with (existing) laptops
-and they provide one connector per model (i.e., shape of the head and
-voltage), so you can&#38;#39;t use any connector and still assume you&#38;#39;ll be able
-to select the voltage: here, the head determines the voltage you&#38;#39;ll get.&#60;/p&#62;
-&#60;h4 id=&#34;Heat&#34;&#62;Heat!&#60;/h4&#62;
-&#60;p&#62;One of the biggest (potential) problem  with COB LEDs is that, as they
-are  very powerful and  very tiny,  you&#38;#39;re supposed  to stick  them on
-something that can dissipate the heat that they produce. What I learnt
-from that is that iron is  a very very slow heat conductor compared to
-aluminium.               I&#38;#39;m              using             &#60;a href=&#39;http://www.amazon.co.uk/dp/B002HMQE86/&#39;&#62;aluminium
-rulers&#60;/a&#62;   because   it&#38;#39;s   the
-cheapest flat thing made of  aluminium that I could find.  Three rules
-very easily dissipate  the heat produced by 4  LEDs.  I tried tripling
-the density  of LEDs... It was not  a good idea, as  the rulers become
-hot quite rapidly: within a few  minutes, they reach close to 50°C. So
-with 4 LEDs per ruler, active fan cooling may dissipate the heat.&#60;/p&#62;
-&#60;h4 id=&#34;StickingCOBLEDs&#34;&#62;Sticking COB LEDs&#60;/h4&#62;
-&#60;p&#62;To    stick   LEDs,    I   used    some   &#60;a href=&#39;http://www.akasa.com.tw/update.php?tpl=product/product.detail.tpl&#38;amp;type=Accessories&#38;amp;type_sub=Thermal%20Interface&#38;amp;model=AK-TT12-80&#39;&#62;akasa    thermal   adhesive
-tape&#60;/a&#62; that I bought on
-Amazon, and it works pretty well.&#60;/p&#62;
-&#60;h4 id=&#34;Theworstpart&#34;&#62;The worst part...&#60;/h4&#62;
-&#60;p&#62;... is obviously, to me, the soldering part. It&#38;#39;s quite hard to solder
-those COB LEDs because the contact spots are very small, so it takes
-a tremendous amount of time.&#60;/p&#62;
-&#60;h3 id=&#34;Overall&#34;&#62;Overall&#60;/h3&#62;
-&#60;h4 id=&#34;Whybrightlightisimportant&#34;&#62;Why bright light is important...&#60;/h4&#62;
-&#60;p&#62;I feel  that it&#38;#39;s important to  me to face (very)  bright light during
-the day, and  it&#38;#39;s best if it comes directly  from the sun. Apparently
-(although I&#38;#39;m not  a hundred percent sure) it&#38;#39;s  actually important to
-be exposed to (very) bright light at least 30 minutes a day.&#60;/p&#62;
-&#60;p&#62;So, instead of using a very expensive 
-&#60;a href=&#39;https://www.google.com/search?q=SAD+light&#39;&#62;S.A.D.  light&#60;/a&#62; 
-to prevent potential
-&#60;a href=&#39;http://en.wikipedia.org/wiki/Seasonal_affective_disorder&#39;&#62;seasonal affective disorder&#60;/a&#62;,
-well, I&#38;#39;m using very bright state-of-the-art LEDs to light up my home. :-)&#60;/p&#62;
-&#60;h4 id=&#34;Conclusion&#34;&#62;Conclusion&#60;/h4&#62;
-&#60;p&#62;LEDs are awesome because they need very little space compared to other
-light-emitting devices.&#60;/p&#62;
-&#60;p&#62;As they&#38;#39;re very energy-efficient, using them for indirect lighting
-doesn&#38;#39;t consume too much electricity.&#60;/p&#62;
-&#60;p&#62;They can last up to 10 or 30 years if they&#38;#39;re taken well care of.
-So once you make them, you don&#38;#39;t need to worry about them for a while...
-Well, I&#38;#39;m not sure the power supply units can last that many years,
-but it&#38;#39;s not the hard part to change.&#60;/p&#62;
-&#60;p&#62;If    you     live    in    Cambridge    (UK),     you    could    use
-&#60;a href=&#39;http://makespace.org&#39;&#62;Makespace&#60;/a&#62;  to build  your own  LED-based super
-bright and/or  super smart lighting system. Well,  given my low-budget
-when I  started building those LED-based lighting  systems, I couldn&#38;#39;t
-afford Makespace membership, so I kind of have all I need to handcraft
-at home.&#60;/p&#62;
-&#60;h5 id=&#34;Pictures&#34;&#62;Pictures&#60;/h5&#62;
-&#60;p&#62;4 COB LEDs on 3 aluminium  rulers, in parallel.  The 3 aluminum rulers
-are  stuck  together using  aluminium  tape,  which  has good  thermal
-conductivity, reflects light not too badly and is not too expensive.&#60;/p&#62;
-&#60;p&#62;&#60;a href=&#39;/img/4-COB-LEDs-off.jpg&#39;&#62;&#60;img src=&#39;/img/4-COB-LEDs-off-640.jpg&#39; alt=&#39;4-COB-LEDs-off-640.jpg&#39; /&#62;&#60;/a&#62;&#60;/p&#62;
-&#60;p&#62;&#60;a href=&#39;/img/4-COB-LEDs-off-unplugged.jpg&#39;&#62;&#60;img src=&#39;/img/4-COB-LEDs-off-unplugged-640.jpg&#39; alt=&#39;4-COB-LEDs-off-unplugged-640.jpg&#39; /&#62;&#60;/a&#62;&#60;/p&#62;
-&#60;p&#62;&#60;a href=&#39;/img/4-COB-LEDs-off2.jpg&#39;&#62;&#60;img src=&#39;/img/4-COB-LEDs-off2-640.jpg&#39; alt=&#39;4-COB-LEDs-off2-640.jpg&#39; /&#62;&#60;/a&#62;&#60;/p&#62;
-&#60;h6 id=&#34;IfyoudowantLEDsbutdon39twanttosolderanything&#34;&#62;If you do want LEDs but don&#38;#39;t want to solder anything&#60;/h6&#62;
-&#60;p&#62;Well, you may find a lot of websites on
-&#60;a href=&#39;https://www.google.com/search?q=COB+LED&#39;&#62;Google&#60;/a&#62; selling LEDs, you may also try
-&#60;a href=&#39;http://kosilum.com/&#39;&#62;this one&#60;/a&#62;, which belongs to a friend of mine.&#60;/p&#62;
-    </content>
+    <content type="html">    </content>
   </entry>
   <entry>
     <id>http://pw374.github.io/posts/2014-01-06-09-24-25-functional-visitors.html</id>
@@ -1175,6 +819,168 @@ conductivity, reflects light not too badly and is not too expensive.&#60;/p&#62;
       <name>Philippe Wang</name>
     <uri>http://pw374.github.io/posts/2014-01-06-09-24-25-functional-visitors.html</uri>
     </author>
-    <content type="html">    </content>
+    <content type="html">&#60;p&#62;Let&#38;#39;s consider this data type:&#60;/p&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;type&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;of&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;of&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;string&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;*&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;*&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;of&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;string&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;of&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;int&#60;/span&#62;
+&#60;span class=&#39;keyword&#39;&#62;and&#60;/span&#62;  &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;list&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;If we want to write an abstraction to apply a function to this 
+data structure (the one of type t)
+without being bothered to treat the whole structure everytime,
+we can get some inspiration from the visitor design pattern commonly used
+in object-oriented programming. The “problem” is that we don&#38;#39;t have the 
+same inheritance mechanism in functional programming, meaning that the default
+behaviour has to be implemented with functions instead of using methods
+that can be overriden in subclasses.&#60;/p&#62;
+&#60;h3 id=&#34;Firstattempt&#34;&#62;First attempt&#60;/h3&#62;
+&#60;p&#62;The following implementation met my needs:&#60;/p&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;rec&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;@&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;@&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;s&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t2&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;@&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;s&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t2&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;
+&#60;span class=&#39;comment&#39;&#62;(* val visit : (e -&#38;#62; t option) -&#38;#62; t -&#38;#62; t *)&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;With this abstraction, it becomes very easy to write a function
+that removes all &#60;code&#62;A&#60;/code&#62;s:&#60;/p&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;remove_A&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;or all &#60;code&#62;B&#60;/code&#62;s:&#60;/p&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;remove_B&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;and it&#38;#39;s also very easy to convert all &#60;code&#62;E&#60;/code&#62;s to &#60;code&#62;D&#60;/code&#62;s:&#60;/p&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;convert_Es_to_Ds&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62;
+  &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;i&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;[&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;string_of_int&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;i&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Doing this with some &#60;code&#62;fold&#60;/code&#62; abstraction is not suitable because we would need
+to do something like&#60;/p&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;rec&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;remove_B&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62;
+  &#60;span class=&#39;constructor module&#39;&#62;List&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;.&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;rev&#60;/span&#62;
+    &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;fold&#60;/span&#62;
+       &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keyword&#39;&#62;fun&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;r&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+          &#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62;
+          &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;r&#60;/span&#62;
+          &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;r&#60;/span&#62;
+          &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;s&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t2&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;s&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;remove_B&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;remove_B&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t2&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+       &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62;
+       &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;in which case what bothers me most is the line that has
+&#60;code&#62;C(s, remove_B t1, remove_B t2)&#60;/code&#62; because it means that 
+we still have to make trivial recursive calls that are just annoying
+to write (trivial code should be avoided whenever possible because it
+increases the chances to introduce nasty bugs).&#60;/p&#62;
+&#60;h3 id=&#34;Whataboutgenericity&#34;&#62;What about genericity?&#60;/h3&#62;
+&#60;p&#62;Well, perhaps we might want to have a visitor that doesn&#38;#39;t always 
+return a &#60;code&#62;t&#60;/code&#62;. Can we make it generic using polymorphic abstractions?
+The implementation of &#60;code&#62;visit&#60;/code&#62; returns a value, so if we want it to 
+be able to return something else, we have to parameterise the default
+behaviour.&#60;/p&#62;
+&#60;p&#62;So, let&#38;#39;s add a parameter to the function &#60;code&#62;visit&#60;/code&#62; and see what it looks like.
+Well,  let&#38;#39;s call it &#60;code&#62;glue&#60;/code&#62; since it&#38;#39;s a function that glues 2 things together
+(if you find a better name, please let me know).&#60;/p&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;rec&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;s&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t2&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+        &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62;
+          &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;s&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t2&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;
+&#60;span class=&#39;comment&#39;&#62;(* val visit : (e -&#38;#62; &#38;#39;a list option) -&#38;#62; (&#38;#39;a list -&#38;#62; t -&#38;#62; t) -&#38;#62; t -&#38;#62; t *)&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;We&#38;#39;re almost there. There&#38;#39;s still that &#60;code&#62;&#38;#39;a list&#60;/code&#62;, which is less generic
+than &#60;code&#62;&#38;#39;a&#60;/code&#62;. Well, &#60;code&#62;glue&#60;/code&#62; needs to have 2 parameters because it has to
+be able to treat both branches of the pattern-matching filter, so we could 
+make the first parameter optional. We could use optional arguments, and
+we can see that &#60;code&#62;f&#60;/code&#62; already returns an option, 
+can we just take advantage of that? Well, if we replace for instance&#60;/p&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;by&#60;/p&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+      &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;it does work for this branch but it doesn&#38;#39;t for the others because
+one purpose of the visitor is to deeply traverse the
+data structure automatically.
+So we&#38;#39;re back to optional arguments...&#60;/p&#62;
+&#60;p&#62;And so we could have that:&#60;/p&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;rec&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;?&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keyword&#39;&#62;fun&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;?&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;r&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;r&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;@&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;r&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;s&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t2&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+        &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; 
+          &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;s&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t2&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;
+&#60;span class=&#39;comment&#39;&#62;(* val visit : (e -&#38;#62; t option) -&#38;#62; ?glue:(?l:t -&#38;#62; t -&#38;#62; t) -&#38;#62; t -&#38;#62; t *)&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;Then the problem is that it&#38;#39;s not polymorphic any more, while we want it to be polymorphic!
+So let&#38;#39;s drop the default value for the parameter &#60;code&#62;glue&#60;/code&#62;.&#60;/p&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;rec&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;:&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;?&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;:&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;&#38;#39;&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;a&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;
+  &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;s&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t2&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;as&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;begin&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;~&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+      &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62;
+        &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; 
+          &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;C&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;s&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t1&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;,&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t2&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;::&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;f&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;tl&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;
+    &#60;span class=&#39;keyword&#39;&#62;end&#60;/span&#62;
+&#60;span class=&#39;comment&#39;&#62;(* val visit : (e -&#38;#62; &#38;#39;a option) -&#38;#62; (?l:&#38;#39;a -&#38;#62; t -&#38;#62; t) -&#38;#62; t -&#38;#62; t *)&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;There we go, we have a generic visitor for structures of type &#60;code&#62;t&#60;/code&#62;.&#60;/p&#62;
+&#60;p&#62;As we did before, we may now define &#60;code&#62;remove_A&#60;/code&#62;, &#60;code&#62;remove_B&#60;/code&#62; and &#60;code&#62;convert_Es_to_Ds&#60;/code&#62;, 
+using the following quite simple definition of &#60;code&#62;glue&#60;/code&#62;.&#60;/p&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;?&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;match&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keyword&#39;&#62;with&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;l&#60;/span&#62; &#60;span class=&#39;keywordsign infix&#39;&#62;@&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;remove_A&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;A&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;remove_B&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;B&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62; &#60;span class=&#39;keywordsign operator&#39;&#62;[]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;:&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;e&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;option&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;pre class=&#39;tryocaml&#39;&#62;&#60;code class=&#39;tryocaml&#39;&#62;&#60;span class=&#39;keyword&#39;&#62;let&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;convert_Es_to_Ds&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;=&#60;/span&#62;
+  &#60;span class=&#39;lower&#39;&#62;visit&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;keyword&#39;&#62;function&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;E&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;i&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;Some&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;[&#60;/span&#62;&#60;span class=&#39;constructor module&#39;&#62;D&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;(&#60;/span&#62;&#60;span class=&#39;lower&#39;&#62;string_of_int&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;i&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;]&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;|&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;_&#60;/span&#62; &#60;span class=&#39;keywordsign&#39;&#62;-&#38;#62;&#60;/span&#62; &#60;span class=&#39;constructor module&#39;&#62;None&#60;/span&#62;&#60;span class=&#39;keywordsign&#39;&#62;)&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;glue&#60;/span&#62; &#60;span class=&#39;lower&#39;&#62;t&#60;/span&#62;&#60;/code&#62;&#60;/pre&#62;
+&#60;p&#62;We could actually make it more generic by allowing &#60;code&#62;glue&#60;/code&#62; to return something
+else than a &#60;code&#62;t&#60;/code&#62;, and we could have something resembling
+&#60;code&#62;val visit : (e -&#38;gt; &#38;#39;a option) -&#38;gt; (?l:&#38;#39;a -&#38;gt; t -&#38;gt; &#38;#39;b) -&#38;gt; t -&#38;gt; &#38;#39;b&#60;/code&#62;.
+Well, the problem is that we have to tell &#60;code&#62;visit&#60;/code&#62; how to reconstruct a visited &#60;code&#62;C&#60;/code&#62;.
+It would be easy to have a more generic version of &#60;code&#62;visit&#60;/code&#62; of type
+&#60;code&#62;val visit : (e -&#38;gt; &#38;#39;a option) -&#38;gt; (?l:&#38;#39;a -&#38;gt; t -&#38;gt; (&#38;#39;b * t)) -&#38;gt; t -&#38;gt; (&#38;#39;b * t)&#60;/code&#62;
+but that&#38;#39;s become far from simple to understand: it looks like some sort of &#60;code&#62;visit&#60;/code&#62; 
+and &#60;code&#62;fold&#60;/code&#62; merged together. Hmmm... Let&#38;#39;s not go that far, for now.&#60;/p&#62;
+    </content>
   </entry>
 </feed>

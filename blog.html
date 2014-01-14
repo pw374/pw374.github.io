@@ -186,7 +186,9 @@ with OCaml of course, but also the (awful) HTML/CSS/JS triplet.</p>
 <p>Here follow the latest blog posts.</p>
 <h2 id="Functionalvisitorsforacomplextreeshapeddatastructure"><a href='/posts/2014-01-06-09-24-25-functional-visitors.html'>Functional visitors for a complex tree-shaped data structure</a></h2><p>Let&#39;s consider this data type:</p>
 <pre class='tryocaml'><code class='tryocaml'><span class='keyword'>type</span> <span class='lower'>e</span> <span class='keywordsign'>=</span> <span class='keywordsign'>|</span> <span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>B</span> <span class='keyword'>of</span> <span class='lower'>t</span> <span class='keywordsign'>|</span> <span class='constructor module'>C</span> <span class='keyword'>of</span> <span class='lower'>string</span> <span class='keywordsign'>*</span> <span class='lower'>t</span> <span class='keywordsign'>*</span> <span class='lower'>t</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keyword'>of</span> <span class='lower'>string</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keyword'>of</span> <span class='lower'>int</span>
-<span class='keyword'>and</span>  <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>e</span> <span class='lower'>list</span><a href="javascript:octry('type e = | A | B of t | C of string * t * t | D of string | E of int\nand  t = e list');">[try]</a></code></pre>
+<span class='keyword'>and</span>  <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>e</span> <span class='lower'>list</span>
+<a href="javascript:octry('type e = | A | B of t | C of string * t * t | D of string | E of int
+and  t = e list');">[try]</a></code></pre>
 <p>If we want to write an abstraction to apply a function to this 
 data structure (the one of type t)
 without being bothered to treat the whole structure everytime,
@@ -214,15 +216,37 @@ that can be overriden in subclasses.</p>
       <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>l</span> <span class='keywordsign infix'>@</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>tl</span>
       <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>t2</span><span class='keywordsign'>)</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>tl</span>
     <span class='keyword'>end</span>
-<span class='comment'>(* val visit : (e -&#62; t option) -&#62; t -&#62; t *)</span><a href="javascript:octry('let rec visit f = function\n  | [] -&#62; []\n  | (A | E _ | D _) as e :: tl -&#62;\n    begin match f e with\n      | Some(l) -&#62; l @ visit f tl\n      | None -&#62; e :: visit f tl\n    end\n  | B(t) as e :: tl -&#62;\n    begin match f e with\n      | Some(l) -&#62; l @ visit f tl\n      | None -&#62; B(visit f t) :: visit f tl\n    end\n  | C(s, t1, t2) as e :: tl -&#62;\n    begin match f e with\n      | Some(l) -&#62; l @ visit f tl\n      | None -&#62; C(s, visit f t1, visit f t2) :: visit f tl\n    end\n(* val visit : (e -&#62; t option) -&#62; t -&#62; t *)');">[try]</a></code></pre>
+<span class='comment'>(* val visit : (e -&#62; t option) -&#62; t -&#62; t *)</span>
+<a href="javascript:octry('let rec visit f = function
+  | [] -&#62; []
+  | (A | E _ | D _) as e :: tl -&#62;
+    begin match f e with
+      | Some(l) -&#62; l @ visit f tl
+      | None -&#62; e :: visit f tl
+    end
+  | B(t) as e :: tl -&#62;
+    begin match f e with
+      | Some(l) -&#62; l @ visit f tl
+      | None -&#62; B(visit f t) :: visit f tl
+    end
+  | C(s, t1, t2) as e :: tl -&#62;
+    begin match f e with
+      | Some(l) -&#62; l @ visit f tl
+      | None -&#62; C(s, visit f t1, visit f t2) :: visit f tl
+    end
+(* val visit : (e -&#62; t option) -&#62; t -&#62; t *)');">[try]</a></code></pre>
 <p>With this abstraction, it becomes very easy to write a function
 that removes all <code>A</code>s:</p>
-<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>remove_A</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>A</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>t</span><a href="javascript:octry('let remove_A t = visit (function A -&#62; Some [] | _ -&#62; None) t');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>remove_A</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>A</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>t</span>
+<a href="javascript:octry('let remove_A t = visit (function A -&#62; Some [] | _ -&#62; None) t');">[try]</a></code></pre>
 <p>or all <code>B</code>s:</p>
-<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>remove_B</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>B</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>t</span><a href="javascript:octry('let remove_B t = visit (function B _ -&#62; Some [] | _ -&#62; None) t');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>remove_B</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>B</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>t</span>
+<a href="javascript:octry('let remove_B t = visit (function B _ -&#62; Some [] | _ -&#62; None) t');">[try]</a></code></pre>
 <p>and it&#39;s also very easy to convert all <code>E</code>s to <code>D</code>s:</p>
 <pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>convert_Es_to_Ds</span> <span class='lower'>t</span> <span class='keywordsign'>=</span>
-  <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>E</span><span class='keywordsign'>(</span><span class='lower'>i</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign'>[</span><span class='constructor module'>D</span><span class='keywordsign'>(</span><span class='lower'>string_of_int</span> <span class='lower'>i</span><span class='keywordsign'>)</span><span class='keywordsign'>]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>t</span><a href="javascript:octry('let convert_Es_to_Ds t =\n  visit (function E(i) -&#62; Some [D(string_of_int i)] | _ -&#62; None) t');">[try]</a></code></pre>
+  <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>E</span><span class='keywordsign'>(</span><span class='lower'>i</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign'>[</span><span class='constructor module'>D</span><span class='keywordsign'>(</span><span class='lower'>string_of_int</span> <span class='lower'>i</span><span class='keywordsign'>)</span><span class='keywordsign'>]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>t</span>
+<a href="javascript:octry('let convert_Es_to_Ds t =
+  visit (function E(i) -&#62; Some [D(string_of_int i)] | _ -&#62; None) t');">[try]</a></code></pre>
 <p>Doing this with some <code>fold</code> abstraction is not suitable because we would need
 to do something like</p>
 <pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>remove_B</span> <span class='lower'>t</span> <span class='keywordsign'>=</span>
@@ -234,7 +258,17 @@ to do something like</p>
           <span class='keywordsign'>|</span> <span class='keywordsign'>(</span><span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>_</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>_</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>e</span><span class='keywordsign'>::</span><span class='lower'>r</span>
           <span class='keywordsign'>|</span> <span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>t2</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>remove_B</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>remove_B</span> <span class='lower'>t2</span><span class='keywordsign'>)</span><span class='keywordsign'>)</span>
        <span class='keywordsign operator'>[]</span>
-       <span class='lower'>t</span><span class='keywordsign'>)</span><a href="javascript:octry('let rec remove_B t =\n  List.rev\n    (fold\n       (fun r -&#62;\n          function\n          | B _ -&#62; r\n          | (A | E _ | D _) as e -&#62; e::r\n          | C(s, t1, t2) -&#62; C(s, remove_B t1, remove_B t2))\n       []\n       t)');">[try]</a></code></pre>
+       <span class='lower'>t</span><span class='keywordsign'>)</span>
+<a href="javascript:octry('let rec remove_B t =
+  List.rev
+    (fold
+       (fun r -&#62;
+          function
+          | B _ -&#62; r
+          | (A | E _ | D _) as e -&#62; e::r
+          | C(s, t1, t2) -&#62; C(s, remove_B t1, remove_B t2))
+       []
+       t)');">[try]</a></code></pre>
 <p>in which case what bothers me most is the line that has
 <code>C(s, remove_B t1, remove_B t2)</code> because it means that 
 we still have to make trivial recursive calls that are just annoying
@@ -268,7 +302,27 @@ Well,  let&#39;s call it <code>glue</code> since it&#39;s a function that glues 
         <span class='lower'>glue</span> <span class='keywordsign operator'>[]</span>
           <span class='keywordsign'>(</span><span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>t2</span><span class='keywordsign'>)</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
     <span class='keyword'>end</span>
-<span class='comment'>(* val visit : (e -&#62; &#39;a list option) -&#62; (&#39;a list -&#62; t -&#62; t) -&#62; t -&#62; t *)</span><a href="javascript:octry('let rec visit f glue = function\n  | [] -&#62; []\n  | (A | E _ | D _) as e :: tl -&#62;\n    begin match f e with\n      | Some(l) -&#62; glue l (visit f glue tl)\n      | None -&#62; glue [] (e :: visit f glue tl)\n    end\n  | B(t) as e :: tl -&#62;\n    begin match f e with\n      | Some(l) -&#62; glue l (visit f glue tl)\n      | None -&#62; glue [] (B(visit f glue t) :: visit f glue tl)\n    end\n  | C(s, t1, t2) as e :: tl -&#62;\n    begin match f e with\n      | Some(l) -&#62; glue l (visit f glue tl)\n      | None -&#62;\n        glue []\n          (C(s, visit f glue t1, visit f glue t2) :: visit f glue tl)\n    end\n(* val visit : (e -&#62; \&#39;a list option) -&#62; (\&#39;a list -&#62; t -&#62; t) -&#62; t -&#62; t *)');">[try]</a></code></pre>
+<span class='comment'>(* val visit : (e -&#62; &#39;a list option) -&#62; (&#39;a list -&#62; t -&#62; t) -&#62; t -&#62; t *)</span>
+<a href="javascript:octry('let rec visit f glue = function
+  | [] -&#62; []
+  | (A | E _ | D _) as e :: tl -&#62;
+    begin match f e with
+      | Some(l) -&#62; glue l (visit f glue tl)
+      | None -&#62; glue [] (e :: visit f glue tl)
+    end
+  | B(t) as e :: tl -&#62;
+    begin match f e with
+      | Some(l) -&#62; glue l (visit f glue tl)
+      | None -&#62; glue [] (B(visit f glue t) :: visit f glue tl)
+    end
+  | C(s, t1, t2) as e :: tl -&#62;
+    begin match f e with
+      | Some(l) -&#62; glue l (visit f glue tl)
+      | None -&#62;
+        glue []
+          (C(s, visit f glue t1, visit f glue t2) :: visit f glue tl)
+    end
+(* val visit : (e -&#62; \&#39;a list option) -&#62; (\&#39;a list -&#62; t -&#62; t) -&#62; t -&#62; t *)');">[try]</a></code></pre>
 <p>We&#39;re almost there. There&#39;s still that <code>&#39;a list</code>, which is less generic
 than <code>&#39;a</code>. Well, <code>glue</code> needs to have 2 parameters because it has to
 be able to treat both branches of the pattern-matching filter, so we could 
@@ -279,10 +333,17 @@ can we just take advantage of that? Well, if we replace for instance</p>
     <span class='keyword'>begin</span> <span class='keyword'>match</span> <span class='lower'>f</span> <span class='lower'>e</span> <span class='keyword'>with</span>
       <span class='keywordsign'>|</span> <span class='constructor module'>Some</span><span class='keywordsign'>(</span><span class='lower'>l</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='lower'>l</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
       <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>glue</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>(</span><span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
-    <span class='keyword'>end</span><a href="javascript:octry('  | (A | E _ | D _) as e :: tl -&#62;\n    begin match f e with\n      | Some(l) -&#62; glue l (visit f glue tl)\n      | None -&#62; glue [] (e :: visit f glue tl)\n    end');">[try]</a></code></pre>
+    <span class='keyword'>end</span>
+<a href="javascript:octry('  | (A | E _ | D _) as e :: tl -&#62;
+    begin match f e with
+      | Some(l) -&#62; glue l (visit f glue tl)
+      | None -&#62; glue [] (e :: visit f glue tl)
+    end');">[try]</a></code></pre>
 <p>by</p>
 <pre class='tryocaml'><code class='tryocaml'>  <span class='keywordsign'>|</span> <span class='keywordsign'>(</span><span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>_</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>_</span><span class='keywordsign'>)</span> <span class='keyword'>as</span> <span class='lower'>e</span> <span class='keywordsign'>::</span> <span class='lower'>tl</span> <span class='keywordsign'>-&#62;</span>
-      <span class='lower'>glue</span> <span class='keywordsign'>(</span><span class='lower'>f</span> <span class='lower'>e</span><span class='keywordsign'>)</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span><a href="javascript:octry('  | (A | E _ | D _) as e :: tl -&#62;\n      glue (f e) (visit f glue tl)');">[try]</a></code></pre>
+      <span class='lower'>glue</span> <span class='keywordsign'>(</span><span class='lower'>f</span> <span class='lower'>e</span><span class='keywordsign'>)</span> <span class='keywordsign'>(</span><span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
+<a href="javascript:octry('  | (A | E _ | D _) as e :: tl -&#62;
+      glue (f e) (visit f glue tl)');">[try]</a></code></pre>
 <p>it does work for this branch but it doesn&#39;t for the others because
 one purpose of the visitor is to deeply traverse the
 data structure automatically.
@@ -307,7 +368,27 @@ So we&#39;re back to optional arguments...</p>
         <span class='lower'>glue</span> 
           <span class='keywordsign'>(</span><span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>~</span><span class='lower'>glue</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>~</span><span class='lower'>glue</span> <span class='lower'>t2</span><span class='keywordsign'>)</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>~</span><span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
     <span class='keyword'>end</span>
-<span class='comment'>(* val visit : (e -&#62; t option) -&#62; ?glue:(?l:t -&#62; t -&#62; t) -&#62; t -&#62; t *)</span><a href="javascript:octry('let rec visit f ?(glue=(fun ?l r -&#62; match l with None -&#62; r | Some l -&#62; l @ r)) = function\n  | [] -&#62; []\n  | (A | E _ | D _) as e :: tl -&#62;\n    begin match f e with\n      | Some(l) -&#62; glue ~l (visit f ~glue tl)\n      | None -&#62; glue (e :: visit f ~glue tl)\n    end\n  | B(t) as e :: tl -&#62;\n    begin match f e with\n      | Some(l) -&#62; glue ~l (visit f ~glue tl)\n      | None -&#62; glue (B(visit f ~glue t) :: visit f ~glue tl)\n    end\n  | C(s, t1, t2) as e :: tl -&#62;\n    begin match f e with\n      | Some(l) -&#62; glue ~l (visit f ~glue tl)\n      | None -&#62;\n        glue \n          (C(s, visit f ~glue t1, visit f ~glue t2) :: visit f ~glue tl)\n    end\n(* val visit : (e -&#62; t option) -&#62; ?glue:(?l:t -&#62; t -&#62; t) -&#62; t -&#62; t *)');">[try]</a></code></pre>
+<span class='comment'>(* val visit : (e -&#62; t option) -&#62; ?glue:(?l:t -&#62; t -&#62; t) -&#62; t -&#62; t *)</span>
+<a href="javascript:octry('let rec visit f ?(glue=(fun ?l r -&#62; match l with None -&#62; r | Some l -&#62; l @ r)) = function
+  | [] -&#62; []
+  | (A | E _ | D _) as e :: tl -&#62;
+    begin match f e with
+      | Some(l) -&#62; glue ~l (visit f ~glue tl)
+      | None -&#62; glue (e :: visit f ~glue tl)
+    end
+  | B(t) as e :: tl -&#62;
+    begin match f e with
+      | Some(l) -&#62; glue ~l (visit f ~glue tl)
+      | None -&#62; glue (B(visit f ~glue t) :: visit f ~glue tl)
+    end
+  | C(s, t1, t2) as e :: tl -&#62;
+    begin match f e with
+      | Some(l) -&#62; glue ~l (visit f ~glue tl)
+      | None -&#62;
+        glue 
+          (C(s, visit f ~glue t1, visit f ~glue t2) :: visit f ~glue tl)
+    end
+(* val visit : (e -&#62; t option) -&#62; ?glue:(?l:t -&#62; t -&#62; t) -&#62; t -&#62; t *)');">[try]</a></code></pre>
 <p>Then the problem is that it&#39;s not polymorphic any more, while we want it to be polymorphic!
 So let&#39;s drop the default value for the parameter <code>glue</code>.</p>
 <pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='keywordsign'>(</span><span class='lower'>glue</span><span class='keywordsign'>:</span><span class='keywordsign'>(</span><span class='keywordsign'>?</span><span class='lower'>l</span><span class='keywordsign'>:</span><span class='keywordsign'>&#39;</span><span class='lower'>a</span><span class='keywordsign'>-&#62;</span> <span class='lower'>t</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>t</span><span class='keywordsign'>)</span><span class='keywordsign'>)</span> <span class='keywordsign'>=</span> <span class='keyword'>function</span>
@@ -329,15 +410,40 @@ So let&#39;s drop the default value for the parameter <code>glue</code>.</p>
         <span class='lower'>glue</span> 
           <span class='keywordsign'>(</span><span class='constructor module'>C</span><span class='keywordsign'>(</span><span class='lower'>s</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>t1</span><span class='keywordsign'>,</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>t2</span><span class='keywordsign'>)</span> <span class='keywordsign'>::</span> <span class='lower'>visit</span> <span class='lower'>f</span> <span class='lower'>glue</span> <span class='lower'>tl</span><span class='keywordsign'>)</span>
     <span class='keyword'>end</span>
-<span class='comment'>(* val visit : (e -&#62; &#39;a option) -&#62; (?l:&#39;a -&#62; t -&#62; t) -&#62; t -&#62; t *)</span><a href="javascript:octry('let rec visit f (glue:(?l:\&#39;a -&#62; t -&#62; t)) = function\n  | [] -&#62; []\n  | (A | E _ | D _) as e :: tl -&#62;\n    begin match f e with\n      | Some(l) -&#62; glue ~l (visit f glue tl)\n      | None -&#62; glue (e :: (visit f glue tl)\n    end\n  | B(t) as e :: tl -&#62;\n    begin match f e with\n      | Some(l) -&#62; glue ~l (visit f glue tl)\n      | None -&#62; glue (B(visit f glue t) :: visit f glue tl)\n    end\n  | C(s, t1, t2) as e :: tl -&#62;\n    begin match f e with\n      | Some(l) -&#62; glue ~l (visit f glue tl)\n      | None -&#62;\n        glue \n          (C(s, visit f glue t1, visit f glue t2) :: visit f glue tl)\n    end\n(* val visit : (e -&#62; \&#39;a option) -&#62; (?l:\&#39;a -&#62; t -&#62; t) -&#62; t -&#62; t *)');">[try]</a></code></pre>
+<span class='comment'>(* val visit : (e -&#62; &#39;a option) -&#62; (?l:&#39;a -&#62; t -&#62; t) -&#62; t -&#62; t *)</span>
+<a href="javascript:octry('let rec visit f (glue:(?l:\&#39;a -&#62; t -&#62; t)) = function
+  | [] -&#62; []
+  | (A | E _ | D _) as e :: tl -&#62;
+    begin match f e with
+      | Some(l) -&#62; glue ~l (visit f glue tl)
+      | None -&#62; glue (e :: (visit f glue tl)
+    end
+  | B(t) as e :: tl -&#62;
+    begin match f e with
+      | Some(l) -&#62; glue ~l (visit f glue tl)
+      | None -&#62; glue (B(visit f glue t) :: visit f glue tl)
+    end
+  | C(s, t1, t2) as e :: tl -&#62;
+    begin match f e with
+      | Some(l) -&#62; glue ~l (visit f glue tl)
+      | None -&#62;
+        glue 
+          (C(s, visit f glue t1, visit f glue t2) :: visit f glue tl)
+    end
+(* val visit : (e -&#62; \&#39;a option) -&#62; (?l:\&#39;a -&#62; t -&#62; t) -&#62; t -&#62; t *)');">[try]</a></code></pre>
 <p>There we go, we have a generic visitor for structures of type <code>t</code>.</p>
 <p>As we did before, we may now define <code>remove_A</code>, <code>remove_B</code> and <code>convert_Es_to_Ds</code>, 
 using the following quite simple definition of <code>glue</code>.</p>
-<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>glue</span> <span class='keywordsign'>?</span><span class='lower'>l</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='keyword'>match</span> <span class='lower'>l</span> <span class='keyword'>with</span> <span class='constructor module'>Some</span> <span class='lower'>l</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>l</span> <span class='keywordsign infix'>@</span> <span class='lower'>t</span> <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>t</span><a href="javascript:octry('let glue ?l t = match l with Some l -&#62; l @ t | None -&#62; t');">[try]</a></code></pre>
-<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>remove_A</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>A</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>glue</span> <span class='lower'>t</span><a href="javascript:octry('let remove_A t = visit (function A -&#62; Some [] | _ -&#62; None) glue t');">[try]</a></code></pre>
-<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>remove_B</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>B</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span> <span class='keywordsign'>:</span> <span class='lower'>e</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>t</span> <span class='lower'>option</span><span class='keywordsign'>)</span> <span class='lower'>glue</span> <span class='lower'>t</span><a href="javascript:octry('let remove_B t = visit (function B _ -&#62; Some [] | _ -&#62; None : e -&#62; t option) glue t');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>glue</span> <span class='keywordsign'>?</span><span class='lower'>l</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='keyword'>match</span> <span class='lower'>l</span> <span class='keyword'>with</span> <span class='constructor module'>Some</span> <span class='lower'>l</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>l</span> <span class='keywordsign infix'>@</span> <span class='lower'>t</span> <span class='keywordsign'>|</span> <span class='constructor module'>None</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>t</span>
+<a href="javascript:octry('let glue ?l t = match l with Some l -&#62; l @ t | None -&#62; t');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>remove_A</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>A</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>glue</span> <span class='lower'>t</span>
+<a href="javascript:octry('let remove_A t = visit (function A -&#62; Some [] | _ -&#62; None) glue t');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>remove_B</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>B</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span> <span class='keywordsign'>:</span> <span class='lower'>e</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>t</span> <span class='lower'>option</span><span class='keywordsign'>)</span> <span class='lower'>glue</span> <span class='lower'>t</span>
+<a href="javascript:octry('let remove_B t = visit (function B _ -&#62; Some [] | _ -&#62; None : e -&#62; t option) glue t');">[try]</a></code></pre>
 <pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>convert_Es_to_Ds</span> <span class='lower'>t</span> <span class='keywordsign'>=</span>
-  <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>E</span><span class='keywordsign'>(</span><span class='lower'>i</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign'>[</span><span class='constructor module'>D</span><span class='keywordsign'>(</span><span class='lower'>string_of_int</span> <span class='lower'>i</span><span class='keywordsign'>)</span><span class='keywordsign'>]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>glue</span> <span class='lower'>t</span><a href="javascript:octry('let convert_Es_to_Ds t =\n  visit (function E(i) -&#62; Some [D(string_of_int i)] | _ -&#62; None) glue t');">[try]</a></code></pre>
+  <span class='lower'>visit</span> <span class='keywordsign'>(</span><span class='keyword'>function</span> <span class='constructor module'>E</span><span class='keywordsign'>(</span><span class='lower'>i</span><span class='keywordsign'>)</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>Some</span> <span class='keywordsign'>[</span><span class='constructor module'>D</span><span class='keywordsign'>(</span><span class='lower'>string_of_int</span> <span class='lower'>i</span><span class='keywordsign'>)</span><span class='keywordsign'>]</span> <span class='keywordsign'>|</span> <span class='keywordsign'>_</span> <span class='keywordsign'>-&#62;</span> <span class='constructor module'>None</span><span class='keywordsign'>)</span> <span class='lower'>glue</span> <span class='lower'>t</span>
+<a href="javascript:octry('let convert_Es_to_Ds t =
+  visit (function E(i) -&#62; Some [D(string_of_int i)] | _ -&#62; None) glue t');">[try]</a></code></pre>
 <p>We could actually make it more generic by allowing <code>glue</code> to return something
 else than a <code>t</code>, and we could have something resembling
 <code>val visit : (e -&gt; &#39;a option) -&gt; (?l:&#39;a -&gt; t -&gt; &#39;b) -&gt; t -&gt; &#39;b</code>.
@@ -532,7 +638,8 @@ conductivity, reflects light not too badly and is not too expensive.</p>
 <a href='https://www.google.com/search?q=COB+LED'>Google</a> selling LEDs, you may also try
 <a href='http://kosilum.com/'>this one</a>, which belongs to a friend of mine.</p>
 <h2 id="ExampleAusecaseofMPPinanOCamlprogram"><a href='/posts/2013-10-04-13-31-30-example-use-case-of-MPP.html'>(Example) A use case of MPP in an OCaml program</a></h2><p>Let&#39;s say you have a big variant type such as this one:</p>
-<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>type</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>B</span> <span class='keywordsign'>|</span> <span class='constructor module'>C</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>|</span> <span class='constructor module'>F</span> <span class='keywordsign'>|</span> <span class='constructor module'>G</span><a href="javascript:octry('type t = A | B | C | D | E | F | G');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>type</span> <span class='lower'>t</span> <span class='keywordsign'>=</span> <span class='constructor module'>A</span> <span class='keywordsign'>|</span> <span class='constructor module'>B</span> <span class='keywordsign'>|</span> <span class='constructor module'>C</span> <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>|</span> <span class='constructor module'>F</span> <span class='keywordsign'>|</span> <span class='constructor module'>G</span>
+<a href="javascript:octry('type t = A | B | C | D | E | F | G');">[try]</a></code></pre>
 <p>and you want to implement a <code>t -&gt; string</code> function.
 With MPP, you can write this:</p>
 <pre class='ocaml'><code class='ocaml'><span class='keywordsign'>{&#60;</span> <span class='keyword'>let</span> <span class='lower'>l</span> <span class='keywordsign'>=</span> <span class='keywordsign'>[</span><span class='string'>&#34;A&#34;</span><span class='keywordsign'>;</span> <span class='string'>&#34;B&#34;</span><span class='keywordsign'>;</span> <span class='string'>&#34;C&#34;</span><span class='keywordsign'>;</span> <span class='string'>&#34;D&#34;</span><span class='keywordsign'>;</span> <span class='string'>&#34;E&#34;</span><span class='keywordsign'>;</span> <span class='string'>&#34;F&#34;</span><span class='keywordsign'>;</span> <span class='string'>&#34;G&#34;</span><span class='keywordsign'>;</span><span class='keywordsign'>]</span> <span class='keywordsign'>&#62;</span><span class='keywordsign'>}</span>
@@ -548,7 +655,16 @@ With MPP, you can write this:</p>
 <span class='keywordsign'>|</span> <span class='constructor module'>D</span> <span class='keywordsign'>-&#62;</span> <span class='string'>&#34;D&#34;</span>
 <span class='keywordsign'>|</span> <span class='constructor module'>E</span> <span class='keywordsign'>-&#62;</span> <span class='string'>&#34;E&#34;</span>
 <span class='keywordsign'>|</span> <span class='constructor module'>F</span> <span class='keywordsign'>-&#62;</span> <span class='string'>&#34;F&#34;</span>
-<span class='keywordsign'>|</span> <span class='constructor module'>G</span> <span class='keywordsign'>-&#62;</span> <span class='string'>&#34;G&#34;</span><a href="javascript:octry('type t = | A | B | C | D | E | F | G \nlet to_string = function\n| A -&#62; &#34;A&#34;\n| B -&#62; &#34;B&#34;\n| C -&#62; &#34;C&#34;\n| D -&#62; &#34;D&#34;\n| E -&#62; &#34;E&#34;\n| F -&#62; &#34;F&#34;\n| G -&#62; &#34;G&#34;');">[try]</a></code></pre>
+<span class='keywordsign'>|</span> <span class='constructor module'>G</span> <span class='keywordsign'>-&#62;</span> <span class='string'>&#34;G&#34;</span>
+<a href="javascript:octry('type t = | A | B | C | D | E | F | G 
+let to_string = function
+| A -&#62; &#34;A&#34;
+| B -&#62; &#34;B&#34;
+| C -&#62; &#34;C&#34;
+| D -&#62; &#34;D&#34;
+| E -&#62; &#34;E&#34;
+| F -&#62; &#34;F&#34;
+| G -&#62; &#34;G&#34;');">[try]</a></code></pre>
 <p>As you may see, if you grow the type <code>t</code> by adding more cases, you don&#39;t have to 
 manually update the function <code>to_string</code>.</p>
 <h2 id="OPAMagingMPP"><a href='/posts/2013-10-03-20-39-07-OPAMaging-MPP.html'>OPAMaging MPP</a></h2><p><em>Please read
@@ -764,7 +880,17 @@ the Boolean value!</p>
         <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span> <span class='keywordsign'>&#60;-</span> <span class='lower'>not</span> <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span><span class='keywordsign'>;</span>
     <span class='keyword'>done</span>
   <span class='keyword'>done</span><span class='keywordsign'>;</span>
-  <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span><a href="javascript:octry('let has_an_odd_number_of_1 s =\n  let res = ref false in\n  for i = 0 to String.length s - 1 do\n    let x = int_of_char s.[i] in\n    for j = 0 to 7 do\n      if (x lsr j) land 1 = 1 then\n        res.contents &#60;- not res.contents;\n    done\n  done;\n  res.contents');">[try]</a></code></pre>
+  <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span>
+<a href="javascript:octry('let has_an_odd_number_of_1 s =
+  let res = ref false in
+  for i = 0 to String.length s - 1 do
+    let x = int_of_char s.[i] in
+    for j = 0 to 7 do
+      if (x lsr j) land 1 = 1 then
+        res.contents &#60;- not res.contents;
+    done
+  done;
+  res.contents');">[try]</a></code></pre>
 <p>Side note:</p>
 <blockquote><p>Moreover, we can see that using a  Boolean means it will not limit the
 number of  bits we  may read, whereas  an integer...   well, actually,
@@ -783,18 +909,28 @@ implementation of two mutually recursive functions:</p>
  <span class='keywordsign'>|</span> <span class='lower'>n</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>is_even</span> <span class='keywordsign'>(</span><span class='lower'>n</span><span class='keywordsign'>-</span><span class='number'>1</span><span class='keywordsign'>)</span>
 <span class='keyword'>and</span> <span class='lower'>is_even</span> <span class='keywordsign'>=</span> <span class='keyword'>function</span>
  <span class='keywordsign'>|</span> <span class='number'>0</span> <span class='keywordsign'>-&#62;</span> <span class='keyword'>true</span>
- <span class='keywordsign'>|</span> <span class='lower'>n</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>is_odd</span> <span class='keywordsign'>(</span><span class='lower'>n</span><span class='keywordsign'>-</span><span class='number'>1</span><span class='keywordsign'>)</span><a href="javascript:octry('let rec is_odd = function\n | 0 -&#62; false\n | n -&#62; is_even (n-1)\nand is_even = function\n | 0 -&#62; true\n | n -&#62; is_odd (n-1)');">[try]</a></code></pre>
+ <span class='keywordsign'>|</span> <span class='lower'>n</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>is_odd</span> <span class='keywordsign'>(</span><span class='lower'>n</span><span class='keywordsign'>-</span><span class='number'>1</span><span class='keywordsign'>)</span>
+<a href="javascript:octry('let rec is_odd = function
+ | 0 -&#62; false
+ | n -&#62; is_even (n-1)
+and is_even = function
+ | 0 -&#62; true
+ | n -&#62; is_odd (n-1)');">[try]</a></code></pre>
 <p>Note that it needs a lot of computation when the integer is &quot;big&quot;...</p>
 <p>And this is probably the shortest version:</p>
-<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keyword'>mod</span> <span class='number'>2</span> <span class='keywordsign infix'>&#60;&#62;</span> <span class='number'>0</span><a href="javascript:octry('let is_odd n = n mod 2 &#60;&#62; 0');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keyword'>mod</span> <span class='number'>2</span> <span class='keywordsign infix'>&#60;&#62;</span> <span class='number'>0</span>
+<a href="javascript:octry('let is_odd n = n mod 2 &#60;&#62; 0');">[try]</a></code></pre>
 <p>Now note that we cannot write this and expect it to work properly in 
 all cases:</p>
-<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keyword'>mod</span> <span class='number'>2</span> <span class='keywordsign'>=</span> <span class='number'>1</span><a href="javascript:octry('let is_odd n = n mod 2 = 1');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keyword'>mod</span> <span class='number'>2</span> <span class='keywordsign'>=</span> <span class='number'>1</span>
+<a href="javascript:octry('let is_odd n = n mod 2 = 1');">[try]</a></code></pre>
 <p>and that&#39;s because if n is negative and odd, then n mod 2 is -1, not 1.</p>
 <p>A tricky version that uses properties on integers:</p>
-<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keywordsign infix'>&#60;&#62;</span> <span class='number'>0</span> <span class='keywordsign'>&#38;&#38;</span> <span class='keywordsign'>(</span><span class='keywordsign'>(</span><span class='lower'>n</span> <span class='keywordsign infix'>/</span> <span class='number'>2</span><span class='keywordsign'>)</span> <span class='keywordsign'>*</span> <span class='number'>2</span><span class='keywordsign'>)</span> <span class='keywordsign infix'>&#60;&#62;</span> <span class='lower'>n</span><a href="javascript:octry('let is_odd n = n &#60;&#62; 0 &#38;&#38; ((n / 2) * 2) &#60;&#62; n');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keywordsign infix'>&#60;&#62;</span> <span class='number'>0</span> <span class='keywordsign'>&#38;&#38;</span> <span class='keywordsign'>(</span><span class='keywordsign'>(</span><span class='lower'>n</span> <span class='keywordsign infix'>/</span> <span class='number'>2</span><span class='keywordsign'>)</span> <span class='keywordsign'>*</span> <span class='number'>2</span><span class='keywordsign'>)</span> <span class='keywordsign infix'>&#60;&#62;</span> <span class='lower'>n</span>
+<a href="javascript:octry('let is_odd n = n &#60;&#62; 0 &#38;&#38; ((n / 2) * 2) &#60;&#62; n');">[try]</a></code></pre>
 <p>Another tricky version that uses properties on machine integers:</p>
-<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keywordsign'>land</span> <span class='number'>1</span> <span class='keywordsign'>=</span> <span class='number'>1</span><a href="javascript:octry('let is_odd n = n land 1 = 1');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>is_odd</span> <span class='lower'>n</span> <span class='keywordsign'>=</span> <span class='lower'>n</span> <span class='keywordsign'>land</span> <span class='number'>1</span> <span class='keywordsign'>=</span> <span class='number'>1</span>
+<a href="javascript:octry('let is_odd n = n land 1 = 1');">[try]</a></code></pre>
 <p>Well, there is the same number  of characters as the shortest version,
 and actually  this version is  probably the most efficient  because we
 know that the  <code>land</code> operation is easy for the  computer, whereas the
@@ -829,7 +965,20 @@ number of 1 or not.</p>
       <span class='lower'>res</span><span class='keywordsign'>.</span><span class='lower'>contents</span>
     <span class='keyword'>else</span>
       <span class='lower'>loop</span> <span class='keywordsign'>(</span><span class='lower'>c</span> <span class='keywordsign'>lxor</span> <span class='lower'>int_of_char</span> <span class='lower'>s</span><span class='keywordsign operator'>.[</span><span class='lower'>i</span><span class='keywordsign'>]</span><span class='keywordsign'>)</span> <span class='keywordsign'>(</span><span class='lower'>succ</span> <span class='lower'>i</span><span class='keywordsign'>)</span>
-  <span class='keyword'>in</span> <span class='lower'>loop</span> <span class='number'>0</span> <span class='number'>0</span><a href="javascript:octry('let has_an_odd_number_of_1__efficient s =\n  let l = String.length s in\n  let rec loop c i =\n    if i = l then\n      let res = ref false in\n      for j = 0 to 7 do\n        if (c lsr j) land 1 = 1 then\n          res.contents &#60;- not res.contents;\n      done;\n      res.contents\n    else\n      loop (c lxor int_of_char s.[i]) (succ i)\n  in loop 0 0');">[try]</a></code></pre>
+  <span class='keyword'>in</span> <span class='lower'>loop</span> <span class='number'>0</span> <span class='number'>0</span>
+<a href="javascript:octry('let has_an_odd_number_of_1__efficient s =
+  let l = String.length s in
+  let rec loop c i =
+    if i = l then
+      let res = ref false in
+      for j = 0 to 7 do
+        if (c lsr j) land 1 = 1 then
+          res.contents &#60;- not res.contents;
+      done;
+      res.contents
+    else
+      loop (c lxor int_of_char s.[i]) (succ i)
+  in loop 0 0');">[try]</a></code></pre>
 <p>And... There we go!  :-)</p>
 <p>Note that <code>int_of_char</code> is a zero-cost operation (but <code>char_of_int</code> is
 not, because it  has to check that  the value of the  given integer is
@@ -849,7 +998,8 @@ end, if  your counter has  its initial value,  then you have  the same
 number of 1s and 0s. If it&#39;s  lesser, then it has more 0s, else it has
 more 1s.</p>
 <p>Let&#39;s declare a type for the result.</p>
-<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>type</span> <span class='lower'>result</span> <span class='keywordsign'>=</span> <span class='constructor module'>Equal</span> <span class='keywordsign'>|</span> <span class='constructor module'>More_zeros</span> <span class='keywordsign'>|</span> <span class='constructor module'>More_ones</span><a href="javascript:octry('type result = Equal | More_zeros | More_ones');">[try]</a></code></pre>
+<pre class='tryocaml'><code class='tryocaml'><span class='keyword'>type</span> <span class='lower'>result</span> <span class='keywordsign'>=</span> <span class='constructor module'>Equal</span> <span class='keywordsign'>|</span> <span class='constructor module'>More_zeros</span> <span class='keywordsign'>|</span> <span class='constructor module'>More_ones</span>
+<a href="javascript:octry('type result = Equal | More_zeros | More_ones');">[try]</a></code></pre>
 <pre class='tryocaml'><code class='tryocaml'><span class='keyword'>let</span> <span class='lower'>count</span> <span class='lower'>l</span> <span class='keywordsign'>=</span>
   <span class='keyword'>let</span> <span class='keyword'>rec</span> <span class='lower'>loop</span> <span class='lower'>counter</span> <span class='keywordsign'>=</span> <span class='keyword'>function</span>
     <span class='keywordsign'>|</span> <span class='keywordsign operator'>[]</span> <span class='keywordsign'>-&#62;</span> <span class='lower'>counter</span>
@@ -865,7 +1015,23 @@ more 1s.</p>
   <span class='keyword'>else</span> <span class='keyword'>if</span> <span class='lower'>r</span> <span class='keywordsign'>&#62;</span> <span class='number'>0</span> <span class='keyword'>then</span>
     <span class='constructor module'>More_ones</span>
   <span class='keyword'>else</span>
-    <span class='constructor module'>More_zeros</span>    <a href="javascript:octry('let count l =\n  let rec loop counter = function\n    | [] -&#62; counter\n    | 1::tl -&#62; loop (counter+1) tl\n    | 0::tl -&#62; loop (counter-1) tl\n    | _::tl -&#62; loop counter tl\n    (* you might want to debate whether you should stop \n       when you get something else than a 0 or a 1. *)\n  in\n  let r = loop 0 l in\n  if r = 0 then\n    Equal\n  else if r &#62; 0 then\n    More_ones\n  else\n    More_zeros    ');">[try]</a></code></pre>
+    <span class='constructor module'>More_zeros</span>    
+<a href="javascript:octry('let count l =
+  let rec loop counter = function
+    | [] -&#62; counter
+    | 1::tl -&#62; loop (counter+1) tl
+    | 0::tl -&#62; loop (counter-1) tl
+    | _::tl -&#62; loop counter tl
+    (* you might want to debate whether you should stop 
+       when you get something else than a 0 or a 1. *)
+  in
+  let r = loop 0 l in
+  if r = 0 then
+    Equal
+  else if r &#62; 0 then
+    More_ones
+  else
+    More_zeros    ');">[try]</a></code></pre>
 <p>Well, what&#39;s the risk with this  program? The risk is that the integer
 <code>counter</code> overflows, of course! If you have a very long list of 1s (or
 0s)  only, you  may  get things  just  wrong.  However,  in OCaml,  in
@@ -924,7 +1090,24 @@ and 1s in O(1).</p>
   <span class='keyword'>for</span> <span class='lower'>i</span> <span class='keywordsign'>=</span> <span class='number'>0</span> <span class='keyword'>to</span> <span class='number'>255</span> <span class='keyword'>do</span>
     <span class='lower'>a</span><span class='keywordsign'>.</span><span class='keywordsign'>(</span><span class='lower'>i</span><span class='keywordsign'>)</span> <span class='keywordsign'>&#60;-</span> <span class='lower'>number_for_a_byte</span> <span class='lower'>i</span>
   <span class='keyword'>done</span><span class='keywordsign'>;</span>
-  <span class='lower'>a</span><a href="javascript:octry('(* this table is computed only once *)\nlet table =\n  let number_for_a_byte b =\n    let r = ref 0 in\n    for i = 0 to 7 do\n      if (b lsr i) land 1 = 0 then\n        decr r\n      else\n        incr r\n    done;\n    !r\n  in\n  let a = Array.make 256 0 in\n  for i = 0 to 255 do\n    a.(i) &#60;- number_for_a_byte i\n  done;\n  a');">[try]</a></code></pre>
+  <span class='lower'>a</span>
+<a href="javascript:octry('(* this table is computed only once *)
+let table =
+  let number_for_a_byte b =
+    let r = ref 0 in
+    for i = 0 to 7 do
+      if (b lsr i) land 1 = 0 then
+        decr r
+      else
+        incr r
+    done;
+    !r
+  in
+  let a = Array.make 256 0 in
+  for i = 0 to 255 do
+    a.(i) &#60;- number_for_a_byte i
+  done;
+  a');">[try]</a></code></pre>
 <p>Then let&#39;s abstract from the means  to read new 0s and 1s, by assuming
 we&#39;ll be provided a function <code>f</code> that given <code>()</code> will return 8 bits in
 a value  of type  <code>char</code>, and will  raise the  exception <code>End_of_file</code>
@@ -939,7 +1122,18 @@ when it has no more bits to give.</p>
   <span class='keyword'>else</span> <span class='keyword'>if</span> <span class='keywordsign prefix'>!</span><span class='lower'>c</span> <span class='keywordsign'>&#62;</span> <span class='number'>0</span> <span class='keyword'>then</span>
     <span class='constructor module'>More_zeros</span>
   <span class='keyword'>else</span>
-    <span class='constructor module'>More_ones</span><a href="javascript:octry('let more_zeros_or_ones f =\n  let c = ref 0 in\n  begin try while true do\n    c := !c + table.(int_of_char(f()))\n  done with End_of_file -&#62; () end;\n  if !c = 0 then\n    Equal\n  else if !c &#62; 0 then\n    More_zeros\n  else\n    More_ones');">[try]</a></code></pre>
+    <span class='constructor module'>More_ones</span>
+<a href="javascript:octry('let more_zeros_or_ones f =
+  let c = ref 0 in
+  begin try while true do
+    c := !c + table.(int_of_char(f()))
+  done with End_of_file -&#62; () end;
+  if !c = 0 then
+    Equal
+  else if !c &#62; 0 then
+    More_zeros
+  else
+    More_ones');">[try]</a></code></pre>
 <p>Note  that <code>int_of_char</code>  has a  zero-cost (i.e.,  it  &quot;disappears&quot; at
 compile-time because  <code>int</code> and <code>char</code>  sort of share the  same memory
 representation).  If  you want  better performance, you  should inline
