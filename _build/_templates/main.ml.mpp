@@ -38,13 +38,8 @@ let _ = if tryocaml then printf
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
           <a class="brand" href="/"><img src="https://1.gravatar.com/avatar/bac6aa3e290e47c0aeeb0c6b826d9fa4?d=https%3A%2F%2Fidenticons.github.com%2F81952a25f2c72f330d4eaf04cdbe89e4.png&s=36" alt="[img]"></a>
-          <div class="nav-collapse collapse">
+          <div>
             <ul class="nav">
               <li {< let _ = if List.mem "root" tags then print_string "class='active'" >}><a href="/">root</a></li>
 <!--
