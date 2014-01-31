@@ -109,3 +109,93 @@ let _ = lambda_reduce_n (`App(`Lam("x", `Var "x"), `Num 42))
 let _ = lambda_reduce_n (`App(`Lam("x", `App(`Var "x", `Var "x")), `Num 2))
 
 
+
+let rec free_vars ?(env=[]) = []
+
+  
+
+
+(** This is a map function over the type ['a lt], which has the
+    particularity of being extensible. *)
+let rec map (f:'a lt -> 'b) = function
+  | `App(l, r) as t ->
+    begin match f t with
+      | `Dig -> `App(map f l, map f r)
+      | ` new_t -> map f new_t
+      | Stop new_t -> new_t
+    end
+  | `Var _ as t ->
+    begin match f t with
+      | Wildcard -> t
+      | Continue new_t -> map f new_t
+      | Stop new_t -> new_t
+    end
+  | `Lam(x, b) as t ->
+    begin match f t with
+      | Wildcard -> `Lam(x, map f b)
+      | Continue new_t -> map f new_t
+      | Stop new_t -> new_t
+    end
+  | t ->
+    begin match f t with
+      | Wildcard -> t
+      | Continue new_t -> map f new_t
+      | Stop new_t -> new_t
+    end
+
+
+type ('a, 'b) result =
+  | Default
+  | Recurse of 'b * 'a
+  | Result of 'b
+
+(**)
+let rec fold f accu = function
+  | `App(l, r) as t ->
+    begin match f accu t with
+      | Recurse(accu, t) -> fold f accu t
+      | Result r -> r
+      | Default -> fold f (fold f accu l) r
+    end
+  | `Var _ as t ->
+    begin match f accu t with
+      | Recurse(accu, t) -> fold f accu t
+      | Result r -> r
+      | Default -> accu
+    end
+  | `Lam(x, b) as t ->
+    begin match f accu t with
+      | Recurse(accu, t) -> fold f accu t
+      | Result r -> r
+      | Default -> fold f accu b
+    end
+  | t ->
+    begin match f accu t with
+      | Recurse(accu, t) -> fold f accu t
+      | Result r -> r
+      | Default -> accu
+    end
+
+
+let rec fold_add f accu e =
+  fold
+    (fun accu -> function
+      | `Num _ as t ->
+        begin match f accu t with
+          | Recurse(accu, t) -> fold f accu t
+          | Result r -> r
+          | Default -> accu
+        end
+      | _ -> Default)
+    accu
+    e
+
+let fold_override f accu e =
+  fold
+    (fun accu -> function
+       | `Lam _ -> Default
+       | x -> f accu x)
+    e
+
+
+
