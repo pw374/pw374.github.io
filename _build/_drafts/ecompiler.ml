@@ -114,7 +114,7 @@ let rec free_vars ?(env=[]) = function
   | `App(left, right) -> free_vars ~env right @ free_vars ~env left
   | `Var x -> if List.mem x env then [] else [x]
   | `Lam(x, b) -> free_vars ~env:(x :: env) b
-
+  | _ -> []
 
 
 (** This is a map function over the type ['a lt], which has the
