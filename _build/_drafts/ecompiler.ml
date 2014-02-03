@@ -124,26 +124,26 @@ let rec map (f:'a lt -> 'b) = function
   | `App(l, r) as t ->
     begin match f t with
       | `Dig -> `App(map f l, map f r)
-      | ` new_t -> map f new_t
-      | Stop new_t -> new_t
+      | `Replace new_t -> map f new_t
+      | `Stop new_t -> new_t
     end
   | `Var _ as t ->
     begin match f t with
-      | Wildcard -> t
-      | Continue new_t -> map f new_t
-      | Stop new_t -> new_t
+      | `Dig -> t
+      | `Replace new_t -> map f new_t
+      | `Stop new_t -> new_t
     end
   | `Lam(x, b) as t ->
     begin match f t with
-      | Wildcard -> `Lam(x, map f b)
-      | Continue new_t -> map f new_t
-      | Stop new_t -> new_t
+      | `Dig -> `Lam(x, map f b)
+      | `Replace new_t -> map f new_t
+      | `Stop new_t -> new_t
     end
   | t ->
     begin match f t with
-      | Wildcard -> t
-      | Continue new_t -> map f new_t
-      | Stop new_t -> new_t
+      | `Dig -> t
+      | `Replace new_t -> map f new_t
+      | `Stop new_t -> new_t
     end
 
 
@@ -180,14 +180,14 @@ let rec fold f accu = function
     end
 
 
-let rec fold_add f accu e =
+let rec fold_add f accu (e:'a lt) =
   fold
     (fun accu -> function
       | `Num _ as t ->
         begin match f accu t with
-          | Recurse(accu, t) -> fold f accu t
-          | Result r -> r
-          | Default -> accu
+          | Recurse(accu, t) -> Result(fold_add f accu t)
+          | Result r -> Result r
+          | Default -> Default
         end
       | _ -> Default)
     accu
@@ -199,6 +199,21 @@ let fold_override f accu e =
        | `Lam _ -> Default
        | x -> f accu x)
     e
+
+
+let rec free_vars fold ?(env=[]) (e:'a lt) =
+  fold
+    (fun accu -> function
+       | `App(left, right) ->
+         Result(free_vars fold ~env left @ free_vars fold ~env right)
+       | `Var x ->
+         if List.mem x env then Default else Result [x]
+       | `Lam(x, b) ->
+         Result(free_vars fold ~env:(x :: env) b)
+       | _ -> Default)
+    []
+    e
+
 
 
 
