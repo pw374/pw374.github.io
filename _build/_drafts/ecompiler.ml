@@ -111,10 +111,11 @@ let _ = lambda_reduce_n (`App(`Lam("x", `App(`Var "x", `Var "x")), `Num 2))
 
 
 let rec free_vars ?(env=[]) = function
-  | `App(left, right) -> free_vars ~env right @ free_vars ~env left
+  | `App(left, right) -> free_vars ~env left @ free_vars ~env right
   | `Var x -> if List.mem x env then [] else [x]
   | `Lam(x, b) -> free_vars ~env:(x :: env) b
   | _ -> []
+
 
 
 (** This is a map function over the type ['a lt], which has the
