@@ -1,0 +1,81 @@
+%% Copyright (C) 2013  Philippe Wang -*- coding: utf-8 -*-
+{< module Meta : Meta = struct
+ let title = "Extensible Recursive Functions"
+ let id = "posts/2014-02-03-15-55-32-extensible-recursive-functions.html"
+ let xmldate = "2014-02-03T15:55:32+00:00"
+ let xmldate_updated = xmldate
+ let rssdate = "Mon, 03 Feb 2014 15:55:32 +0000"
+ let date = "2014-02-03 15:55:32+00:00"
+ let tags = [ "ocaml"; "functional programming"; "design pattern" ]
+ let disqus = true
+ let stamp = true
+ let tryocaml = false
+end
+include Meta
+
+module Post(Printer:Printer) = struct open Printer >}
+
+Object-oriented  programming (OOP)  massively  uses *design  patterns*
+because most problems introduced by OOP are difficult. In order to put
+some order and  to ease OOP, the most recurring  patterns that we have
+observed over time  in OOP are called *design  patterns*.  Most people
+believe that  OOP is easier  than functional programming  (FP) because
+they  understand  the  mechanism  better.  Well,  even  though  that's
+probably true, from my personal experience,  I would rather say that a
+lot of  people believe they  understand OOP while they  actually don't
+(note that  I'm not comparing  to FP  anymore), because OOP  is really
+very hard.  And by  "hard", I mean: if you had  to reinvent all design
+patterns by yourself, it would take you a hell of a time and you might
+not find them all.  In fact, my guess is that you'll probably not find
+them all unless you really dedicate yourself to just that.
+
+That being said,  it's also because there are so  many books and other
+resources  dedicated  to  OOP-with-all-its-crazy-design-patterns  that
+it's  become  so popular.   Also,  let's  admit  it: OOP  offers  good
+abstraction. Abstra-what? The  funny thing is that one of  the 3 basic
+constructions of FP  is abstraction.  The 2 others  being the variable
+and the  application. (Yes, here in  this paragraph, FP is  reduced to
+(the  great)  lambda-calculus.)  But  that's at  another  level.   The
+abstraction in OOP  is objects and classes,  whereas in lamda-calculus
+it's functions. And even though  people learn very soon what functions
+are  in  (basic)  mathematics,  and  those  are  really  the  same  as
+lambda-calculus  functions, they  end  up understanding,  or at  least
+preferring, OOP.
+
+**Now let's go into the real subject**: so, one thing that's very nice
+in OPP is extensibility for algorithms.  (It's not very easy to really
+understand and  control OOP  when it really  comes to  inheritance and
+extensibility because  the first comes  from the OOP paradigm  and the
+second comes from the algorithm  implementation point of view and uses
+the first.) And  one design pattern that represents that  very well is
+the *visitor* design pattern (it  doesn't matter here if it's abstract
+or not).
+
+The  nice thing  with  the  visitor design  pattern  is  that one  can
+implement an  algorithm for a  data structure  and one can  extend the
+data structure,  and then implement  the algorithm patch  quite easily
+for this very extension.
+
+In FP, extensibility  is not very natural.  The design  patterns of FP
+are  mostly "map",  "filter" and  "fold", and  "iter" if  the language
+isn't purely  functional. The big  difference, and perhaps  the reason
+why they're not often called "design patterns" is that they mostly are
+functions,  whereas  for  OOP,  design patterns  are  not  classes  or
+objects, nor  functions or methods: they  are a way to  assemble them.
+
+> Distraction:
+> Things that would scare most people away from FP:
+> * [combinatory logic](http://en.wikipedia.org/wiki/Combinatory_logic)
+> * [normal form](http://en.wikipedia.org/wiki/Normal_form_(abstract_rewriting))
+> * [lambda calculus](http://en.wikipedia.org/wiki/Lambda_calculus)
+> * [computable functions](http://en.wikipedia.org/wiki/Computable_function)
+
+
+> In [a previous blog post](
+http://pw374.github.io/posts/2014-01-06-09-24-25-functional-visitors.html
+) I wrote about a functional visitor. In fact it's really just an 
+extensible map. (Well, that depends on the point of view of course.)
+
+
+
+{< end >}%% don't write anything after this line
