@@ -73,9 +73,78 @@ objects, nor  functions or methods: they  are a way to  assemble them.
 
 > In [a previous blog post](
 http://pw374.github.io/posts/2014-01-06-09-24-25-functional-visitors.html
-) I wrote about a functional visitor. In fact it's really just an 
+) I wrote about a functional visitor. In fact it's really "just" an 
 extensible map. (Well, that depends on the point of view of course.)
 
+So this post is really about extensible algorithms implemented 
+with functions (no we're not talking about lambda-calculus anymore).
+
+
+# Over a list
+
+## In Java
+
+```java
+class EmptyList extends Exception { }
+abstract class List<A> throws EmptyList {
+  A getHead();
+  List<A> getTail();
+  void accept(ListVisitor<A> visitor) {
+    visitor.visit(this); 
+  }
+}
+class Cell<A> extends List<A> {
+  Cell(A head, List<A> tail) {
+    head = head;
+    tail = tail;
+  }
+  A head;
+  List<A> tail;
+  A getHead() {
+    return head;
+  }
+  List<A> getTail() {
+    return tail;
+  }
+}
+class Nil<A> extends List<A> {
+  A getHead() { 
+}
+
+abstract class ListVisitor<A> {
+  abstract void visit(Cell<A> cell);
+  abstract void visit(Nil<A> nil);
+}
+
+
+
+## In OCaml
+
+```ocaml
+type 'a t = Nil | Cons of 'a * 'a t
+virtual class ['a,'b] list = object(this)
+  method accept visitor = visitor#visit this
+  virtual method get_head : 'a
+  virtual method get_tail : 'a t
+end
+class ['a,'b] nil = object
+  inherits ['a,'b] list
+  method get_head = failwith "Empty list"
+  method get_tail = failwith "Empty list"
+end
+class ['a,'b] cons = fun head tail -> object
+  inherit ['a,'b] list
+  val head = head
+  val tail = tail
+  method get_head = head
+  method get_tail = tail
+end
+```
+
+
+## In OCaml without OOP
+
+# 
 
 
 {< end >}%% don't write anything after this line
