@@ -220,12 +220,12 @@ body {
   background-color: #ffffff;
 }
 a {
-  color: #1864c5; /*plop*/
+  color: #1864c5; /*was c45641*/
   text-decoration: none;
 }
 a:hover,
 a:focus {
-  color: #0066cc; /*plop*/
+  color: #0066cc; /*was df533b*/
   text-decoration: underline;
 }
 .img-rounded {
