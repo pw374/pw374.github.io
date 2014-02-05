@@ -153,7 +153,7 @@ let parse_ical l =
         | None -> res, []
       end
     | {name="BEGIN"; value=e} as v::tl ->
-      let block, tl = loop [] (Some e) tl in
+      let block, tl = loop_rev [] (Some e) tl in
       loop ((`Block(v.name_start, e, block))::res) ob tl
     | {name="END"; value=e} as v::tl ->
       begin match ob with
@@ -172,13 +172,16 @@ let parse_ical l =
         ((`Assoc(v.name_start, name, `Raw(v.value_start, value)))::res)
         ob
         tl
+  and loop_rev res ob l =
+    let f,s = loop res ob l in
+    List.rev f, s
   in
-  match loop [] None l with
+  match loop_rev [] None l with
   | res, [] ->
-      res
+    res
   | _, v::_ ->
-      syntax_error (sprintf "unexpected data")
-        (fst v.name_start) (snd v.name_start)
+    syntax_error (sprintf "unexpected data")
+      (fst v.name_start) (snd v.name_start)
 
 let x =
   lex_ical "BEGIN:VCALENDAR
@@ -201,7 +204,7 @@ END:VCALENDAR
 let y = parse_ical x;;
 
 let x =
-lex_ical "BEGIN:VCALENDAR
+  lex_ical "BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//ABC Corporation//NONSGML My Product//EN
 BEGIN:VJOURNAL
@@ -224,9 +227,11 @@ DESCRIPTION:Project xyz Review Meeting Minutes\\n
  Next weeks meeting is cancelled. No meeting until 3/23.
 END:VJOURNAL
 END:VCALENDAR
-";;
+"
+;;
 
 let y = parse_ical x;;
+
 let () = () ;;
 
 let rec tree_map f = function
