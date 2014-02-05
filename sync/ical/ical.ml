@@ -19,7 +19,11 @@ type line = {
 
 
 (* http://tools.ietf.org/html/rfc5545#section-3.3.11 (TEXT) *)
-let text_of_raw : ([> `Raw of (int*int) * string ] as 'a) -> ([> `Text of (int*int) * string list ] as 'a) = function
+let text_of_raw :
+  ([> `Raw of (int*int) * string ] as 'a)
+  -> ([> `Text of (int*int) * string list ] as 'a)
+  =
+  function
   | `Raw((ln, cn) as location, s) ->
       let sl = String.length s in
       let open Buffer in
@@ -156,14 +160,18 @@ let parse_ical l =
         | Some x when x = e ->
           res, tl
         | Some x ->
-          syntax_error (sprintf "unexpected end of block %s, expected end of block %s" x e)
+          syntax_error (sprintf "unexpected end of block %s, \
+                                 expected end of block %s" x e)
             (fst v.name_start) (snd v.name_start)
         | None ->
           syntax_error (sprintf "unexpected end of block %s" e)
             (fst v.name_start) (snd v.name_start)
       end
     | {name; value} as v::tl ->
-      loop ((`Assoc(v.name_start, name, `Raw(v.value_start, v.name)))::res) ob tl
+      loop
+        ((`Assoc(v.name_start, name, `Raw(v.value_start, v.name)))::res)
+        ob
+        tl
   in
   match loop [] None l with
   | res, [] ->
