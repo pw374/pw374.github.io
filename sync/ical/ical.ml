@@ -51,7 +51,7 @@ let text_of_raw :
                   | ',' -> add_char b ','
                   | c -> syntax_error (sprintf "backslash-escaping %c" c) ln cn
                 end;
-              loop accu (i+1)
+              loop accu (i+2)
 
           (* For multiple text values *)
           | ',' ->
@@ -248,3 +248,5 @@ let rec tree_map f = function
   | [] -> []
 
 let _ = tree_map text_of_raw y;;
+
+
