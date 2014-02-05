@@ -169,7 +169,7 @@ let parse_ical l =
       end
     | {name; value} as v::tl ->
       loop
-        ((`Assoc(v.name_start, name, `Raw(v.value_start, v.name)))::res)
+        ((`Assoc(v.name_start, name, `Raw(v.value_start, value)))::res)
         ob
         tl
   in
