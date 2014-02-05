@@ -9,9 +9,15 @@ exception Syntax_error of string
 let syntax_error s ln cn = raise (Syntax_error (sprintf "(%d:%d): %s." ln cn s))
 let syntax_assert b s ln cn  = if not b then syntax_error s ln cn
 
+(** A [line] is made of a name and a value. Sometimes, the value of a [line] 
+    in a file is better off being on several lines, in which case the [\n]
+    has to be backslash-escaped. *)
 type line = {
+  (*  *)
   name: string;
+  (* *)
   value: string;
+  (* Locations *)
   name_start: int * int;
   value_start: int * int;
   value_end: int * int;
