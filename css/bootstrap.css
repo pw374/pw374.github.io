@@ -7020,8 +7020,8 @@ blockquote {
     padding-left:1em;
 }
 
-.k, .keyword { color: #f47421; font-weight: bold }
-.keywordsign { color: #f47421 }
+.k, .keyword { color: #1855c2; font-weight: bold }
+.keywordsign { color: #1855c2 }
 .superscript { font-size : 4 }
 .subscript { font-size : 4 }
 .comment { color: #747474; font-style: italic }
