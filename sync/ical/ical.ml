@@ -163,7 +163,7 @@ let parse_ical l =
             (fst v.name_start) (snd v.name_start)
       end
     | {name; value} as v::tl ->
-      loop ((`Assoc(v.name_start, name, `Raw(v.value_start)))::res) ob tl
+      loop ((`Assoc(v.name_start, name, `Raw(v.value_start, v.name)))::res) ob tl
   in
   match loop [] None l with
   | res, [] ->
@@ -226,4 +226,4 @@ let rec tree_map f = function
   | `Assoc(loc, s, r)::tl -> `Assoc(loc, s, f r)::tree_map f tl
   | [] -> []
 
-let _ = tree_map (Obj.magic text_of_raw) y;;
+let _ = tree_map text_of_raw y;;
