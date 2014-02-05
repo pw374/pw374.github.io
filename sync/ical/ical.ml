@@ -23,6 +23,18 @@ type line = {
   value_end: int * int;
 }
 
+type 'a timezone = [> `Local | `UTC | `String of string ] as 'a
+
+type 'a date = {
+  timezone : 'a timezone;
+  year     : int;
+  month    : int;
+  day      : int;
+  hours    : int;
+  minutes  : int;
+  seconds  : int;
+}
+
 
 (* http://tools.ietf.org/html/rfc5545#section-3.3.11 (TEXT) *)
 let text_of_raw :
@@ -31,7 +43,7 @@ let text_of_raw :
   =
   function
   | `Raw((ln, cn) as location, s) ->
-      let sl = String.length s in
+    let sl = String.length s in
       let open Buffer in
       let b = create sl in
       let rec loop accu i =
@@ -42,7 +54,7 @@ let text_of_raw :
           (* Escaped char *)
           | '\\' ->
               if i+1 = sl then
-                syntax_error "raw data end with an unescaped backslash" ln cn
+                syntax_error "raw data ends with an unescaped backslash" ln cn
               else
                 begin match s.[i+1] with
                   | 'N' | 'n' -> add_char b '\n'
@@ -189,6 +201,62 @@ let parse_ical l =
     syntax_error (sprintf "unexpected data")
       (fst v.name_start) (snd v.name_start)
 
+let parse_date (ln, cn : int*int) (s : string) =
+    let d = "19980130T134500" in
+    let l = String.length d in
+    let t = String.index d 'T' (* Won't fail. *) in
+    if String.length s < l
+    then
+      syntax_error (sprintf "invalid date format for %S" s) ln cn
+    else
+      let timezone, offset =
+        if String.sub s 0 5 = "TZID=" then
+          if String.contains s ':' then
+            let i = String.index s ':' in
+            let tz = String.sub s 5 (i - 5) in
+            tz, i+1
+          else
+            syntax_error (sprintf "invalid date format for %S" s) ln cn
+        else
+          "", 0
+      in
+      begin
+        for i = offset to l - 1 do
+          if i = t && s.[i] = 'T'
+          || match s.[i] with '0' .. '9' -> i <> t | _ -> false
+          then
+            ()
+          else
+            syntax_error (sprintf "invalid date format for %S, \
+                                   character #%d is wrong" s i) ln cn
+        done;
+        let year = int_of_string (String.sub s offset 4)
+        and month = int_of_string (String.sub s (offset+4) 2)
+        and day = int_of_string (String.sub s (offset+6) 2)
+        and hours = int_of_string (String.sub s (offset+9) 2)
+        and minutes = int_of_string (String.sub s (offset+11) 2)
+        and seconds = int_of_string (String.sub s (offset+13) 2)
+        and utc =
+          if String.length s = offset + 15 || String.length s = offset + 16
+          then
+            s.[String.length s - 1] = 'Z'
+          else
+            syntax_error (sprintf "invalid date format for %S" s) ln cn
+        in
+        `Date{
+            timezone =
+              (if utc then `UTC
+               else if timezone <> "" then `String(timezone)
+               else `Local);
+            year = year;
+            month = month;
+            day = day;
+            hours = hours;
+            minutes = minutes;
+            seconds = seconds;
+        }
+      end
+
 let x =
   lex_ical "BEGIN:VCALENDAR
 VERSION:2.0
@@ -215,6 +283,7 @@ VERSION:2.0
 PRODID:-//ABC Corporation//NONSGML My Product//EN
 BEGIN:VJOURNAL
 DTSTAMP:19970324T120000Z
+DTSTAMP:TZID=America/New_York:19980119T020000
 UID:uid5@host1.com
 ORGANIZER:MAILTO:jsmith@example.com
 STATUS:DRAFT
@@ -249,4 +318,15 @@ let rec tree_map f = function
 
 let _ = tree_map text_of_raw y;;
 
+
+(** [tree_transform] keeps location and section names, it applies the
+    function [f] to all [`Assoc(loc, s, r)] elements. *)
+let rec tree_transform f = function
+  | `Block(loc, s, v)::tl ->
+    `Block(loc, s, tree_transform f v)::tree_transform f tl
+  | (`Assoc(loc, s, r) as e)::tl ->
+    f e::tree_transform f tl
+  | [] -> []
+
+let _ = tree_transform text_of_raw y;;
 
