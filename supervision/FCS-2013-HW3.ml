@@ -63,9 +63,43 @@ product [2] [4];;
 product [0] [0];;
 
 (* Question 2. What's the complexity in time ? In space ? *)
+(*
+Complexity for the sub-function [add]: O(max(N, M)) where N and M are the lengths
+of the numbers, so it's linear complexity in time and in space (the number
+of memory allocations is roughly a factor of the number of other operations).
+
+Complexity for the sub-function [p]: it's a function that multiplies a one-digit
+number by a multiple-digit number, the complexity in both space and time is 
+linear to the length of the multiple-digit number.
+
+Complexity for the sub-function [prod]: it multiplies 2 multidigit numbers by using
+the 2 previously mentioned sub-functions.
+[prod] calls
+- [prod] N times where N is the number of digits for the first number.
+- [add] N times (same number as for [prod])
+- [p] N times (same number as for [prod])
+
+Since [prod] calls itself N times, and each time it calls [add] and [p] N times,
+that gives a complexity of O(N*N) in time. And in space as well: [prod] itself
+doesn't allocate much (note that (0::z) is negligible since it's one operation per
+[prod] call, and (z@p 0 e x) is always allocating less than the call to [add]).
+
+*)
 
 (* Question 3. Do you see some possible optimisations?  (you don't
    have to implement them, just give the intuition and the possible
    impact on the complexity, if any)
-
+*)
+(*
+Many ways to reduce the number of operations: 
+- change the algorithm, use a more efficient one, e.g., 
+  http://en.wikipedia.org/wiki/Karatsuba_algorithm
+  but there are many others, c.f.
+  http://en.wikipedia.org/wiki/Multiplication_algorithm
+- without changing the algorithm, it's possible to dramatically reduce the 
+  number of allocations, for instance by combining some operations made by
+  the subfunctions (but then the code might become harder to read).
+  It's also possible to convert the list of digits to an array of digits
+  and use the mutable property so that all addition results are directy assigned
+  to a pre-existing array cell instead of allocating list cells.
 *)
