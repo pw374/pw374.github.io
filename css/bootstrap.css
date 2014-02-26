@@ -220,12 +220,12 @@ body {
   background-color: #ffffff;
 }
 a {
-  color: #c45641;
+  color: #1864c5; /*was c45641*/
   text-decoration: none;
 }
 a:hover,
 a:focus {
-  color: #df533b;
+  color: #0066cc; /*was df533b*/
   text-decoration: underline;
 }
 .img-rounded {
@@ -582,11 +582,11 @@ a.muted:focus {
   color: #808080;
 }
 .text-warning {
-  color: #c09853;
+  color: #c09853; /*plop*/
 }
 a.text-warning:hover,
 a.text-warning:focus {
-  color: #a47e3c;
+  color: #a47e3c; /*plop*/
 }
 .text-error {
   color: #b94a48;
@@ -3501,7 +3501,7 @@ input[type="submit"].btn.btn-mini {
 .nav-pills > .active > a:hover,
 .nav-pills > .active > a:focus {
   color: #ffffff;
-  background-color: #c45641;
+  background-color: #4156c4; /* was c45641 */
 }
 .nav-stacked > li {
   float: none;
@@ -7016,12 +7016,12 @@ body {
 blockquote {
     border-left:solid;
     border-width-left:1ex;
-    border-color-left:orange;
+    border-color-left: #1864c5;
     padding-left:1em;
 }
 
-.k, .keyword { color: #f47421; font-weight: bold }
-.keywordsign { color: #f47421 }
+.k, .keyword { color: #1855c2; font-weight: bold }
+.keywordsign { color: #1855c2 }
 .superscript { font-size : 4 }
 .subscript { font-size : 4 }
 .comment { color: #747474; font-style: italic }
