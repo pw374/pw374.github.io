@@ -10,6 +10,7 @@ do
 	    continue
 	fi
 	i="$(cd "$j" && ls -1dt "$j"*|head -n 1)";
+	if ls -1dt "$j"* 2> /dev/null > /dev/null ; then true ; else continue ; fi
 	v=$(echo "$i"|sed 's/[^.][^.]*\.//') ;
 	p=$(echo "$i"|sed 's/\..*//g') ;
 	d="$(git log -n 1 "$j/$i"|grep 'Date:'|head -n 1|sed 's/[^:]*: *//'|sed 's/\(201[234]\).*/\1/')" ;
@@ -24,4 +25,3 @@ do
     date
     echo "Done sleeping."
 done
-
