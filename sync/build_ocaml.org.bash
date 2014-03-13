@@ -48,8 +48,11 @@ mv opam-update-list.tmp opam-update-list
         cd ~/ocaml.org && make clean
     fi
     cd ~/ocaml.org/ || exit 1
-    git pull
-    make production && rsync -r ocaml.org/* /var/www/ocaml.org/
+    # git pull
+    if timeout 1h git fetch ; then true ; else echo '`timeout 1h git fetch` returned with ' $? ; continue ; fi
+    git reset --hard origin/master
+    make production || ( echo '`make production` returned with ' $? )
+    rsync -r ocaml.org/* /var/www/ocaml.org/
     (( i ++ ))
     for s in stdout stderr
     do
@@ -83,7 +86,3 @@ mv opam-update-list.tmp opam-update-list
     done
     
 done > $HOME/stdout.log 2> $HOME/stderr.log
-
-
-
-
