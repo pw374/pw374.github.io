@@ -31,14 +31,7 @@ done
 >&2 date
 
 # begin opam package list matter
-### .package-list-old is always up to date if it does exist, hence this trick:
-cp ~/opam-repository/packages/.package-list-old opam-update-list || cp ~/opam-repository/packages/.package-list opam-update-list
-if cp ~/opam-repository/packages/.package-list-old opam-update-list-old
-then
-    mv opam-update-list-old opam-update-list
-fi
-sort -r opam-update-list | head -n 6| cut -f2 > opam-update-list.tmp
-mv opam-update-list.tmp opam-update-list
+(cd ~/opam-repository && timeout 1h git fetch && git reset --hard origin/master && timeout 1h opam update)
 # end opam package list matter
 
     if (( i % 20 == 0 ))
