@@ -31,14 +31,7 @@ done
 >&2 date
 
 # begin opam package list matter
-### .package-list-old is always up to date if it does exist, hence this trick:
-cp ~/opam-repository/packages/.package-list-old opam-update-list || cp ~/opam-repository/packages/.package-list opam-update-list
-if cp ~/opam-repository/packages/.package-list-old opam-update-list-old
-then
-    mv opam-update-list-old opam-update-list
-fi
-sort -r opam-update-list | head -n 6| cut -f2 > opam-update-list.tmp
-mv opam-update-list.tmp opam-update-list
+(cd ~/opam-repository && timeout 1h git fetch && git reset --hard origin/master && timeout 1h opam update)
 # end opam package list matter
 
     if (( i % 20 == 0 ))
@@ -48,8 +41,11 @@ mv opam-update-list.tmp opam-update-list
         cd ~/ocaml.org && make clean
     fi
     cd ~/ocaml.org/ || exit 1
-    git pull
-    make production && rsync -r ocaml.org/* /var/www/ocaml.org/
+    # git pull
+    if timeout 1h git fetch ; then true ; else echo '`timeout 1h git fetch` returned with ' $? ; continue ; fi
+    git reset --hard origin/master
+    make production || ( echo '`make production` returned with ' $? )
+    rsync -r ocaml.org/* /var/www/ocaml.org/
     (( i ++ ))
     for s in stdout stderr
     do
@@ -83,7 +79,3 @@ mv opam-update-list.tmp opam-update-list
     done
     
 done > $HOME/stdout.log 2> $HOME/stderr.log
-
-
-
-
